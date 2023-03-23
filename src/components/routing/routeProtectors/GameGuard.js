@@ -1,6 +1,6 @@
 import {Redirect} from "react-router-dom";
 import PropTypes from "prop-types";
-
+//delete line
 /**
  * routeProtectors interfaces can tell the router whether or not it should allow navigation to a requested route.
  * They are functional components. Based on the props passed, a route gets rendered.
