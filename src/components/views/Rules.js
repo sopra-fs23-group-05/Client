@@ -2,7 +2,7 @@ import React from "react";
 import {handleError} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Rules.scss';
-import {Button} from 'components/ui/Button';
+import Button from '@mui/material/Button';
 import TabooLogo from './TabooLogo.png';
 
 
@@ -17,9 +17,8 @@ const Rules = props => {
     };
 
   return (
-    <div className="rulesRoot">
+    <div className="rulesRoot" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}} />
-            <div className="rules">Rules</div>
                 <div className="rectangle">
                     <div className="rulesText">
                         QUICK!

@@ -29,35 +29,28 @@
     justify-content: flex-end;
     align-self: stretch;
     align-items: flex-start;
-    margin: 0px 0px -1547px 0px;
-    padding: 13px 16px 0px 16px;
     margin-bottom: 20px;
     box-sizing: border-box;
-    background-size: cover;
-    background-image: url("https://file.rendit.io/n/Q0OtYfkWFNWDYTihWQyC.svg");
-    min-height: 100%;
+    background-color: #B699DC;
+    min-height: calc(100vh - 40%);
+    padding: 13px 16px;
+    border-radius: 9px;
   }
-  .rulesText{
-    width: 96.93%;
-    height: 100.92%;
-    margin: 0px 0px -21px 0px;
-    margin-bottom: 10px;
+  
+  .rulesText {
     font-size: 24px;
     font-weight: 600;
     font-family: Inter, sans-serif;
-    box-sizing: border-box;
-    height: auto;
-    min-height: 100%;
+    margin-top: 20px;
   }
   
-  .button {
+  .MuiButton-root.button {
     width: 219px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 20px auto;
-    margin-top: 20px;
+    margin: 0 auto;
     padding: 20px 32.1px;
     border-width: 1px;
     border-radius: 9px;
@@ -70,5 +63,6 @@
     font-size: 23px;
     font-weight: 600;
     font-family: Inter, sans-serif;
+    margin-bottom: 50px;
   }
   
