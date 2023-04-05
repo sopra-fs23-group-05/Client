@@ -2,87 +2,116 @@ import React, {useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import User from 'models/User';
 import {useHistory} from 'react-router-dom';
-import {Button} from 'components/ui/Button';
-import 'styles/views/Login.scss';
-import BaseContainer from "components/ui/BaseContainer";
-import PropTypes from "prop-types";
+import {Container, TextField, Button, Typography, Box} from "@mui/material";
+import 'styles/views/AdminLogin.scss';
+import Team from "../../models/Team";
 
-/*
-It is possible to add multiple components inside a single file,
-however be sure not to clutter your files with an endless amount!
-As a rule of thumb, use one file per component and only add small,
-specific components that belong to the main one in the same file.
- */
-const FormField = props => {
-    return (
-            <div className="login field">
-                <input
-                        className="login input"
-                        placeholder="enter your username.."
-                        value={props.value}
-                        onChange={e => props.onChange(e.target.value)}
-                />
-            </div>
-    );
-};
-
-FormField.propTypes = {
-    value: PropTypes.string,
-    onChange: PropTypes.func
-};
-
-const Login = props => {
+const AdminLogin = props => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
 
-    /*const goBack = {
-        history.push();
-    }*/ //push back to homepage
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value)
+    }
+
+    const goBack = () => {
+        localStorage.removeItem('token');
+        history.push('/login');
+        window.location.reload();
+    }
 
     const doLogin = async () => {
         try {
-            const requestBody = JSON.stringify({username});
-            const response = await api.post('/users', requestBody);
+            const isLeader = true;
+            const userRequestBody = JSON.stringify({username, isLeader});
+            const response = await api.post('/users', userRequestBody);
 
             // Get the returned user and update a new object.
             const user = new User(response.data);
 
-            // Store the token into the local storage.
-            localStorage.setItem('token', user.token);
+            // Store the token=id into the local storage.
+            localStorage.setItem('token', user.id);
 
-            // Login successfully worked --> navigate to the route /game in the GameRouter
-            history.push(`/game`);
+            //create two teams
+            const teamsRequestBody = JSON.stringify([]);
+            const teamResponse1 = await api.post(`/teams`, teamsRequestBody);
+            const team1 = new Team(teamResponse1.data);
+            const teamResponse2 = await api.post(`/teams`, teamsRequestBody);
+            const team2 = new Team(teamResponse2.data);
+            localStorage.setItem('team1Token', team1.token);
+            localStorage.setItem('team2Token', team2.token);
+
+            // Login successfully worked --> navigate to the route /lobbies/user.id in the GameRouter
+            history.push(`/lobbies/${user.id}`);
+
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
         }
     };
+    console.log(username)
 
     return (
-            <BaseContainer>
-                <div className="login container">
-                    <div className="login form">
-                        <FormField
-                                value={username}
-                                onChange={un => setUsername(un)}
-                        />
-                        <div className="login button-container">
-                            <Button
-                                    disabled={!username}
-                                    width="100%"
-                                    onClick={() => doLogin()}
-                            >
-                                ENTER
-                            </Button>
-                            <Button
-                                    width="100%"
-                                    onClick={() => goBack()}
-                            >
-                                BACK
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </BaseContainer>
+            <Container sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    width: '30%',
+                    height: 200,
+                    backgroundColor: '#D1C4E9',
+                    borderRadius: '20px',
+                    border: '1px solid white'
+                }}
+                >
+                    <Typography variant="h6" sx={{color: 'white'}}>Login</Typography>
+                    <TextField
+                            id='outlined-basic'
+                            label='Username'
+                            value={username}
+                            onChange={handleUsernameChange}
+                            variant='outlined'
+                            InputLabelProps={{style: {color: 'white'}}}
+                            InputProps={{style: {color: 'white'}}}
+                            sx={{
+                                backgroundColor: 'lightgray',
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: 'white'
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'white'
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'white'
+                                    }
+                                }
+                            }}
+                    >
+                    </TextField>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '65%',
+                        marginTop: '10px',}}
+                    >
+                        <Button variant="contained"
+                                sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%'}}
+                                onClick={() => goBack()}
+                        >
+                            Back
+                        </Button>
+                        <Button variant="contained"
+                                sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%'}}
+                                onClick={() => doLogin()}
+                        >
+                            Enter
+                        </Button>
+                    </Box>
+                </Box>
+            </Container>
     );
 };
 
@@ -90,4 +119,4 @@ const Login = props => {
  * You can get access to the history object's properties via the withRouter.
  * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
  */
-export default Login;
+export default AdminLogin;

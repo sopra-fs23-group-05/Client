@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.15",
     "axios": "^0.24.0",
     "node-gyp": "^8.4.1",
     "node-sass": "^8.0.0",
