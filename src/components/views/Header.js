@@ -1,5 +1,4 @@
 import React from "react";
-import {ReactLogo} from "components/ui/ReactLogo";
 import PropTypes from "prop-types";
 import "styles/views/Header.scss";
 
@@ -12,9 +11,8 @@ import "styles/views/Header.scss";
  * @FunctionalComponent
  */
 const Header = props => (
-  <div className="header container" style={{height: props.height}}>
-    <h1 className="header title">Group 05!</h1>
-    <ReactLogo width="60px" height="60px"/>
+  <div className="header container" style={{height: props.height, backgroundColor: "transparent"}}>
+    <img src="https://file.rendit.io/n/LtWICUUcBdXDDqhPUH8O.png" alt="" />
   </div>
 );
 
