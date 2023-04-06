@@ -84,6 +84,31 @@ const Lobby = () => {
         justifyContent: 'space-between'}}
     />
 
+    if (isLeader) {
+        content = (
+                <Box sx={{
+                    width: '50%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'}}
+                >
+                    <Button variant="contained"
+                            sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%', marginTop: '10px'}}
+                            onClick={() => goToSettingsPage()}
+                    >
+                        Settings
+                    </Button>
+                    <Button variant="contained"
+                            sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%', marginTop: '10px'}}
+                            onClick={() => startGame()}
+                    >
+                        Start Game
+                    </Button>
+                </Box>
+        );
+    }
+
     return (
             <Container sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                 <Typography  variant="h5" sx={{color: 'white'}}>Access Code:</Typography>
