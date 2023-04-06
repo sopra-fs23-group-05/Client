@@ -1,11 +1,7 @@
-import {useEffect, useState} from 'react';
-import {api, handleError} from 'helpers/api';
-import {Spinner} from 'components/ui/Spinner';
-import {Button} from 'components/ui/Button';
-import {useHistory} from 'react-router-dom';
-import BaseContainer from "components/ui/BaseContainer";
+import React from 'react';
 import PropTypes from "prop-types";
 import "styles/views/Game.scss";
+import {Box, Divider, Button, Typography} from "@mui/material";
 
 const Player = ({user}) => (
   <div className="player container">
@@ -20,19 +16,11 @@ Player.propTypes = {
 };
 
 const Game = () => {
+  //const logout = () => {}
   // use react-router-dom's hook to access the history
-  const history = useHistory();
+  //const history = useHistory();
 
-  // define a state variable (using the state hook).
-  // if this variable changes, the component will re-render, but the variable will
-  // keep its value throughout render cycles.
-  // a component can have as many state variables as you like.
-  // more information can be found under https://reactjs.org/docs/hooks-state.html
-  const [teamGuesser, setTeamGuesser] = useState(null);
-  const [clueGiver, setClueGiver] = useState(null);
-  const [teamBuzzer, setTeamBuzzer] = useState(null);
-  const [user, setUser] = useState(null);
-
+  /*
   useEffect(() => {
     async function fetchData() {
       try {
@@ -58,36 +46,87 @@ const Game = () => {
     }
 
     fetchData();
-  }, []);
+  }, []);*/
 
-  let content = <Spinner/>;
 
-  if (users) {
-    content = (
-      <div className="game">
-        <ul className="game user-list">
-          {users.map(user => (
-            <Player user={user} key={user.id}/>
-          ))}
-        </ul>
-        <Button
-          width="100%"
-          onClick={() => logout()}
-        >
-          Logout
-        </Button>
-      </div>
-    );
-  }
+  /*content = (
+            <div className="game">
+                <ul className="game user-list">
+                </ul>
+                <Button
+                        width="100%"
+                        onClick={() => logout()}
+                >
+                    Logout
+                </Button>
+            </div>
+    );*/
 
   return (
-    <BaseContainer className="game container">
-      <h2>Happy Coding!</h2>
-      <p className="game paragraph">
-        Get all users from secure endpoint:
-      </p>
-      {content}
-    </BaseContainer>
+    <div className="homePageRoot">
+      <Box sx={{display: 'flex', flexDirection: 'column', width: '50%'}}>
+          <Box sx={{display: 'flex', flexDirection: 'row'}}>
+              <Box sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                  width: '100%',
+                  height: 200,
+                  backgroundColor: '#D1C4E9',
+                  borderRadius: '20px',
+                  border: '1px solid white'}}
+              >
+                  <Typography variant="h6" sx={{color: 'white', marginLeft: '20px'}}>Word</Typography>
+                  <Box sx={{display: 'flex', flexDirection: 'column', marginLeft: '20px', marginRight: '20px'}}>
+                      <Typography variant="h6" sx={{color: 'white'}}>Taboo 1</Typography>
+                      <Typography variant="h6" sx={{color: 'white'}}>Taboo 2</Typography>
+                      <Typography variant="h6" sx={{color: 'white'}}>Taboo 3</Typography>
+                      <Typography variant="h6" sx={{color: 'white'}}>Taboo 4</Typography>
+                      <Typography variant="h6" sx={{color: 'white'}}>Taboo 5</Typography>
+
+                  </Box>
+              </Box>
+                  <Box sx={{display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'column',
+                      width: '100%',
+                      height: 200,
+                      backgroundColor: '#D1C4E9',
+                      borderRadius: '20px',
+                      border: '1px solid white',
+                      marginLeft: '20px'
+                  }}>
+                      <Typography variant="h6" sx={{color: 'white'}}>Timer</Typography>
+                      <Divider sx={{color: 'white', border: '1px solid white', width: '20%', marginBottom: '30px', marginTop: '30px'}} />
+                      <Typography variant="h6" sx={{color: 'white'}}>Score</Typography>
+                  </Box>
+          </Box>
+          <Box sx={{display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              width: '100%',
+              height: 300,
+              backgroundColor: '#D1C4E9',
+              borderRadius: '20px',
+              border: '1px solid white',
+              marginTop: '20px',
+              marginBottom: '20px'}}>
+          </Box>
+          <Button variant="contained"
+                  sx={{backgroundColor: 'red',
+                      color: 'black',
+                      '&:hover': { backgroundColor: 'darkred'},
+                      width: '100%',
+                      fontWeight: 'bold',
+                      fontSize: '1.5rem'}}
+          >
+              Buzzer
+          </Button>
+      </Box>
+    </div>
   );
 }
 
