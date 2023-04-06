@@ -1,0 +1,77 @@
+.settingsRoot{
+    gap: 114px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 96px 27px 189px 27px;
+    box-sizing: border-box;
+    background-position: 50% 50%;
+    background-size: cover;
+    background-blend-mode: normal, normal;
+    background: radial-gradient(ellipse closest-side at 50% 50%, #b219fe 5%, #48007e);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+  .rules {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .settingsPanel {
+    width: 225px;
+    gap: 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    padding-top: 28px;
+    padding-right: 34px;
+    padding-bottom: 29px;
+    padding-left: 34px;
+    border-width: 0px;
+    border-radius: 15px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-style: solid;
+    border-color: #ffffff;
+    box-sizing: content-box;
+    background-color: #b699db;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+  }
+  .buttonPanel:hover {
+    opacity: 70%;
+  }
+  .MuiButton-root.button {
+    width: 219px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0px 0.34px 0px 0px;
+    padding: 20px 32.1px;
+    border-width: 1px;
+    border-radius: 9px;
+    border-style: solid;
+    border-color: #ffffff;
+    box-sizing: border-box;
+    background-color: #7f5dab;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    color: #EA854C;
+    font-size: 23px;
+    font-weight: 600;
+    font-family: Inter, sans-serif;
+  }
+  

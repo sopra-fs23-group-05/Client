@@ -1,6 +1,7 @@
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import Homepage from "components/views/Homepage";
 import Rules from "components/views/Rules";
+import Settings from "components/views/Settings";
 
 /**
  * Main router of your application.
@@ -20,6 +21,9 @@ const AppRouter = () => {
         </Route>
         <Route exact path="/rules">
           <Rules/>
+        </Route>
+        <Route exact path="/settings">
+          <Settings/>
         </Route>
         <Route exact path="/">
           <Redirect to="/game"/>
