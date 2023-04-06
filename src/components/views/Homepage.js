@@ -17,14 +17,14 @@ const Homepage = props => {
       ];
     const doCreate = () => {
         try{
-            history.push(`/create`);
+            history.push(`/admin-login`);
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
         }
     };
     const doJoin = () => {
         try{
-            history.push(`/join`);
+            history.push(`/user-login`);
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
         }
