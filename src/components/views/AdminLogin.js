@@ -6,7 +6,7 @@ import {Container, TextField, Button, Typography, Box} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import Lobby from "../../models/Lobby";
 
-const AdminLogin = props => {
+const AdminLogin = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
 
