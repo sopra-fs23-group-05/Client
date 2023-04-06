@@ -8,7 +8,6 @@ import 'styles/views/AdminLogin.scss';
 const UserLogin = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
-    const [accessCode, setAccessCode] = useState(null);
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value)
