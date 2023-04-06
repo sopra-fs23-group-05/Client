@@ -16,7 +16,7 @@ const AdminLogin = props => {
 
     const goBack = () => {
         localStorage.removeItem('token');
-        history.push('/login');
+        history.push('/homepage');
         window.location.reload();
     }
 
