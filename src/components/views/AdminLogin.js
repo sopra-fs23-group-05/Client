@@ -4,7 +4,7 @@ import User from 'models/User';
 import {useHistory} from 'react-router-dom';
 import {Container, TextField, Button, Typography, Box} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
-import Team from "../../models/Team";
+import Lobby from "../../models/Lobby";
 
 const AdminLogin = props => {
     const history = useHistory();
@@ -32,17 +32,13 @@ const AdminLogin = props => {
             // Store the token=id into the local storage.
             localStorage.setItem('token', user.id);
 
-            //create two teams
-            const teamsRequestBody = JSON.stringify([]);
-            const teamResponse1 = await api.post(`/teams`, teamsRequestBody);
-            const team1 = new Team(teamResponse1.data);
-            const teamResponse2 = await api.post(`/teams`, teamsRequestBody);
-            const team2 = new Team(teamResponse2.data);
-            localStorage.setItem('team1Token', team1.token);
-            localStorage.setItem('team2Token', team2.token);
+            //create lobby
+            const lobbyResponse = await api.post(`/lobbies`);
+            const lobby = new Lobby(lobbyResponse.data);
+            localStorage.setItem('lobbyAccessCode', lobby.accessCode);
 
-            // Login successfully worked --> navigate to the route /lobbies/user.id in the GameRouter
-            history.push(`/lobbies/${user.id}`);
+            // Login successfully worked --> navigate to the route /lobbies/lobby.accessCode in the GameRouter
+            history.push(`/lobbies/${lobby.accessCode}`);
 
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);

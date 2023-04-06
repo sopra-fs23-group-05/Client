@@ -1,7 +1,7 @@
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import AdminLogin from "../../views/AdminLogin";
 import UserLogin from "../../views/UserLogin";
-
+import LobbyPage from "../../views/LobbyPage";
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
@@ -29,6 +29,9 @@ const AppRouter = () => {
                   </Route>
                   <Route exact path="/user-login">
                       <UserLogin/>
+                  </Route>
+                  <Route exact path="/lobbies/:accessCode">
+                      <LobbyPage/>
                   </Route>
               </Switch>
           </BrowserRouter>
