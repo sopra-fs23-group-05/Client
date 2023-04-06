@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import User from 'models/User';
 import {useHistory} from 'react-router-dom';
-import {Container, TextField, Button, Typography, Box} from "@mui/material";
+import {TextField, Button, Typography, Box} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 
 const UserLogin = () => {
@@ -22,8 +22,8 @@ const UserLogin = () => {
 
     const doLogin = async () => {
         try {
-            const isLeader = false;
-            const requestBody = JSON.stringify({username, isLeader});
+            const leader = false;
+            const requestBody = JSON.stringify({username, leader});
             const response = await api.post('/users', requestBody);
 
             // Get the returned user and update a new object.
@@ -41,7 +41,7 @@ const UserLogin = () => {
     };
 
     return (
-            <Container sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <div className="homePageRoot">
                 <Box sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -118,7 +118,7 @@ const UserLogin = () => {
                         </Button>
                     </Box>
                 </Box>
-            </Container>
+            </div>
     );
 };
 
