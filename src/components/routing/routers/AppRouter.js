@@ -1,8 +1,4 @@
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
-import {GameGuard} from "components/routing/routeProtectors/GameGuard";
-import GameRouter from "components/routing/routers/GameRouter";
-import {LoginGuard} from "components/routing/routeProtectors/LoginGuard";
-import Login from "components/views/Login";
 import AdminLogin from "../../views/AdminLogin";
 import UserLogin from "../../views/UserLogin";
 import Lobby from "../../views/Lobby";
@@ -18,32 +14,28 @@ import Lobby from "../../views/Lobby";
  */
 const AppRouter = () => {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/game">
-          <GameGuard>
-            <GameRouter base="/game"/>
-          </GameGuard>
-        </Route>
-        <Route exact path="/login">
-          <LoginGuard>
-            <Login/>
-          </LoginGuard>
-        </Route>
-          <Route exact path="/admin-login">
-              <AdminLogin/>
-          </Route>
-          <Route exact path="/user-login">
-                  <UserLogin/>
-          </Route>
-          <Route exact path="/lobbies/:id">
-              <Lobby/>
-          </Route>
-        <Route exact path="/">
-          <Redirect to="/game"/>
-        </Route>
-      </Switch>
-    </BrowserRouter>
+          <BrowserRouter>
+              <Switch>
+                  <Route exact path="/homepage">
+                      <Homepage/>
+                  </Route>
+                  <Route exact path="/rules">
+                      <Rules/>
+                  </Route>
+                  <Route exact path="/">
+                      <Redirect to="/homepage"/>
+                  </Route>
+                  <Route exact path="/admin-login">
+                      <AdminLogin/>
+                  </Route>
+                  <Route exact path="/user-login">
+                      <UserLogin/>
+                  </Route>
+                  <Route exact path="/lobbies/:id">
+                      <Lobby/>
+                  </Route>
+              </Switch>
+          </BrowserRouter>
   );
 };
 
