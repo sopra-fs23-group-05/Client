@@ -22,7 +22,7 @@ const AppRouter = () => {
           <Rules/>
         </Route>
         <Route exact path="/">
-          <Redirect to="/homepage"/>
+          <Redirect to="/game"/>
         </Route>
       </Switch>
     </BrowserRouter>
