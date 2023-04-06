@@ -1,18 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
-import {Container, Button, Typography, Box,} from "@mui/material";
+import {Button, Typography, Box,} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
-import user from "../../models/User";
-
-
 
 const Lobby = () => {
 
     const history = useHistory();
     const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
-    const [teamId, setTeamId] = useState(null);
+    const [setTeamId] = useState(null);
     const [team1, addToTeam1] = useState(null);
     const [team2, addToTeam2] = useState(null);
     const [clicked, setClicked] = useState(false);
@@ -27,7 +24,7 @@ const Lobby = () => {
 
                 // Get the returned users and update the state.
                 setUser(response.data);
-                setIsLeader(user.isLeader);
+                setIsLeader(user.leader);
 
             } catch (error) {
                 console.error(`Something went wrong while fetching the user: \n${handleError(error)}`);
@@ -37,7 +34,7 @@ const Lobby = () => {
         }
 
         fetchData();
-    }, []);
+    });
 
     console.log("local token", localStorage.getItem('token'));
     console.log("leader", isLeader);
@@ -110,7 +107,7 @@ const Lobby = () => {
     }
 
     return (
-            <Container sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <div className="homePageRoot">
                 <Typography  variant="h5" sx={{color: 'white'}}>Access Code:</Typography>
                 <Box sx={{
                     display: 'flex',
@@ -182,7 +179,7 @@ const Lobby = () => {
                     </Button>
                 </Box>
                 {content}
-            </Container>
+            </div>
     );
 };
 export default Lobby;
