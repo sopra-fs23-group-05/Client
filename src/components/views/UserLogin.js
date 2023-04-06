@@ -5,7 +5,7 @@ import {useHistory} from 'react-router-dom';
 import {Container, TextField, Button, Typography, Box} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 
-const UserLogin = props => {
+const UserLogin = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
     const [accessCode, setAccessCode] = useState(null);
