@@ -4,6 +4,7 @@ import UserLogin from "../../views/UserLogin";
 import LobbyPage from "../../views/LobbyPage";
 import Homepage from "components/views/Homepage";
 import Rules from "components/views/Rules";
+import PreGame from "../../views/PreGame";
 
 /**
  * Main router of your application.
@@ -35,6 +36,9 @@ const AppRouter = () => {
                   </Route>
                   <Route exact path="/lobbies/:accessCode">
                       <LobbyPage/>
+                  </Route>
+                  <Route exact path="/pregame">
+                      <PreGame/>
                   </Route>
               </Switch>
           </BrowserRouter>
