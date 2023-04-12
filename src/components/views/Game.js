@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import "styles/views/Game.scss";
-import {Box, Divider, Button, Typography} from "@mui/material";
+import {Box, Divider, Button} from "@mui/material";
 
 const Player = ({user}) => (
   <div className="player container">
@@ -62,7 +62,8 @@ const Game = () => {
             </div>
     );*/
 
-  return (
+
+    return (
     <div className="homePageRoot">
       <Box sx={{display: 'flex', flexDirection: 'column'}}>
           <div className="card-and-timer-box">
@@ -80,9 +81,9 @@ const Game = () => {
                   </div>
               </div>
                   <div className="timer-box">
-                      <Typography variant="h6" sx={{color: 'white'}}>Timer</Typography>
+                      <div>Timer</div>
                       <Divider sx={{color: 'white', border: '1px solid white', width: '80%', marginBottom: '30px', marginTop: '30px'}} />
-                      <Typography variant="h6" sx={{color: 'white'}}>Score</Typography>
+                      <div>Score</div>
                   </div>
           </div>
           <Box sx={{display: 'flex',
