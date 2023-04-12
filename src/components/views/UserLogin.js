@@ -62,7 +62,7 @@ const UserLogin = () => {
                             onChange={handleUsernameChange}
                     >
                     </TextField>
-                    <div className="horizontal-button-box">
+                    <div className="horizontal-box">
                         <Button variant="contained"
                                 className="buttonLogin"
                                 onClick={() =>goBack()}
