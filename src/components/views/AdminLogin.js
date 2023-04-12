@@ -5,6 +5,8 @@ import {useHistory} from 'react-router-dom';
 import {TextField, Button, Typography, Box} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import Lobby from "../../models/Lobby";
+import TabooLogo from "./TabooLogo.png";
+
 
 const AdminLogin = () => {
     const history = useHistory();
@@ -48,64 +50,34 @@ const AdminLogin = () => {
 
     return (
             <div className="homePageRoot">
+                <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}} />
                 <Box sx={{
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
                     flexDirection: 'column',
-                    width: '30%',
-                    height: 200,
-                    backgroundColor: '#D1C4E9',
-                    borderRadius: '20px',
-                    border: '1px solid white'
                 }}
                 >
-                    <Typography variant="h6" sx={{color: 'white'}}>Login</Typography>
-                    <TextField
-                            id='outlined-basic'
+                    <div className="buttonPanel">
+                    <Typography variant="h5" sx={{color: 'white'}}>Login</Typography>
+                    <TextField className="custom-outlined-text-field"
                             label='Username'
                             value={username}
-                            onChange={handleUsernameChange}
-                            variant='outlined'
-                            InputLabelProps={{style: {color: 'white'}}}
-                            InputProps={{style: {color: 'white'}}}
-                            sx={{
-                                backgroundColor: 'lightgray',
-                                '& .MuiOutlinedInput-root': {
-                                    '& fieldset': {
-                                        borderColor: 'white'
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: 'white'
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: 'white'
-                                    }
-                                }
-                            }}
-                    >
+                            onChange={handleUsernameChange}>
                     </TextField>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        width: '65%',
-                        marginTop: '10px',}}
-                    >
+                    <div className="horizontal-box">
                         <Button variant="contained"
-                                sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%'}}
+                                className="buttonLogin"
                                 onClick={() => goBack()}
                         >
                             Back
                         </Button>
                         <Button variant="contained"
-                                sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%'}}
+                                className="buttonLogin"
                                 onClick={() => doLogin()}
                         >
                             Enter
                         </Button>
-                    </Box>
+                    </div>
+                    </div>
                 </Box>
             </div>
     );
