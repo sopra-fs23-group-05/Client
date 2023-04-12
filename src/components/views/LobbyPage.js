@@ -71,7 +71,14 @@ const Lobby = () => {
 
     const goToInvitePage = () => {}//TODO insert code
     const goToSettingsPage = () => {}//TODO insert code
-    const startGame = () => {}//TODO insert code
+    const startGame = async () => {
+        const accessCode = localStorage.getItem("lobbyAccessCode");
+
+        await api.post(`/games/${accessCode}`);
+
+        history.push(`/games/${accessCode}/pregame`);
+
+    }
 
     let content = <Box sx={{
         width: '50%',
