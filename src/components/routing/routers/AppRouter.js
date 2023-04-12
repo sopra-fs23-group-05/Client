@@ -4,7 +4,9 @@ import UserLogin from "../../views/UserLogin";
 import LobbyPage from "../../views/LobbyPage";
 import Homepage from "components/views/Homepage";
 import Rules from "components/views/Rules";
+import PreGame from "../../views/PreGame";
 import Game from "../../views/Game";
+
 
 /**
  * Main router of your application.
