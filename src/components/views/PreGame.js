@@ -1,12 +1,8 @@
-import React, {useState} from 'react';
-import {useHistory} from 'react-router-dom';
-import {TextField, Button, Typography, Box} from "@mui/material";
+import {Box} from "@mui/material";
 import 'styles/views/PreGame.scss';
 
 
 const PreGame = () => {
-  const history = useHistory();
-  const [username, setUsername] = useState(null);
 
   let timeLeft = 10;
   const downloadTimer = setInterval(function(){

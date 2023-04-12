@@ -42,6 +42,9 @@ const AppRouter = () => {
                   <Route exact path="/games/:accessCode">
                       <Game/>
                   </Route>
+                  <Route exact path="/games/:accessCode/pregame">
+                      <PreGame/>
+                  </Route>
               </Switch>
           </BrowserRouter>
   );
