@@ -35,10 +35,10 @@ const PreGame = () => {
           borderRadius: '20px',
           border: '1px solid white'
         }}
-        ><h2> round starts in:</h2>
-          <div id="countdown"></div>
-          <h2> your role:</h2>
-          <h2>  xx</h2>
+        ><h2 className="h2"> round starts in:</h2>
+          <div id="countdown" className="countdown"></div>
+          <h2 className="h2"> your role:</h2>
+          <h2 className="role">  ROLE</h2>
         </Box>
           <Box sx={{
             display: 'flex',
@@ -52,9 +52,9 @@ const PreGame = () => {
             border: '1px solid white'
           }}
           >
-            <h1>Score</h1>
-            <h2>Team 1:</h2>
-            <h2>Team 2:</h2>
+            <h1 className="score">Score</h1>
+            <h2 className="team">Team 1:</h2>
+            <h2 className="team">Team 2:</h2>
         </Box>
       </div>
   );
