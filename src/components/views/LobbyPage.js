@@ -14,27 +14,10 @@ const Lobby = () => {
     const [clicked, setClicked] = useState(false);
     const [isLeader, setIsLeader] = useState(false);
 
-    const team1 = [];
-    const team2 = [];
+
 
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const userId = localStorage.getItem('token');
-
-    const mockUser = {
-        id: 17,
-        username: 'mockUser',
-    };
-    team1.push(mockUser);
-
-    /*const mockTeam = {
-        teamId: 2,
-        users: [
-            {id: 1, username: 'user1', isLeader: false},
-            {id: 2, username: 'user2', isLeader: false},
-            {id: 3, username: 'user3', isLeader: false},
-            {id: 4, username: 'user4', isLeader: false},
-        ],
-    };*/
 
     useEffect(() => {
         async function fetchData() {
@@ -59,7 +42,7 @@ const Lobby = () => {
         }
 
         fetchData();
-    }, []);
+    }, [clicked]);
 
     const goBack = () => {
         localStorage.removeItem('token');
@@ -71,24 +54,31 @@ const Lobby = () => {
 
     const joinTeam = async (teamNr) => {
         try {
-            if (teamNr === 1 && !clicked) {
+            if (clicked) {
+                alert("you've already joined a team");
+            }
+            else if (teamNr === 1) {
                 setClicked(true);
-                //const teamId = 1; //TODO get correct team id
-                //const requestBody = JSON.stringify({accessCode, teamId, userId});
-                //const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamId}/additions/users/${userId}`, requestBody)
-                team1.push(user);
+                const updatedUser = {...user, teamId: 1};
+                setUser(updatedUser);
+
+                const teamId = 1; //TODO get correct team id
+                const requestBody = JSON.stringify({accessCode, teamId, userId});
+                const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamId}/additions/users/${userId}`, requestBody);
+
                 lobby.team1.push(user);
                 console.log('team1:', lobby.team1);
+                window.location.reload();
             }
 
-            else if (teamNr === 2 && !clicked) {
+            else if (teamNr === 2) {
                 setClicked(true);
-                //const teamId = 2; //TODO get correct team id
-                //const requestBody = JSON.stringify({accessCode, teamId, userId});
-                //const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamId}/additions/users/${userId}`, requestBody)
-                team2.push(user);
+                const teamId = 2; //TODO get correct team id
+                const requestBody = JSON.stringify({accessCode, teamId, userId});
+                const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamId}/additions/users/${userId}`, requestBody);
                 lobby.team2.push(user);
                 console.log('team2:', lobby.team2);
+                window.location.reload();
             }
         }
         catch (error) {
@@ -136,7 +126,7 @@ const Lobby = () => {
                     <div className="buttonPanel">
                         <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 1</Typography>
                         <ul className="team-member-box">
-                            {team1.map(user => (
+                            {lobby?.team1?.map(user => (
                                     <div className="team-member" key={user.id}>{user.username}</div>
                             ))}
                         </ul>
@@ -151,7 +141,7 @@ const Lobby = () => {
                     <div className="buttonPanel" style={{marginTop: '20px'}}>
                         <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 2</Typography>
                         <ul className="team-member-box">
-                            {team2.map(user => (
+                            {lobby?.team2?.map(user => (
                                     <div className="team-member" key={user.id}>{user.username}</div>
                                     ))}
                         </ul>
