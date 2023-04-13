@@ -5,36 +5,55 @@ import {useHistory} from 'react-router-dom';
 import {TextField, Button, Typography, Box} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import TabooLogo from "./TabooLogo.png";
+import Lobby from "../../models/Lobby";
 
 const UserLogin = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
-    const [accessCode] = useState(null);
+    const isLeader = false;
+    const [givenAccessCode, setGivenAccessCode] = useState(null);
+
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value)
     }
+    const handleAccessCodeChange = (event) => {
+        setGivenAccessCode(event.target.value)
+    }
 
     const goBack = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('lobbyAccessCode');
         history.push('/homepage');
         window.location.reload();
     }
 
     const doLogin = async () => {
         try {
-            const leader = false;
-            const requestBody = JSON.stringify({username, leader});
+            //find Lobby; if not found, error thrown
+            const requestLobby = await api.get(`/lobbies/${givenAccessCode}`);
+            const lobby = new Lobby(requestLobby.data);
+            localStorage.setItem('lobbyAccessCode', lobby.accessCode);
+
+            //create user
+            const requestBody = JSON.stringify({username, isLeader});
             const response = await api.post('/users', requestBody);
-
-            // Get the returned user and update a new object.
             const user = new User(response.data);
-
-            // Store the token into the local storage.
             localStorage.setItem('token', user.id);
 
+            //add user to lobby
+            const putBody = JSON.stringify({givenAccessCode, username});
+            await api.put(`/lobbies/${givenAccessCode}/additions/users/${user.id}`, putBody);
+
+            //add user to lobby userList
+            lobby.lobbyUsers.push(user);
+
+            //show details
+            console.log('user id:', user.id);
+            console.log('access code:', givenAccessCode);
+
             // Login successfully worked --> navigate to the route /game in the GameRouter
-            history.push(`/lobbies/${user.id}`);
+            history.push(`/lobbies/${lobby.accessCode}`);
 
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
@@ -52,8 +71,8 @@ const UserLogin = () => {
                     <Typography variant="h5" sx={{color: 'white'}}>Login</Typography>
                     <TextField className="custom-outlined-text-field"
                             label='Access Code'
-                            value={accessCode}
-                            onChange={null} //TODO insert Access Code
+                            value={givenAccessCode}
+                            onChange={handleAccessCodeChange}
                     >
                     </TextField>
                     <TextField className="custom-outlined-text-field"

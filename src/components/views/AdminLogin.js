@@ -11,6 +11,7 @@ import TabooLogo from "./TabooLogo.png";
 const AdminLogin = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
+    const isLeader = true;
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value)
@@ -18,26 +19,43 @@ const AdminLogin = () => {
 
     const goBack = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('lobbyAccessCode');
         history.push('/homepage');
         window.location.reload();
     }
 
     const doLogin = async () => {
         try {
-            const leader = true;
-            const userRequestBody = JSON.stringify({username, leader});
+            //create user
+            const userRequestBody = JSON.stringify({username, isLeader});
             const response = await api.post('/users', userRequestBody);
 
             // Get the returned user and update a new object.
             const user = new User(response.data);
+            setUsername(user.username)
 
             // Store the token=id into the local storage.
             localStorage.setItem('token', user.id);
 
-            //create lobby
-            const lobbyResponse = await api.post(`/lobbies`);
-            const lobby = new Lobby(lobbyResponse.data);
-            localStorage.setItem('lobbyAccessCode', lobby.accessCode);
+            //post lobby
+            const lobbyEmpty = await api.post(`/lobbies`);
+
+            //create lobby object
+            const lobby = new Lobby(lobbyEmpty.data);
+
+            const accessCode = lobby.accessCode;
+
+            //add user to lobby
+            const putBody = JSON.stringify({accessCode, username});
+            await api.put(`/lobbies/${accessCode}/additions/users/${user.id}`, putBody);
+
+            //add user to lobby userList
+            lobby.lobbyUsers.push(user);
+
+            console.log('user list:', lobby.lobbyUsers);
+
+            localStorage.setItem('lobbyAccessCode', accessCode.toString());
+            console.log('access code when login:', accessCode);
 
             // Login successfully worked --> navigate to the route /lobbies/lobby.accessCode in the GameRouter
             history.push(`/lobbies/${lobby.accessCode}`);
