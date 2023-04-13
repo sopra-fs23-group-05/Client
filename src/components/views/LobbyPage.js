@@ -3,34 +3,52 @@ import {api, handleError} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import {Button, Typography, Box,} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
+import 'styles/views/LobbyPage.scss';
 
 const Lobby = () => {
 
     const history = useHistory();
 
     const [lobby, setLobby] = useState(null);
-    //const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
     const [clicked, setClicked] = useState(false);
+    const [isLeader, setIsLeader] = useState(false);
+
+    const team1 = [];
+    const team2 = [];
 
     const accessCode = localStorage.getItem('lobbyAccessCode');
-    //const userId = localStorage.getItem('token');
+    const userId = localStorage.getItem('token');
 
     const mockUser = {
         id: 17,
         username: 'mockUser',
-        isLeader: false,
     };
+    team1.push(mockUser);
+
+    /*const mockTeam = {
+        teamId: 2,
+        users: [
+            {id: 1, username: 'user1', isLeader: false},
+            {id: 2, username: 'user2', isLeader: false},
+            {id: 3, username: 'user3', isLeader: false},
+            {id: 4, username: 'user4', isLeader: false},
+        ],
+    };*/
 
     useEffect(() => {
         async function fetchData() {
             try {
                 //get user
-                //const userResponse = await api.get(`/users/${userId}`);
-                //setUser(userResponse.data);
+                const userResponse = await api.get(`/users/${userId}`);
+                setUser(userResponse.data);
+                console.log('user info', userResponse.data);
+                setIsLeader(userResponse.data.leader);
 
                 //get teams
                 const lobbyResponse = await api.get(`/lobbies/${accessCode}`);
                 setLobby(lobbyResponse.data);
+                console.log('lobby info:', lobbyResponse.data);
 
 
             } catch (error) {
@@ -58,15 +76,18 @@ const Lobby = () => {
                 //const teamId = 1; //TODO get correct team id
                 //const requestBody = JSON.stringify({accessCode, teamId, userId});
                 //const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamId}/additions/users/${userId}`, requestBody)
-                lobby.team1.push(mockUser);
+                team1.push(user);
+                lobby.team1.push(user);
                 console.log('team1:', lobby.team1);
             }
+
             else if (teamNr === 2 && !clicked) {
                 setClicked(true);
                 //const teamId = 2; //TODO get correct team id
                 //const requestBody = JSON.stringify({accessCode, teamId, userId});
                 //const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamId}/additions/users/${userId}`, requestBody)
-                lobby.team2.push(mockUser);
+                team2.push(user);
+                lobby.team2.push(user);
                 console.log('team2:', lobby.team2);
             }
         }
@@ -85,8 +106,7 @@ const Lobby = () => {
 
     let content = <div className="horizontal-box"></div>
 
-    //should be if  (user.isLeader)
-    if (true) {
+    if (isLeader) {
         content = (
                 <div className="horizontal-box">
                     <Button variant="contained"
@@ -114,8 +134,12 @@ const Lobby = () => {
 
                 <Box sx={{display: 'flex', flexDirection: 'column', marginBottom: '-80px'}}>
                     <div className="buttonPanel">
-                        <Typography variant="h5" sx={{color: 'white'}}>Team 1</Typography>
-                        <Box sx={{ width: '80%', height: '100px', backgroundColor: 'lightgray' }}></Box>
+                        <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 1</Typography>
+                        <ul className="team-member-box">
+                            {team1.map(user => (
+                                    <div className="team-member" key={user.id}>{user.username}</div>
+                            ))}
+                        </ul>
                         <Button variant="contained"
                                 className="buttonLogin"
                                 onClick={() => joinTeam(1)}
@@ -125,8 +149,12 @@ const Lobby = () => {
                     </div>
 
                     <div className="buttonPanel" style={{marginTop: '20px'}}>
-                        <Typography variant="h5" sx={{color: 'white'}}>Team 2</Typography>
-                        <Box sx={{ width: '80%', height: '100px', backgroundColor: 'lightgray' }}></Box>
+                        <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 2</Typography>
+                        <ul className="team-member-box">
+                            {team2.map(user => (
+                                    <div className="team-member" key={user.id}>{user.username}</div>
+                                    ))}
+                        </ul>
                         <Button variant="contained"
                                 className="buttonLogin"
                                 onClick={() => joinTeam(2)}
