@@ -64,45 +64,27 @@ const Game = () => {
 
   return (
     <div className="homePageRoot">
-      <Box sx={{display: 'flex', flexDirection: 'column', width: '50%'}}>
-          <Box sx={{display: 'flex', flexDirection: 'row'}}>
-              <Box sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'row',
-                  width: '100%',
-                  height: 200,
-                  backgroundColor: '#D1C4E9',
-                  borderRadius: '20px',
-                  border: '1px solid white'}}
-              >
-                  <Typography variant="h6" sx={{color: 'white', marginLeft: '20px'}}>Word</Typography>
-                  <Box sx={{display: 'flex', flexDirection: 'column', marginLeft: '20px', marginRight: '20px'}}>
-                      <Typography variant="h6" sx={{color: 'white'}}>Taboo 1</Typography>
-                      <Typography variant="h6" sx={{color: 'white'}}>Taboo 2</Typography>
-                      <Typography variant="h6" sx={{color: 'white'}}>Taboo 3</Typography>
-                      <Typography variant="h6" sx={{color: 'white'}}>Taboo 4</Typography>
-                      <Typography variant="h6" sx={{color: 'white'}}>Taboo 5</Typography>
-
-                  </Box>
-              </Box>
-                  <Box sx={{display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexDirection: 'column',
-                      width: '100%',
-                      height: 200,
-                      backgroundColor: '#D1C4E9',
-                      borderRadius: '20px',
-                      border: '1px solid white',
-                      marginLeft: '20px'
-                  }}>
+      <Box sx={{display: 'flex', flexDirection: 'column'}}>
+          <div className="card-and-timer-box">
+              <div className="card-box">
+                  <div className="side-box">
+                      <div>Word</div>
+                      <div>Skip</div>
+                  </div>
+                  <div className="side-box">
+                      <div>Taboo 1</div>
+                      <div>Taboo 2</div>
+                      <div>Taboo 3</div>
+                      <div>Taboo 4</div>
+                      <div>Taboo 5</div>
+                  </div>
+              </div>
+                  <div className="timer-box">
                       <Typography variant="h6" sx={{color: 'white'}}>Timer</Typography>
-                      <Divider sx={{color: 'white', border: '1px solid white', width: '20%', marginBottom: '30px', marginTop: '30px'}} />
+                      <Divider sx={{color: 'white', border: '1px solid white', width: '80%', marginBottom: '30px', marginTop: '30px'}} />
                       <Typography variant="h6" sx={{color: 'white'}}>Score</Typography>
-                  </Box>
-          </Box>
+                  </div>
+          </div>
           <Box sx={{display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
