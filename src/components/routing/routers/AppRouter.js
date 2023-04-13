@@ -1,7 +1,13 @@
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
+import AdminLogin from "../../views/AdminLogin";
+import UserLogin from "../../views/UserLogin";
+import LobbyPage from "../../views/LobbyPage";
 import Homepage from "components/views/Homepage";
 import Rules from "components/views/Rules";
 import Settings from "components/views/Settings";
+import PreGame from "../../views/PreGame";
+import Game from "../../views/Game";
+
 
 /**
  * Main router of your application.
@@ -14,22 +20,37 @@ import Settings from "components/views/Settings";
  */
 const AppRouter = () => {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/homepage">
-          <Homepage/>
-        </Route>
-        <Route exact path="/rules">
-          <Rules/>
-        </Route>
-        <Route exact path="/settings">
-          <Settings/>
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/homepage"/>
-        </Route>
-      </Switch>
-    </BrowserRouter>
+          <BrowserRouter>
+              <Switch>
+                  <Route exact path="/homepage">
+                      <Homepage/>
+                  </Route>
+                  <Route exact path="/rules">
+                      <Rules/>
+                  </Route>
+                  <Route exact path="/settings">
+                    <Settings/>
+                  </Route>
+                  <Route exact path="/">
+                      <Redirect to="/homepage"/>
+                  </Route>
+                  <Route exact path="/admin-login">
+                      <AdminLogin/>
+                  </Route>
+                  <Route exact path="/user-login">
+                      <UserLogin/>
+                  </Route>
+                  <Route exact path="/lobbies/:accessCode">
+                      <LobbyPage/>
+                  </Route>
+                  <Route exact path="/games/:accessCode">
+                      <Game/>
+                  </Route>
+                  <Route exact path="/games/:accessCode/pregame">
+                      <PreGame/>
+                  </Route>
+              </Switch>
+          </BrowserRouter>
   );
 };
 
