@@ -42,7 +42,7 @@ const Lobby = () => {
         }
 
         fetchData();
-    }, [clicked]);
+    }, [clicked, userId, setUser]);
 
     const goBack = () => {
         localStorage.removeItem('token');
