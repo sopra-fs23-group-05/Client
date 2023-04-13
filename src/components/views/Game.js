@@ -1,25 +1,7 @@
-import React from 'react';
-import PropTypes from "prop-types";
 import "styles/views/Game.scss";
 import {Box, Divider, Button} from "@mui/material";
 
-const Player = ({user}) => (
-  <div className="player container">
-    <div className="player username">{user.username}</div>
-    <div className="player name">{user.name}</div>
-    <div className="player id">id: {user.id}</div>
-  </div>
-);
-
-Player.propTypes = {
-  user: PropTypes.object
-};
-
 const Game = () => {
-  //const logout = () => {}
-  // use react-router-dom's hook to access the history
-  //const history = useHistory();
-
   /*
   useEffect(() => {
     async function fetchData() {
@@ -48,21 +30,6 @@ const Game = () => {
     fetchData();
   }, []);*/
 
-
-  /*content = (
-            <div className="game">
-                <ul className="game user-list">
-                </ul>
-                <Button
-                        width="100%"
-                        onClick={() => logout()}
-                >
-                    Logout
-                </Button>
-            </div>
-    );*/
-
-
     return (
     <div className="homePageRoot">
       <Box sx={{display: 'flex', flexDirection: 'column'}}>
@@ -82,8 +49,10 @@ const Game = () => {
               </div>
                   <div className="timer-box">
                       <div>Timer</div>
-                      <Divider sx={{color: 'white', border: '1px solid white', width: '80%', marginBottom: '30px', marginTop: '30px'}} />
+                      <div>01:45</div>
+                      <Divider sx={{color: 'white', border: '1px solid white', width: '80%', marginBottom: '15px', marginTop: '15px'}} />
                       <div>Score</div>
+                      <div>4</div>
                   </div>
           </div>
           <Box sx={{display: 'flex',
