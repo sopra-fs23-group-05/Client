@@ -7,22 +7,31 @@ import 'styles/views/AdminLogin.scss';
 const Lobby = () => {
 
     const history = useHistory();
-    const [setTeamId] = useState(null);
-    const [team1, addToTeam1] = useState(null);
-    const [addToTeam2] = useState(null);
-    const [setClicked] = useState(false);
 
-    const [user, setUser] = useState(null);
+    const [lobby, setLobby] = useState(null);
+    //const [user, setUser] = useState(null);
+    const [clicked, setClicked] = useState(false);
 
     const accessCode = localStorage.getItem('lobbyAccessCode');
+    //const userId = localStorage.getItem('token');
 
-    const userId = localStorage.getItem('token');
+    const mockUser = {
+        id: 17,
+        username: 'mockUser',
+        isLeader: false,
+    };
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const userResponse = await api.get(`/users/${userId}`);
-                setUser(userResponse.data);
+                //get user
+                //const userResponse = await api.get(`/users/${userId}`);
+                //setUser(userResponse.data);
+
+                //get teams
+                const lobbyResponse = await api.get(`/lobbies/${accessCode}`);
+                setLobby(lobbyResponse.data);
+
 
             } catch (error) {
                 console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
@@ -36,30 +45,33 @@ const Lobby = () => {
 
     const goBack = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('lobbyAccessCode');
         //TODO remove user from team if already joined
         history.push('/homepage');
         window.location.reload();
     }
 
-    const clickOnJoinButton = async ({team}) => {
-        //TODO insert correct function to join a team
+    const joinTeam = async (teamNr) => {
         try {
-            setClicked(true);
-            const localToken = localStorage.getItem('token'); //token = user.id
-            const userFoundByToken = await api.get(`/users/${localToken}`);
-
-            if (team.id === 1) {
-                addToTeam1(userFoundByToken);
-                setTeamId(1);
+            if (teamNr === 1 && !clicked) {
+                setClicked(true);
+                //const teamId = 1; //TODO get correct team id
+                //const requestBody = JSON.stringify({accessCode, teamId, userId});
+                //const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamId}/additions/users/${userId}`, requestBody)
+                lobby.team1.push(mockUser);
+                console.log('team1:', lobby.team1);
             }
-
-            if (team.id === 2) {
-                addToTeam2(userFoundByToken);
-                setTeamId(2);
+            else if (teamNr === 2 && !clicked) {
+                setClicked(true);
+                //const teamId = 2; //TODO get correct team id
+                //const requestBody = JSON.stringify({accessCode, teamId, userId});
+                //const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamId}/additions/users/${userId}`, requestBody)
+                lobby.team2.push(mockUser);
+                console.log('team2:', lobby.team2);
             }
         }
         catch (error) {
-            alert(`Something went wrong during the login: \n${handleError(error)}`);
+            alert(`Something went wrong during the join: \n${handleError(error)}`);
         }
     };
 
@@ -106,7 +118,7 @@ const Lobby = () => {
                         <Box sx={{ width: '80%', height: '100px', backgroundColor: 'lightgray' }}></Box>
                         <Button variant="contained"
                                 className="buttonLogin"
-                                onClick={() => clickOnJoinButton(team1)}
+                                onClick={() => joinTeam(1)}
                         >
                             Join
                         </Button>
@@ -117,7 +129,7 @@ const Lobby = () => {
                         <Box sx={{ width: '80%', height: '100px', backgroundColor: 'lightgray' }}></Box>
                         <Button variant="contained"
                                 className="buttonLogin"
-                                onClick={() => clickOnJoinButton(team1)}
+                                onClick={() => joinTeam(2)}
                         >
                             Join
                         </Button>

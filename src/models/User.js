@@ -8,6 +8,7 @@ class User {
     this.token = null;
     this.status = null;
     this.isLeader = null;
+    this.teamId = null;
     Object.assign(this, data);
   }
 }
