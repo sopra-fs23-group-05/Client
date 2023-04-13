@@ -18,60 +18,92 @@
     left: 0;
     right: 0;
     margin: auto;
-  }
-  .rules {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  .settingsPanel {
-    width: 225px;
-    gap: 44px;
+
+  .inputBox {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    margin: 0px 0px 0px 0px;
-    padding: 0px;
-    padding-top: 28px;
-    padding-right: 34px;
-    padding-bottom: 29px;
-    padding-left: 34px;
-    border-width: 0px;
-    border-radius: 15px;
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-style: solid;
-    border-color: #ffffff;
-    box-sizing: content-box;
-    background-color: #b699db;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
+    width: 100%;
+    height: 200px;
+    background-color: #D1C4E9;
+    border-radius: 20px;
+    border: 1px solid white;
+    padding: 20px;
   }
-  .buttonPanel:hover {
-    opacity: 70%;
+  .saveBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;    
+    margin-top: 20px;
+    max-width: 500px;
+  
+  .saveButton {
+    background-color: #7f5dab;
+    color: #EA854C;
+    width: 40%;
+    font-family: Inter, sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+  
+    &:hover {
+      background-color: #8a2be2;
+    }
   }
-  .MuiButton-root.button {
-    width: 219px;
+}
+  .topicsButton {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0px 0.34px 0px 0px;
-    padding: 20px 32.1px;
-    border-width: 1px;
-    border-radius: 9px;
-    border-style: solid;
-    border-color: #ffffff;
-    box-sizing: border-box;
+    width: 170px;
+    height: 170px;
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 20px;
+    border: 1px solid white;
+    padding: 20px;
+
+  
+    h1 {
+      color: white;
+      text-transform: none;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+    }
+  }
+  
+  
+  .textField{
+    background-color: lightgray;
+    width: 90%;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.3);
+  
+    & .MuiOutlinedInput-root {
+      & fieldset {
+        border-color: white;
+      }
+      &:hover fieldset {
+        border-color: white;
+      }
+      &.Mui-focused fieldset {
+        border-color: white;
+      }
+    }
+  }
+  .input {
+    color: white;
+  }
+
+  .backButton {
     background-color: #7f5dab;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    color: #EA854C;
-    font-size: 23px;
+    color: orange;
+    &:hover {background-color: #8a2be2};
+    width: 90%;
+    margin-top: -20px;
+    font-size: 18px;
     font-weight: 600;
     font-family: Inter, sans-serif;
   }
-  
+}

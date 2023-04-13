@@ -7,146 +7,142 @@ import {Container, TextField, Button, Typography, Box} from "@mui/material";
 const Settings = props => {
     const history = useHistory();
     
-    const [username, setUsername] = useState(null);
+    const [rounds, setRounds] = useState(null);
+    const [time, setTime] = useState(null);
     
-    const handleUsernameChange = (event) => {
-        setUsername(event.target.value)
+    const handleRoundsChange = (event) => {
+        setRounds(event.target.value)
+    }
+    const handleTimeChange = (event) => {
+        setTime(event.target.value)
     }
 
     const doBack = () => {
         localStorage.removeItem('token');
-        history.push('/login');
+        history.push('/lobbies');
         window.location.reload();
     }
 
   return (
-    <div className="settingsRoot">
-                <h1 style={{ color: 'white' }}>Settings</h1>
+    <div className="settingsRoot" style={{ overflowY: 'scroll' }}>
+    
+    <h1 style={{ color: 'white', marginTop:'1100px', marginRight: '150px', fontFamily: 'Inter, sans-serif', fontWeight: '600', fontSize: '40px' }}>Settings</h1>
     <Container sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                <Box sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-                width: '100%',
-                height: 200,
-                backgroundColor: '#D1C4E9',
-                borderRadius: '20px',
-                border: '1px solid white',
-                padding: '20px',
-                marginTop: '250px'
-                }}
-                >
-                    <Typography variant="h6" sx={{color: 'white', mb: 1}}>Number of Rounds</Typography>
-                    <TextField
-                            id='outlined-basic'
-                            label='Enter number...'
-                            value={username}
-                            onChange={handleUsernameChange}
-                            variant='outlined'
-                            InputLabelProps={{style: {color: 'white'}}}
-                            InputProps={{style: {color: 'white'}}}
-                            sx={{
-                                backgroundColor: 'lightgray',
-                                '& .MuiOutlinedInput-root': {
-                                    '& fieldset': {
-                                        borderColor: 'white'
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: 'white'
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: 'white'
-                                    }
-                                }
-                            }}
-                    >
-                    </TextField>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        width: '65%',
-                        marginTop: '40px',
-                        marginLeft: '200px'}}
-                    >
-                        <Button variant="contained"
-                                sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%'}}
-                                onClick={() => doBack()}
-                        >
-                            Save
-                        </Button>
-                    </Box>
-                </Box>
+    <Box className="inputBox" sx={{marginTop: '-120px'}}>
+        <Typography variant="h6" sx={{color: 'white', mb: 1, fontFamily: 'Inter, sans-serif', fontWeight: '600', fontSize: '24px', textShadow: '2px 2px 4px rgba(0,0,0,0.4)'}}>Number of Rounds</Typography>
+        <TextField
+            className='textField'
+            id='outlined-basic'
+            label='Enter number...'
+            value={rounds}
+            onChange={handleRoundsChange}
+            variant='outlined'
+            InputLabelProps={{ className: 'input' }}
+            InputProps={{ className: 'input' }}
+        />
+
+        <Box className="saveBox">
+            <div></div>
+            <Button variant="contained" className="saveButton"
+            >
+            Save
+            </Button>
+        </Box>
+        </Box>
             </Container>
             <Container sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                <Box sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-                width: '100%',
-                height: 200,
-                backgroundColor: '#D1C4E9',
-                borderRadius: '20px',
-                border: '1px solid white',
-                padding: '20px',
-                marginTop: '-70px'
-                }}
-                >
-                    <Typography variant="h6" sx={{color: 'white', mb: 1}}>Time Per Round</Typography>
-                    <TextField
-                            id='outlined-basic'
-                            label='Enter time in seconds...'
-                            value={username}
-                            onChange={handleUsernameChange}
-                            variant='outlined'
-                            InputLabelProps={{style: {color: 'white'}}}
-                            InputProps={{style: {color: 'white'}}}
-                            sx={{
-                                backgroundColor: 'lightgray',
-                                '& .MuiOutlinedInput-root': {
-                                    '& fieldset': {
-                                        borderColor: 'white'
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: 'white'
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: 'white'
-                                    }
-                                }
-                            }}
+            <Box className="inputBox" sx={{marginTop: '-50px'}}>
+                <Typography variant="h6" sx={{color: 'white', mb: 1, fontFamily: 'Inter, sans-serif', fontWeight: '600', fontSize: '24px', textShadow: '2px 2px 4px rgba(0,0,0,0.4)'}}>Time Per Round</Typography>
+                <TextField
+                    className='textField'
+                    id='outlined-basic'
+                    label='Enter time in seconds...'
+                    value={time}
+                    onChange={handleTimeChange}
+                    variant='outlined'
+                    InputLabelProps={{ className: 'input' }}
+                    InputProps={{ className: 'input' }}
+                />
+                <Box className="saveBox">
+                    <div></div>
+                    <Button variant="contained" className="saveButton"
                     >
-                    </TextField>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        width: '65%',
-                        marginTop: '40px',
-                        marginLeft: '200px'}}
-                    >
-                        <Button variant="contained"
-                                sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%'}}
-                                onClick={() => doBack()}
-                        >
-                            Save
-                        </Button>
-                    </Box>
+                    Save
+                    </Button>
+                </Box>
                 </Box>
             </Container>
-            <Button variant="contained"
-                sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '90%'}}
+            <Button variant="contained" className="backButton"            
                 onClick={() => doBack()}
                 >
                 Back
             </Button>
 
-            <h1 style={{ color: 'white' }}>Topic of Words</h1>
+            <h1 style={{ color: 'white', marginTop:'-50px', marginBottom: '-20px', fontFamily: 'Inter, sans-serif', fontWeight: '600', fontSize: '40px' }}>Topic of Words</h1>
 
+
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button variant="contained" className="topicsButton" style={{ backgroundColor: '#DB8E56', margin: '-30px 10px -30px 0px'}}>
+                <h1>
+                    Animals
+                </h1>
+            </Button>
+
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#77DE5D', margin: '-30px 0 -30px 10px'}}>
+                <h1>
+                    Sports
+                </h1>
+            </Button>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#EA4848', margin: '-30px 10px -30px 0px'}}>
+                <h1>
+                    Movies
+                </h1>
+            </Button>
+            
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#4D7CF3', margin: '-30px 0 -30px 10px'}}>
+                <h1>
+                    Countries
+                </h1>
+            </Button>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#EEF167', margin: '-30px 10px -30px 0px'}}>
+                <h1>
+                    Food
+                </h1>
+            </Button>
+
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#F666CE', margin: '-30px 0 -30px 10px'}}>
+                <h1>
+                    Music
+                </h1>
+            </Button>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#C660F6', margin: '-30px 10px -30px 0px'}}>
+                <h1>
+                    Famous People
+                </h1>
+            </Button>
+
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#C1BACB', margin: '-30px 0 -30px 10px'}}>
+                <h1>
+                    Technology
+                </h1>
+            </Button>
+            </div>
+
+            <Button variant="contained" className="backButton"            
+                onClick={() => doBack()}
+                >
+                Back
+            </Button>
             </div>
   );
 };
