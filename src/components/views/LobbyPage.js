@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import {Button, Typography, Box,} from "@mui/material";
@@ -7,42 +7,32 @@ import 'styles/views/AdminLogin.scss';
 const Lobby = () => {
 
     const history = useHistory();
-    //const [accessCode, setAccessCode] = useState(null);
-    const [user] = useState(null);
-    const [isLeader] = useState(false);
     const [setTeamId] = useState(null);
     const [team1, addToTeam1] = useState(null);
     const [addToTeam2] = useState(null);
     const [setClicked] = useState(false);
 
-    //mock access code
-    const accessCode = "12345";
-    /*
+    const [user, setUser] = useState(null);
+
+    const accessCode = localStorage.getItem('lobbyAccessCode');
+
+    const userId = localStorage.getItem('token');
+
     useEffect(() => {
         async function fetchData() {
             try {
-                const localToken = localStorage.getItem('token'); //token = user.id
-                const response = await api.get(`/users/${localToken}`);
-
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                // Get the returned users and update the state.
-                setUser(response.data);
-                setIsLeader(user.leader);
+                const userResponse = await api.get(`/users/${userId}`);
+                setUser(userResponse.data);
 
             } catch (error) {
-                console.error(`Something went wrong while fetching the user: \n${handleError(error)}`);
+                console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
                 console.error("Details:", error);
-                alert("Something went wrong while fetching the user! See the console for details.");
+                alert("Something went wrong while fetching the users! See the console for details.");
             }
         }
 
         fetchData();
-    });
-*/
-    console.log("local token", localStorage.getItem('token'));
-    console.log("leader", isLeader);
-    console.log("user", user);
+    }, []);
 
     const goBack = () => {
         localStorage.removeItem('token');
@@ -76,17 +66,15 @@ const Lobby = () => {
     const goToInvitePage = () => {}//TODO insert code
     const goToSettingsPage = () => {}//TODO insert code
     const startGame = async () => {
-        const accessCode = localStorage.getItem("lobbyAccessCode");
-
         await api.post(`/games/${accessCode}`);
 
         history.push(`/games/${accessCode}/pregame`);
-
     }
 
     let content = <div className="horizontal-box"></div>
 
-    if (isLeader) {
+    //should be if  (user.isLeader)
+    if (true) {
         content = (
                 <div className="horizontal-box">
                     <Button variant="contained"
@@ -108,8 +96,8 @@ const Lobby = () => {
     return (
             <div className="homePageRoot">
                 <div className="horizontal-box" style={{marginBottom: '-80px'}}>
-                    <Typography variant="h4" sx={{color: 'white', fontWeight: 700}}>Access Code:</Typography>
-                    <Typography variant="h4" sx={{color: 'white', fontWeight: 700}}>{accessCode}</Typography>
+                    <Typography variant="h5" sx={{color: 'white', fontWeight: 700}}>Access Code:</Typography>
+                    <Typography variant="h5" sx={{color: 'white', fontWeight: 700, marginLeft: '10px'}}>{accessCode}</Typography>
                 </div>
 
                 <Box sx={{display: 'flex', flexDirection: 'column', marginBottom: '-80px'}}>
