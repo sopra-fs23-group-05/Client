@@ -11,8 +11,7 @@ const Lobby = () => {
     const [team1, addToTeam1] = useState(null);
     const [addToTeam2] = useState(null);
     const [setClicked] = useState(false);
-
-    const [user, setUser] = useState(null);
+    const [setUser] = useState(null);
 
     const accessCode = localStorage.getItem('lobbyAccessCode');
 
@@ -32,7 +31,7 @@ const Lobby = () => {
         }
 
         fetchData();
-    }, []);
+    }, [userId,setUser]);
 
     const goBack = () => {
         localStorage.removeItem('token');
