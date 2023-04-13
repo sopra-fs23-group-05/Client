@@ -4,17 +4,11 @@ import {useHistory} from 'react-router-dom';
 import 'styles/views/Homepage.scss';
 import TabooLogo from './TabooLogo.png';
 import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
 import Box from '@mui/material/Box';
 
 
 const Homepage = props => {
     const history = useHistory();
-    const buttons = [
-      <Button onClick={() => doCreate()} className="button">Create Lobby</Button>,
-      <Button onClick={() => doJoin()} className="button">Join Lobby</Button>,
-      <Button onClick={() => doRules()} className="button">Rules</Button>,
-      ];
     const doCreate = () => {
         try{
             history.push(`/admin-login`);
@@ -43,18 +37,29 @@ const Homepage = props => {
       <Box
       sx={{
         display: 'flex',
-        '& > *': {
-          m: 1,
-        },
+        flexDirection: 'column'
       }}
     >
-      <ButtonGroup
-        className="buttonPanel"
-        orientation="vertical"
-        aria-label="vertical outlined button group"
-      >
-        {buttons}
-      </ButtonGroup>
+      <div className="buttonPanel">
+      <Button variant="contained"
+        className="button"
+        onClick={() =>doCreate()}
+        >
+        Create Lobby
+      </Button>
+      <Button variant="contained"
+        className="button"
+        onClick={() =>doJoin()}
+        >
+        Join Lobby
+      </Button>
+      <Button variant="contained"
+        className="button"
+        onClick={() =>doRules()}
+        >
+        Rules
+      </Button>
+      </div>
     </Box>
     </div>
   );
