@@ -4,6 +4,7 @@ import UserLogin from "../../views/UserLogin";
 import LobbyPage from "../../views/LobbyPage";
 import Homepage from "components/views/Homepage";
 import Rules from "components/views/Rules";
+import Invite from "components/views/Invite";
 import Settings from "components/views/Settings";
 import PreGame from "../../views/PreGame";
 import Game from "../../views/Game";
@@ -27,6 +28,9 @@ const AppRouter = () => {
                   </Route>
                   <Route exact path="/rules">
                       <Rules/>
+                  </Route>
+                  <Route exact path="/invite">
+                      <Invite/>
                   </Route>
                   <Route exact path="/settings">
                     <Settings/>
