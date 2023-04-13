@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import {Button, Typography, Box,} from "@mui/material";
@@ -7,13 +7,17 @@ import 'styles/views/AdminLogin.scss';
 const Lobby = () => {
 
     const history = useHistory();
-    const [user, setUser] = useState(null);
-    const [isLeader, setIsLeader] = useState(false);
+    //const [accessCode, setAccessCode] = useState(null);
+    const [user] = useState(null);
+    const [isLeader] = useState(false);
     const [setTeamId] = useState(null);
     const [team1, addToTeam1] = useState(null);
-    const [team2, addToTeam2] = useState(null);
-    const [clicked, setClicked] = useState(false);
+    const [addToTeam2] = useState(null);
+    const [setClicked] = useState(false);
 
+    //mock access code
+    const accessCode = "12345";
+    /*
     useEffect(() => {
         async function fetchData() {
             try {
@@ -35,7 +39,7 @@ const Lobby = () => {
 
         fetchData();
     });
-
+*/
     console.log("local token", localStorage.getItem('token'));
     console.log("leader", isLeader);
     console.log("user", user);
@@ -71,113 +75,81 @@ const Lobby = () => {
 
     const goToInvitePage = () => {}//TODO insert code
     const goToSettingsPage = () => {}//TODO insert code
-    const startGame = () => {}//TODO insert code
+    const startGame = async () => {
+        const accessCode = localStorage.getItem("lobbyAccessCode");
 
-    let content = <Box sx={{
-        width: '50%',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'}}
-    />
+        await api.post(`/games/${accessCode}`);
+
+        history.push(`/games/${accessCode}/pregame`);
+
+    }
+
+    let content = <div className="horizontal-box"></div>
 
     if (isLeader) {
         content = (
-                <Box sx={{
-                    width: '50%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'}}
-                >
+                <div className="horizontal-box">
                     <Button variant="contained"
-                            sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%', marginTop: '10px'}}
+                            className="buttonLogin"
                             onClick={() => goToSettingsPage()}
                     >
                         Settings
                     </Button>
                     <Button variant="contained"
-                            sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%', marginTop: '10px'}}
+                            className="buttonLogin"
                             onClick={() => startGame()}
                     >
                         Start Game
                     </Button>
-                </Box>
+                </div>
         );
     }
 
     return (
             <div className="homePageRoot">
-                <Typography  variant="h5" sx={{color: 'white'}}>Access Code:</Typography>
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    width: '70%',
-                    height: 200,
-                    backgroundColor: '#D1C4E9',
-                    borderRadius: '20px',
-                    border: '1px solid white',
-                    marginBottom: '10px'
-                }}
-                >
-                    <Typography variant="h6" sx={{color: 'white'}}>Team 1</Typography>
-                    <Box sx={{ width: '80%', height: '100px', backgroundColor: 'lightgray' }}></Box>
+                <div className="horizontal-box" style={{marginBottom: '-80px'}}>
+                    <Typography variant="h4" sx={{color: 'white', fontWeight: 700}}>Access Code:</Typography>
+                    <Typography variant="h4" sx={{color: 'white', fontWeight: 700}}>{accessCode}</Typography>
+                </div>
 
-                    <Button variant="contained"
-                            sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%', marginTop: '10px'}}
-                            onClick={() => clickOnJoinButton(team1)}
-                            disabled={clicked}
-                    >
-                        Join
-                    </Button>
+                <Box sx={{display: 'flex', flexDirection: 'column', marginBottom: '-80px'}}>
+                    <div className="buttonPanel">
+                        <Typography variant="h5" sx={{color: 'white'}}>Team 1</Typography>
+                        <Box sx={{ width: '80%', height: '100px', backgroundColor: 'lightgray' }}></Box>
+                        <Button variant="contained"
+                                className="buttonLogin"
+                                onClick={() => clickOnJoinButton(team1)}
+                        >
+                            Join
+                        </Button>
+                    </div>
+
+                    <div className="buttonPanel" style={{marginTop: '20px'}}>
+                        <Typography variant="h5" sx={{color: 'white'}}>Team 2</Typography>
+                        <Box sx={{ width: '80%', height: '100px', backgroundColor: 'lightgray' }}></Box>
+                        <Button variant="contained"
+                                className="buttonLogin"
+                                onClick={() => clickOnJoinButton(team1)}
+                        >
+                            Join
+                        </Button>
+                    </div>
                 </Box>
 
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    width: '70%',
-                    height: 200,
-                    backgroundColor: '#D1C4E9',
-                    borderRadius: '20px',
-                    border: '1px solid white'
-                }}
-                >
-                    <Typography variant="h6" sx={{color: 'white'}}>Team 2</Typography>
-                    <Box sx={{ width: '80%', height: '100px', backgroundColor: 'lightgray' }}></Box>
-
+                <div className="horizontal-box" style={{marginBottom: '-80px'}}>
                     <Button variant="contained"
-                            sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%', marginTop: '10px'}}
-                            onClick={() => clickOnJoinButton(team2)}
-                            disabled={clicked}
-                    >
-                        Join
-                    </Button>
-                </Box>
-
-                <Box sx={{
-                    width: '50%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'}}
-                >
-                    <Button variant="contained"
-                            sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%', marginTop: '10px'}}
+                            className="buttonLogin"
                             onClick={() => goBack()}
                     >
                         Back
                     </Button>
                     <Button variant="contained"
-                            sx={{backgroundColor: '#8a2be2', color: 'orange', '&:hover': { backgroundColor: '#8a2be2'}, width: '40%', marginTop: '10px'}}
+                            className="buttonLogin"
                             onClick={() => goToInvitePage()}
                     >
                         Invite
                     </Button>
-                </Box>
+                </div>
                 {content}
             </div>
     );
