@@ -6,6 +6,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/material": "^5.11.16",
+    "@mui/icons-material": "latest",
     "axios": "^0.24.0",
     "node-gyp": "^8.4.1",
     "react": "^17.0.2",

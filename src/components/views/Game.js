@@ -1,5 +1,6 @@
 import "styles/views/Game.scss";
 import {Box, Divider, Button, TextField} from "@mui/material";
+import SendIcon from '@mui/icons-material/Send';
 
 const Game = () => {
   /*
@@ -70,26 +71,39 @@ const Game = () => {
               flex: '1',
               position: 'relative',}}>
               <Box sx={{ flex: '1' }}>
-                  {/* Add a Box component with flex: '1' to fill the remaining space */}
+                  {/* A Box component with flex: '1' to fill the remaining space */}
               </Box>
+              <Box sx={{
+                  display: 'flex',
+                  alignSelf: 'flex-end',
+                  margin: '5px',
+                  width: 'calc(100% - 10px)',
+              }}>
                   <TextField className={"textField-chat-input"}
-                      id="input-with-icon-adornment"
                       variant="outlined"
-                      placeholder="Describe the word"
+                      // placeholder="Describe the word"
                       InputProps={{
                           sx: {
                               '& fieldset': {
                                   backgroundColor: '#6600B6', // Set background color only within the borders
                                   opacity: '0.43',
+                                  marginRight: '5px', // Add margin between TextField and Button
                               },
                           },
                       }}
-                      sx={{
-                          alignSelf: 'flex-end',
-                          margin: '5px',
-                          width: 'calc(100% - 10px)',
-                      }}
-                  />
+                     sx={{
+                             flexGrow: '1',
+                         }}
+                  ></TextField>
+                  <Button variant="contained" color="primary"
+                          sx={{
+                              borderRadius: '15px',
+                              height: '100%',
+                              flexGrow: '0',
+                          }}>
+                      <SendIcon />
+                  </Button>
+              </Box>
           </Box>
           <Button variant="contained"
                   sx={{backgroundColor: 'red',
