@@ -1,5 +1,5 @@
 import "styles/views/Game.scss";
-import {Box, Divider, Button} from "@mui/material";
+import {Box, Divider, Button, TextField} from "@mui/material";
 
 const Game = () => {
   /*
@@ -31,8 +31,8 @@ const Game = () => {
   }, []);*/
 
     return (
-    <div className="homePageRoot">
-      <Box sx={{display: 'flex', flexDirection: 'column'}}>
+    <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
+      <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
           <div className="card-and-timer-box">
               <div className="card-box">
                   <div className="side-box">
@@ -55,7 +55,8 @@ const Game = () => {
                       <div>4</div>
                   </div>
           </div>
-          <Box sx={{display: 'flex',
+          <Box
+              sx={{display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'column',
@@ -65,7 +66,30 @@ const Game = () => {
               borderRadius: '20px',
               border: '1px solid white',
               marginTop: '20px',
-              marginBottom: '20px'}}>
+              marginBottom: '20px',
+              flex: '1',
+              position: 'relative',}}>
+              <Box sx={{ flex: '1' }}>
+                  {/* Add a Box component with flex: '1' to fill the remaining space */}
+              </Box>
+                  <TextField className={"textField-chat-input"}
+                      id="input-with-icon-adornment"
+                      variant="outlined"
+                      placeholder="Describe the word"
+                      InputProps={{
+                          sx: {
+                              '& fieldset': {
+                                  backgroundColor: '#6600B6', // Set background color only within the borders
+                                  opacity: '0.43',
+                              },
+                          },
+                      }}
+                      sx={{
+                          alignSelf: 'flex-end',
+                          margin: '5px',
+                          width: 'calc(100% - 10px)',
+                      }}
+                  />
           </Box>
           <Button variant="contained"
                   sx={{backgroundColor: 'red',
@@ -73,7 +97,9 @@ const Game = () => {
                       '&:hover': { backgroundColor: 'darkred'},
                       width: '100%',
                       fontWeight: 'bold',
-                      fontSize: '1.5rem'}}
+                      fontSize: '1.5rem',
+                      borderRadius: '20px',
+                  }}
           >
               Buzzer
           </Button>
