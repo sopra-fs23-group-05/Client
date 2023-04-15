@@ -68,12 +68,7 @@ const Game = () => {
               marginBottom: '20px'}}>
           </Box>
           <Button variant="contained"
-                  sx={{backgroundColor: 'red',
-                      color: 'black',
-                      '&:hover': { backgroundColor: 'darkred'},
-                      width: '100%',
-                      fontWeight: 'bold',
-                      fontSize: '1.5rem'}}
+                  className="Buzzer"
           >
               Buzzer
           </Button>
