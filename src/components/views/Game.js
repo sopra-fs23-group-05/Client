@@ -36,8 +36,8 @@ const Game = () => {
           <div className="card-and-timer-box">
               <div className="card-box">
                   <div className="side-box">
-                      <div>Word</div>
-                      <div>Skip</div>
+                      <Button variant="contained" sx={{width: '80%', bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' }, '&:active': { bgcolor: 'darkgreen' } }}>Word</Button>
+                      <Button variant="contained" sx={{width: '80%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}>Skip Card</Button>
                   </div>
                   <div className="side-box">
                       <div>Taboo 1</div>
