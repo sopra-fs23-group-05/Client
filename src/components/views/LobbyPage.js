@@ -11,7 +11,7 @@ const Lobby = () => {
 
     const [lobby, setLobby] = useState(null);
     const [user, setUser] = useState(null);
-    const [clicked, setClicked] = useState(false);
+    const [clicked] = useState(false);
     const [isLeader, setIsLeader] = useState(false);
 
 
@@ -50,21 +50,15 @@ const Lobby = () => {
         //TODO remove user from team if already joined
         history.push('/homepage');
         window.location.reload();
-    }
+    };
 
     const joinTeam = async (teamNr) => {
         try {
-            if (clicked) {
-                alert("you've already joined a team");
-            }
-            else if (teamNr === 1) {
-                setClicked(true);
-                const updatedUser = {...user, teamId: 1};
-                setUser(updatedUser);
+            //const checkUser = await api.get(`/lobbies/${accessCode}/teams/${teamNr}/users/${userId}`);
 
-                const teamId = 1; //TODO get correct team id
-                const requestBody = JSON.stringify({accessCode, teamId, userId});
-                const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamId}/additions/users/${userId}`, requestBody);
+            if (teamNr === 1) {
+                const requestBody = JSON.stringify({accessCode, teamNr, userId});
+                const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
 
                 lobby.team1.push(user);
                 console.log('team1:', lobby.team1);
@@ -72,10 +66,8 @@ const Lobby = () => {
             }
 
             else if (teamNr === 2) {
-                setClicked(true);
-                const teamId = 2; //TODO get correct team id
-                const requestBody = JSON.stringify({accessCode, teamId, userId});
-                const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamId}/additions/users/${userId}`, requestBody);
+                const requestBody = JSON.stringify({accessCode, teamNr, userId});
+                const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
                 lobby.team2.push(user);
                 console.log('team2:', lobby.team2);
                 window.location.reload();
