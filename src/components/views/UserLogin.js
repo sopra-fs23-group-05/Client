@@ -57,6 +57,7 @@ const UserLogin = () => {
 
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
+            window.location.reload();
         }
     };
 
