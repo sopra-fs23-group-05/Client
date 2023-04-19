@@ -11,7 +11,14 @@ const UserLogin = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
     const isLeader = false;
-    const [givenAccessCode, setGivenAccessCode] = useState(null);
+    const url = window.location.href;
+    const parts = url.split("/");
+    var lastPart = parts.pop().toString();
+    if(lastPart==='user-login'){
+        lastPart=null;
+    }
+    const [givenAccessCode, setGivenAccessCode] = useState(lastPart);
+
 
 
     const handleUsernameChange = (event) => {

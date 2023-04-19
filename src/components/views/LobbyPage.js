@@ -62,8 +62,8 @@ const Lobby = () => {
         }
     };
 
-    const goToInvitePage = () => {}//TODO insert code
-    const goToSettingsPage = () => {}//TODO insert code
+    const goToInvitePage = () => {history.push(`/lobbies/${accessCode}/invite`)}
+    const goToSettingsPage = () => {history.push(`/lobbies/${accessCode}/settings`)}
     const startGame = async () => {
         await api.post(`/games/${accessCode}`);
 

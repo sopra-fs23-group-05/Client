@@ -29,10 +29,10 @@ const AppRouter = () => {
                   <Route exact path="/rules">
                       <Rules/>
                   </Route>
-                  <Route exact path="/invite">
+                  <Route exact path="/lobbies/:accessCode/invite">
                       <Invite/>
                   </Route>
-                  <Route exact path="/settings">
+                  <Route exact path="/lobbies/:accessCode/settings">
                     <Settings/>
                   </Route>
                   <Route exact path="/">
@@ -42,6 +42,9 @@ const AppRouter = () => {
                       <AdminLogin/>
                   </Route>
                   <Route exact path="/user-login">
+                      <UserLogin/>
+                  </Route>
+                  <Route exact path="/user-login/:accessCode">
                       <UserLogin/>
                   </Route>
                   <Route exact path="/lobbies/:accessCode">
