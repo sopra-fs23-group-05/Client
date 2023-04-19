@@ -1,6 +1,5 @@
-import React from "react";
-import {handleError} from 'helpers/api';
-import {useHistory} from 'react-router-dom';
+import React, { useRef } from "react";
+import { useHistory } from 'react-router-dom';
 import 'styles/views/Endscreen.scss';
 import TabooLogo from './TabooLogo.png';
 import Button from '@mui/material/Button';
@@ -9,14 +8,40 @@ import StarIcon from '@mui/icons-material/Star';
 
 
 const Endscreen = props => {
-    const history = useHistory();
-    const doHomepage = () => {
-        try{
-            history.push(`/homepage`);
-        } catch (error) {
-            alert(`Something went wrong during the login: \n${handleError(error)}`);
-        }
-    };
+  const history = useHistory();
+  const canvasRef = useRef(null);
+
+  const doHomepage = () => {
+    localStorage.removeItem('token');
+    history.push(`/homepage`);
+    window.location.reload();
+  };
+
+  const doShare = async () => {
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      alert('Could not create screenshot.');
+      return;
+    }
+  
+    const dataUrl = canvas.toDataURL();
+    const uploadUrl = 'https://api.imgur.com/3/image';
+    const response = await fetch(uploadUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Client-ID <your-client-id>',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: dataUrl.replace('data:image/png;base64,', ''),
+    });
+    const json = await response.json();
+    const imageUrl = json.data.link;
+    const tweetText = 'New Taboo Win!';
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(window.location.href)}&hashtags=Taboo&media=${encodeURIComponent(imageUrl)}`;
+    
+    window.open(tweetUrl, '_blank');
+  };
+  
     
 
   return (
@@ -55,12 +80,12 @@ const Endscreen = props => {
 
 
     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '50px'}}>
-      <Button variant="contained" style={{width: '150px', height: '60px', margin: '-0px 20px -30px 50px', fontSize: '20px'}}
-        className="button"
-        onClick={() =>doHomepage()}
-        >
-        Share
-      </Button>
+    <Button variant="contained" style={{ width: '150px', height: '60px', margin: '-0px 20px -30px 50px', fontSize: '20px' }}
+            className="button"
+            onClick={() => doShare()}
+          >
+            Share
+          </Button>
       <Button variant="contained" style={{width: '150px', height: '60px', margin: '-0px 50px -30px 20px', fontSize: '20px'}}
         className="button"
         onClick={() =>doHomepage()}
@@ -68,6 +93,7 @@ const Endscreen = props => {
         Homepage
       </Button>
     </div>
+    <canvas ref={canvasRef} style={{ display: 'none' }} width={window.innerWidth} height={window.innerHeight}></canvas>
 
     </Box>
     </div>
