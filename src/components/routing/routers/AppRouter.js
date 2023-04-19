@@ -8,6 +8,8 @@ import Invite from "components/views/Invite";
 import Settings from "components/views/Settings";
 import PreGame from "../../views/PreGame";
 import Game from "../../views/Game";
+import Endscreen from "components/views/Endscreen";
+
 
 
 /**
@@ -55,6 +57,9 @@ const AppRouter = () => {
                   </Route>
                   <Route exact path="/games/:accessCode/pregame">
                       <PreGame/>
+                  </Route>
+                  <Route exact path="/games/:accessCode/endscreen">
+                      <Endscreen/>
                   </Route>
               </Switch>
           </BrowserRouter>
