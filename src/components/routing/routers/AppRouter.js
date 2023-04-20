@@ -4,8 +4,12 @@ import UserLogin from "../../views/UserLogin";
 import LobbyPage from "../../views/LobbyPage";
 import Homepage from "components/views/Homepage";
 import Rules from "components/views/Rules";
+import Invite from "components/views/Invite";
+import Settings from "components/views/Settings";
 import PreGame from "../../views/PreGame";
 import Game from "../../views/Game";
+import Endscreen from "components/views/Endscreen";
+
 
 /**
  * Main router of your application.
@@ -26,6 +30,12 @@ const AppRouter = () => {
                   <Route exact path="/rules">
                       <Rules/>
                   </Route>
+                  <Route exact path="/lobbies/:accessCode/invite">
+                      <Invite/>
+                  </Route>
+                  <Route exact path="/lobbies/:accessCode/settings">
+                    <Settings/>
+                  </Route>
                   <Route exact path="/">
                       <Redirect to="/homepage"/>
                   </Route>
@@ -33,6 +43,9 @@ const AppRouter = () => {
                       <AdminLogin/>
                   </Route>
                   <Route exact path="/user-login">
+                      <UserLogin/>
+                  </Route>
+                  <Route exact path="/user-login/:accessCode">
                       <UserLogin/>
                   </Route>
                   <Route exact path="/lobbies/:accessCode">
@@ -43,6 +56,9 @@ const AppRouter = () => {
                   </Route>
                   <Route exact path="/games/:accessCode/pregame">
                       <PreGame/>
+                  </Route>
+                  <Route exact path="/games/:accessCode/endscreen">
+                      <Endscreen/>
                   </Route>
               </Switch>
           </BrowserRouter>

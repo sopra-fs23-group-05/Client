@@ -12,6 +12,13 @@ const UserLogin = () => {
     const [username, setUsername] = useState(null);
     const leader = false;
     const [givenAccessCode, setGivenAccessCode] = useState(null);
+    const url = window.location.href;
+    const parts = url.split("/");
+    var lastPart = parts.pop().toString();
+    if(lastPart==='user-login'){
+        lastPart=null;
+    }
+
 
 
     const handleUsernameChange = (event) => {
@@ -57,6 +64,7 @@ const UserLogin = () => {
 
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
+            window.location.reload();
         }
     };
 

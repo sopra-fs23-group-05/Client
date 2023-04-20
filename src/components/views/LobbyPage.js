@@ -79,8 +79,8 @@ const Lobby = () => {
         }
     };
 
-    const goToInvitePage = () => {}//TODO insert code
-    const goToSettingsPage = () => {}//TODO insert code
+    const goToInvitePage = () => {history.push(`/lobbies/${accessCode}/invite`)}
+    const goToSettingsPage = () => {history.push(`/lobbies/${accessCode}/settings`)}
     const startGame = async () => {
         await api.post(`/games/${accessCode}`);
 
@@ -110,7 +110,7 @@ const Lobby = () => {
 
     return (
             <div className="homePageRoot">
-                <div className="horizontal-box" style={{marginBottom: '-80px'}}>
+                <div className="horizontal-box">
                     <Typography variant="h5" sx={{color: 'white', fontWeight: 700}}>Access Code:</Typography>
                     <Typography variant="h5" sx={{color: 'white', fontWeight: 700, marginLeft: '10px'}}>{accessCode}</Typography>
                 </div>
