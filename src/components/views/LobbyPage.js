@@ -54,6 +54,7 @@ const Lobby = () => {
 
     const joinTeam = async (teamNr) => {
         try {
+            //TODO check if user is already in a team before joining team
             //const checkUser = await api.get(`/lobbies/${accessCode}/teams/${teamNr}/users/${userId}`);
 
             if (teamNr === 1) {
