@@ -39,7 +39,7 @@ const Lobby = () => {
             }
         }
         fetchData();
-    }, [userId, setUser]);
+    }, [accessCode, userId, setUser]);
 
     const goBack = () => {
         localStorage.removeItem('token');
@@ -66,14 +66,14 @@ const Lobby = () => {
 
             if (teamNr === 1) {
                 const requestBody = JSON.stringify({accessCode, teamNr, userId});
-                const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
+                await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
                 lobby.team1.push(user);
                 window.location.reload();
             }
 
             else if (teamNr === 2) {
                 const requestBody = JSON.stringify({accessCode, teamNr, userId});
-                const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
+                await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
                 lobby.team2.push(user);
                 window.location.reload();
             }
