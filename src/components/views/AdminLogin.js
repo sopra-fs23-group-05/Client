@@ -36,6 +36,7 @@ const AdminLogin = () => {
 
             // Store the token=id into the local storage.
             localStorage.setItem('token', user.id);
+            localStorage.setItem('userName', user.username);
 
             //post lobby
             const lobbyEmpty = await api.post(`/lobbies`);

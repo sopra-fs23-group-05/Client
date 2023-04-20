@@ -40,6 +40,7 @@ const UserLogin = () => {
             const response = await api.post('/users', requestBody);
             const user = new User(response.data);
             localStorage.setItem('token', user.id);
+            localStorage.setItem('userName', user.username);
 
             //add user to lobby
             const putBody = JSON.stringify({givenAccessCode, username});
