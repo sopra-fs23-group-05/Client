@@ -21,7 +21,7 @@ export default function Game(){
     useEffect(() => {
         console.log('Opening WebSocket');
         // Activate the following line for deployment.
-        webSocket.current = new WebSocket('ws://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
+        webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
         // Activate the following line for local testing.
         // webSocket.current = new WebSocket('ws://localhost:8080/chat');
         const openWebSocket = () => {
