@@ -5,13 +5,14 @@ import {useHistory} from "react-router-dom";
 
 const PreGame = () => {
     const history = useHistory();
+    const accessCode = localStorage.getItem('lobbyAccessCode');
 
-  let timeLeft = 10;
+    let timeLeft = 10;
   const downloadTimer = setInterval(function(){
     if(timeLeft <= 0){
+      history.push(`/games/${accessCode}`);
       clearInterval(downloadTimer);
       document.getElementById("countdown").innerHTML = "push to game";
-      history.push("/games/123456");
     } else {
       document.getElementById("countdown").innerHTML = timeLeft;
     }
@@ -21,14 +22,14 @@ const PreGame = () => {
 
 
   return (
-      <div className="homePageRoot">
+          <div className="homePageRoot" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: "100%", }}>
         <Box sx={{
           display: 'flex',
           alignItems: "center",
           justifyContent: 'center',
           flexDirection: 'column',
-          width: '30%',
-          height: 200,
+          width: '100%',
+          height: '100%',
           backgroundColor: '#D1C4E9',
           borderRadius: '20px',
           border: '1px solid white'
@@ -43,8 +44,8 @@ const PreGame = () => {
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: 'column',
-            width: '30%',
-            height: 200,
+            width: '100%',
+            height: '100%',
             backgroundColor: '#D1C4E9',
             borderRadius: '20px',
             border: '1px solid white'

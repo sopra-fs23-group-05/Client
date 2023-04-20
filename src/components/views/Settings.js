@@ -11,7 +11,6 @@ const Settings = props => {
     const [time, setTime] = useState(null);
 
     const accessCode = localStorage.getItem('lobbyAccessCode');
-
     const handleRoundsChange = (event) => {
         setRounds(event.target.value)
     }
