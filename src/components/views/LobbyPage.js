@@ -11,7 +11,6 @@ const Lobby = () => {
 
     const [lobby, setLobby] = useState(null);
     const [user, setUser] = useState(null);
-    const [clicked] = useState(false);
     const [isLeader, setIsLeader] = useState(false);
 
 
@@ -33,16 +32,14 @@ const Lobby = () => {
                 setLobby(lobbyResponse.data);
                 console.log('lobby info:', lobbyResponse.data);
 
-
             } catch (error) {
                 console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
                 console.error("Details:", error);
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
         }
-
         fetchData();
-    }, [clicked, userId, setUser]);
+    }, [userId, setUser]);
 
     const goBack = () => {
         localStorage.removeItem('token');
@@ -54,15 +51,23 @@ const Lobby = () => {
 
     const joinTeam = async (teamNr) => {
         try {
-            //TODO check if user is already in a team before joining team
-            //const checkUser = await api.get(`/lobbies/${accessCode}/teams/${teamNr}/users/${userId}`);
+            for (let i=0; i<lobby.team1.length; i++) {
+                if (lobby.team1[i].id === user.id) {
+                    alert('you already joined team 1');
+                    teamNr = 0;
+                }
+            }
+
+            for (let i=0; i<lobby.team2.length; i++) {
+                if (lobby.team2[i].id === user.id) {
+                    alert('you already joined team 2');
+                }
+            }
 
             if (teamNr === 1) {
                 const requestBody = JSON.stringify({accessCode, teamNr, userId});
                 const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
-
                 lobby.team1.push(user);
-                console.log('team1:', lobby.team1);
                 window.location.reload();
             }
 
@@ -70,7 +75,6 @@ const Lobby = () => {
                 const requestBody = JSON.stringify({accessCode, teamNr, userId});
                 const joinedLobby = await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
                 lobby.team2.push(user);
-                console.log('team2:', lobby.team2);
                 window.location.reload();
             }
         }
@@ -91,7 +95,7 @@ const Lobby = () => {
 
     if (isLeader) {
         content = (
-                <div className="horizontal-box">
+                <div className="horizontal-box" style={{marginTop: '-80px', marginBottom: '-100px'}}>
                     <Button variant="contained"
                             className="buttonLogin"
                             onClick={() => goToSettingsPage()}
@@ -147,7 +151,7 @@ const Lobby = () => {
                     </div>
                 </Box>
 
-                <div className="horizontal-box" style={{marginBottom: '-80px'}}>
+                <div className="horizontal-box">
                     <Button variant="contained"
                             className="buttonLogin"
                             onClick={() => goBack()}
