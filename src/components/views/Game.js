@@ -1,117 +1,182 @@
 import "styles/views/Game.scss";
-import {Box, Divider, Button, TextField} from "@mui/material";
+import {Box, Divider, Button, TextField, ListItem, List, ListItemText} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
+import {useEffect, useRef, useState} from "react";
+import {ChatMessageClueGiver} from "models/ChatMessageClueGiver";
+import User from "../../models/User";
 
-const Game = () => {
-    /*
-   useEffect(() => {
-     async function fetchData() {
-       try {
-         const response = await api.get('/users');
-         await new Promise(resolve => setTimeout(resolve, 1000));
+export default function Game(){
 
-         setUsers(response.data);
+    const ENTER_KEY_CODE = 13;
 
-         // This is just some data for you to see what is available.
-         // Feel free to remove it.
-         console.log('request to:', response.request.responseURL);
-         console.log('status code:', response.status);
-         console.log('status text:', response.statusText);
-         console.log('requested data:', response.data);
+    const scrollBottomRef = useRef(null);
+    const webSocket = useRef(null);
+    const [chatMessages, setChatMessages] = useState([]);
+    // Activate the following line as soon as the actual user is obtained from the backend.
+    // const [user, setUser] = useState('');
+    const [message, setMessage] = useState('');
 
-         // See here to get more data.
-         console.log(response);
-       } catch (error) {
-         console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
-         console.error("Details:", error);
-         alert("Something went wrong while fetching the users! See the console for details.");
+
+    // Websocket code
+    useEffect(() => {
+        console.log('Opening WebSocket');
+        // Activate the following line for deployment.
+        webSocket.current = new WebSocket('ws://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
+        // Activate the following line for local testing.
+        // webSocket.current = new WebSocket('ws://localhost:8080/chat');
+        const openWebSocket = () => {
+            webSocket.current.onopen = (event) => {
+                console.log('Open:', event);
+            }
+            webSocket.current.onclose = (event) => {
+                console.log('Close:', event);
+            }
         }
-      }
+        openWebSocket();
+        return () => {
+            console.log('Closing WebSocket');
+            webSocket.current.close();
+        }
+    }, []);
 
-      fetchData();
-    }, []);*/
+    // Websocket code
+    useEffect(() => {
+        webSocket.current.onmessage = (event) => {
+            const ChatMessageDTO = JSON.parse(event.data);
+            console.log('Message:', ChatMessageDTO);
+            setChatMessages([...chatMessages, {
+                user: ChatMessageDTO.user,
+                message: ChatMessageDTO.message
+            }]);
+            if(scrollBottomRef.current) {
+                scrollBottomRef.current.scrollIntoView({ behavior: 'smooth'});
+            }
+        }
+    }, [chatMessages]);
+
+    // Websocket code
+    const handleMessageChange = (event) => {
+        setMessage(event.target.value);
+    }
+
+    // Websocket code
+    const handleEnterKey = (event) => {
+        if(event.keyCode === ENTER_KEY_CODE){
+            sendMessage();
+        }
+    }
+
+    // Websocket code
+    const sendMessage = () => {
+
+        // Delete this line as soon as the actual user is obtained from the backend.
+        const user = new User({username: "felix"});
+
+        if(user && message) {
+            console.log('Send!');
+            webSocket.current.send(
+                JSON.stringify(new ChatMessageClueGiver(user, message))
+            );
+            setMessage('');
+        }
+    };
+
+    const listChatMessages = chatMessages.map((ChatMessageClueGiver, index) =>
+        <ListItem key={index}>
+            <ListItemText primary={`${ChatMessageClueGiver.user}: ${ChatMessageClueGiver.message}`}/>
+        </ListItem>
+    );
 
     return (
-            <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
-                <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
-                    <div className="card-and-timer-box">
-                        <div className="card-box">
-                            <div className="side-box">
-                                <Button variant="contained" sx={{width: '80%', bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' }, '&:active': { bgcolor: 'darkgreen' } }}>Word</Button>
-                                <Button variant="contained" sx={{width: '80%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}>Skip Card</Button>
-                            </div>
-                            <div className="side-box">
-                                <div>Taboo 1</div>
-                                <div>Taboo 2</div>
-                                <div>Taboo 3</div>
-                                <div>Taboo 4</div>
-                                <div>Taboo 5</div>
-                            </div>
-                        </div>
-                        <div className="timer-box">
-                            <div>Timer</div>
-                            <div>01:45</div>
-                            <Divider sx={{color: 'white', border: '1px solid white', width: '80%', marginBottom: '15px', marginTop: '15px'}} />
-                            <div>Score</div>
-                            <div>4</div>
-                        </div>
-                    </div>
-                    <Box
-                            sx={{display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexDirection: 'column',
-                                width: '100%',
-                                height: 300,
-                                backgroundColor: '#D1C4E9',
-                                borderRadius: '20px',
-                                border: '1px solid white',
-                                marginTop: '20px',
-                                marginBottom: '20px',
-                                flex: '1',
-                                position: 'relative',}}>
-                        <Box sx={{ flex: '1' }}>
-                            {/* A Box component with flex: '1' to fill the remaining space */}
-                        </Box>
-                        <Box sx={{
-                            display: 'flex',
-                            alignSelf: 'flex-end',
-                            margin: '5px',
-                            width: 'calc(100% - 10px)',
-                        }}>
-                            <TextField className={"textField-chat-input"}
-                                       variant="outlined"
-                                    // placeholder="Describe the word"
-                                       InputProps={{
-                                           sx: {
-                                               '& fieldset': {
-                                                   backgroundColor: '#6600B6', // Set background color only within the borders
-                                                   opacity: '0.43',
-                                                   marginRight: '5px', // Add margin between TextField and Button
-                                               },
-                                           },
-                                       }}
-                                       sx={{
-                                           flexGrow: '1',
-                                       }}
-                            ></TextField>
-                            <Button variant="contained" color="primary"
-                                    sx={{
-                                        borderRadius: '15px',
-                                        height: '100%',
-                                        flexGrow: '0',
-                                    }}>
-                                <SendIcon />
-                            </Button>
-                        </Box>
-                    </Box>
-                    <Button variant="contained"
-                            className="Buzzer"
-                    >
-                        Buzzer
-                    </Button>
-                </Box>
-            </div>
-    );
+    <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
+      <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
+          <div className="card-and-timer-box">
+              <div className="card-box">
+                  <div className="side-box">
+                      <Button variant="contained" sx={{width: '80%', bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' }, '&:active': { bgcolor: 'darkgreen' } }}>Word</Button>
+                      <Button variant="contained" sx={{width: '80%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}>Skip Card</Button>
+                  </div>
+                  <div className="side-box">
+                      <div>Taboo 1</div>
+                      <div>Taboo 2</div>
+                      <div>Taboo 3</div>
+                      <div>Taboo 4</div>
+                      <div>Taboo 5</div>
+                  </div>
+              </div>
+                  <div className="timer-box">
+                      <div>Timer</div>
+                      <div>01:45</div>
+                      <Divider sx={{color: 'white', border: '1px solid white', width: '80%', marginBottom: '15px', marginTop: '15px'}} />
+                      <div>Score</div>
+                      <div>4</div>
+                  </div>
+          </div>
+          <Box
+              sx={{display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              width: '100%',
+              height: 300,
+              backgroundColor: '#D1C4E9',
+              borderRadius: '20px',
+              border: '1px solid white',
+              marginTop: '20px',
+              marginBottom: '20px',
+              flex: '1',
+              position: 'relative',}}>
+              <Box sx={{ flex: '1' }}>
+                  <List id="chat-window-messages">
+                      {listChatMessages}
+                      <ListItem ref={scrollBottomRef}></ListItem>
+                  </List>
+              </Box>
+              <Box sx={{
+                  display: 'flex',
+                  alignSelf: 'flex-end',
+                  margin: '5px',
+                  width: 'calc(100% - 10px)',
+              }}>
+                  <TextField className={"textField-chat-input"}
+                             onChange={handleMessageChange}
+                             onKeyDown={handleEnterKey}
+                             label="Type your message..."
+                             value={message}
+                      variant="outlined"
+                      // placeholder="Describe the word"
+                      InputProps={{
+                          sx: {
+                              '& fieldset': {
+                                  backgroundColor: '#6600B6', // Set background color only within the borders
+                                  opacity: '0.43',
+                                  marginRight: '5px', // Add margin between TextField and Button
+                              },
+                          },
+                      }}
+                     sx={{
+                             flexGrow: '1',
+                         }}
+                  />
+                  <Button
+                      onClick={sendMessage}
+                      variant="contained"
+                      color="primary"
+                          sx={{
+                              borderRadius: '15px',
+                              height: '100%',
+                              flexGrow: '0',
+                          }}>
+                      <SendIcon />
+                  </Button>
+              </Box>
+          </Box>
+          <Button variant="contained"
+                  className="Buzzer"
+          >
+              Buzzer
+          </Button>
+      </Box>
+    </div>
+  );
 }
-export default Game;
