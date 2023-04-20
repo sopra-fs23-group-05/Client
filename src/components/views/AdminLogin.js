@@ -62,6 +62,7 @@ const AdminLogin = () => {
 
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
+            window.location.reload();
         }
     };
     console.log(username)

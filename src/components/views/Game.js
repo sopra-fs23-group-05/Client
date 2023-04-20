@@ -1,5 +1,6 @@
 import "styles/views/Game.scss";
-import {Box, Divider, Button} from "@mui/material";
+import {Box, Divider, Button, TextField} from "@mui/material";
+import SendIcon from '@mui/icons-material/Send';
 
 const Game = () => {
   /*
@@ -31,13 +32,13 @@ const Game = () => {
   }, []);*/
 
     return (
-    <div className="homePageRoot">
-      <Box sx={{display: 'flex', flexDirection: 'column'}}>
+    <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
+      <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
           <div className="card-and-timer-box">
               <div className="card-box">
                   <div className="side-box">
-                      <div>Word</div>
-                      <div>Skip</div>
+                      <Button variant="contained" sx={{width: '80%', bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' }, '&:active': { bgcolor: 'darkgreen' } }}>Word</Button>
+                      <Button variant="contained" sx={{width: '80%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}>Skip Card</Button>
                   </div>
                   <div className="side-box">
                       <div>Taboo 1</div>
@@ -55,7 +56,8 @@ const Game = () => {
                       <div>4</div>
                   </div>
           </div>
-          <Box sx={{display: 'flex',
+          <Box
+              sx={{display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'column',
@@ -65,7 +67,43 @@ const Game = () => {
               borderRadius: '20px',
               border: '1px solid white',
               marginTop: '20px',
-              marginBottom: '20px'}}>
+              marginBottom: '20px',
+              flex: '1',
+              position: 'relative',}}>
+              <Box sx={{ flex: '1' }}>
+                  {/* A Box component with flex: '1' to fill the remaining space */}
+              </Box>
+              <Box sx={{
+                  display: 'flex',
+                  alignSelf: 'flex-end',
+                  margin: '5px',
+                  width: 'calc(100% - 10px)',
+              }}>
+                  <TextField className={"textField-chat-input"}
+                      variant="outlined"
+                      // placeholder="Describe the word"
+                      InputProps={{
+                          sx: {
+                              '& fieldset': {
+                                  backgroundColor: '#6600B6', // Set background color only within the borders
+                                  opacity: '0.43',
+                                  marginRight: '5px', // Add margin between TextField and Button
+                              },
+                          },
+                      }}
+                     sx={{
+                             flexGrow: '1',
+                         }}
+                  ></TextField>
+                  <Button variant="contained" color="primary"
+                          sx={{
+                              borderRadius: '15px',
+                              height: '100%',
+                              flexGrow: '0',
+                          }}>
+                      <SendIcon />
+                  </Button>
+              </Box>
           </Box>
           <Button variant="contained"
                   className="Buzzer"
