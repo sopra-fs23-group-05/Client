@@ -1,0 +1,109 @@
+.settingsRoot{
+    gap: 114px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 96px 27px 189px 27px;
+    box-sizing: border-box;
+    background-position: 50% 50%;
+    background-size: cover;
+    background-blend-mode: normal, normal;
+    background: radial-gradient(ellipse closest-side at 50% 50%, #b219fe 5%, #48007e);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+
+  .inputBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 200px;
+    background-color: #D1C4E9;
+    border-radius: 20px;
+    border: 1px solid white;
+    padding: 20px;
+  }
+  .saveBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;    
+    margin-top: 20px;
+    max-width: 500px;
+  
+  .saveButton {
+    background-color: #7f5dab;
+    color: #EA854C;
+    width: 40%;
+    font-family: Inter, sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+  
+    &:hover {
+      background-color: #8a2be2;
+    }
+  }
+}
+  .topicsButton {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 170px;
+    height: 170px;
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 20px;
+    border: 1px solid white;
+    padding: 20px;
+
+  
+    h1 {
+      color: white;
+      text-transform: none;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+    }
+  }
+  
+  
+  .textField{
+    background-color: lightgray;
+    width: 90%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  
+    & .MuiOutlinedInput-root {
+      & fieldset {
+        border-color: white;
+      }
+      &:hover fieldset {
+        border-color: white;
+      }
+      &.Mui-focused fieldset {
+        border-color: white;
+      }
+    }
+  }
+  .input {
+    color: white;
+  }
+
+  .backButton {
+    background-color: #7f5dab;
+    color: orange;
+    &:hover {background-color: #8a2be2};
+    width: 90%;
+    margin-top: -20px;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: Inter, sans-serif;
+  }
+}

@@ -1,15 +1,17 @@
 import {Box} from "@mui/material";
 import 'styles/views/PreGame.scss';
+import {useHistory} from "react-router-dom";
 
 
 const PreGame = () => {
+    const history = useHistory();
 
   let timeLeft = 10;
   const downloadTimer = setInterval(function(){
     if(timeLeft <= 0){
       clearInterval(downloadTimer);
       document.getElementById("countdown").innerHTML = "push to game";
-      //history.push("/game");
+      history.push("/games/123456");
     } else {
       document.getElementById("countdown").innerHTML = timeLeft;
     }

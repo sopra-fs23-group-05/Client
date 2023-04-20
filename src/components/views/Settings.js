@@ -1,4 +1,4 @@
-/*import React, {useState} from 'react';
+import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Settings.scss';
 import {Container, TextField, Button, Typography, Box} from "@mui/material";
@@ -150,4 +150,3 @@ const Settings = props => {
 };
 
 export default Settings;
-*/

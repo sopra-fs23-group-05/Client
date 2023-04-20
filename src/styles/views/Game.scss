@@ -28,7 +28,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     height: 150px;
     width: 85px;
     overflow: auto;
@@ -47,7 +47,25 @@
     border: 1px solid white;
     margin-left: 20px;
     color: white;
+}
+
+.MuiButton-root.Buzzer {
+    width: 100%;
+    margin-inline: 3px;
+    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.25);
+    background-color: red;
+    color: black;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: Inter, sans-serif;
 
 }
 
+.MuiButton-root.Buzzer:hover {
+    background-color: darkred;
+}
 
+.textField-chat-input fieldset{
+    border-radius: 15px;
+    flex: 1;
+}
