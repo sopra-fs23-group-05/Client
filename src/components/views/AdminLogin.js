@@ -11,7 +11,7 @@ import TabooLogo from "./TabooLogo.png";
 const AdminLogin = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
-    const isLeader = true;
+    const leader = true;
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value)
@@ -27,7 +27,7 @@ const AdminLogin = () => {
     const doLogin = async () => {
         try {
             //create user
-            const userRequestBody = JSON.stringify({username, isLeader});
+            const userRequestBody = JSON.stringify({username, leader});
             const response = await api.post('/users', userRequestBody);
 
             // Get the returned user and update a new object.

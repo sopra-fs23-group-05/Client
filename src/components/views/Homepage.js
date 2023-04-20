@@ -33,7 +33,7 @@ const Homepage = props => {
 
   return (
     <div className="homePageRoot">
-      <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%", marginTop: '50px'}} />
+      <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}} />
       <Box
       sx={{
         display: 'flex',
