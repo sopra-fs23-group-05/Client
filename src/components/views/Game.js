@@ -2,7 +2,7 @@ import "styles/views/Game.scss";
 import {Box, Divider, Button, TextField, ListItem, List, ListItemText} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import {useEffect, useRef, useState} from "react";
-import {ChatMessageClueGiver} from "models/ChatMessageClueGiver";
+import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
 
 export default function Game(){
@@ -21,9 +21,9 @@ export default function Game(){
     useEffect(() => {
         console.log('Opening WebSocket');
         // Activate the following line for deployment.
-        webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
+        // webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
         // Activate the following line for local testing.
-        // webSocket.current = new WebSocket('ws://localhost:8080/chat');
+        webSocket.current = new WebSocket('ws://localhost:8080/chat');
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
                 console.log('Open:', event);
@@ -42,11 +42,11 @@ export default function Game(){
     // Websocket code
     useEffect(() => {
         webSocket.current.onmessage = (event) => {
-            const ChatMessageClueGiver = JSON.parse(event.data);
-            console.log('Message:', ChatMessageClueGiver);
+            const ChatMessage = JSON.parse(event.data);
+            console.log('Message:', ChatMessage);
             setChatMessages([...chatMessages, {
-                user: ChatMessageClueGiver.user,
-                message: ChatMessageClueGiver.message
+                user: ChatMessage.user,
+                message: ChatMessage.message
             }]);
             if(scrollBottomRef.current) {
                 scrollBottomRef.current.scrollIntoView({ behavior: 'smooth'});
@@ -75,15 +75,15 @@ export default function Game(){
         if(user && message) {
             console.log('Send!');
             webSocket.current.send(
-                JSON.stringify(new ChatMessageClueGiver(user, message))
+                JSON.stringify(new ChatMessage(user, message))
             );
             setMessage('');
         }
     };
 
-    const listChatMessages = chatMessages.map((ChatMessageClueGiver, index) =>
+    const listChatMessages = chatMessages.map((ChatMessage, index) =>
         <ListItem key={index}>
-            <ListItemText primary={`${ChatMessageClueGiver.user}: ${ChatMessageClueGiver.message}`}/>
+            <ListItemText primary={`${ChatMessage.user}: ${ChatMessage.message}`}/>
         </ListItem>
     );
 
