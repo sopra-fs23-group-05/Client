@@ -96,8 +96,18 @@ export default function Game(){
             flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse',
             width: '100%',
             alignItems: 'flex-start',
+            marginTop: '5px',
         }}>
-            <Box>
+            <Box
+                sx={{
+                    backgroundColor: ChatMessage.type === "description" ? 'primary.main' : 'secondary.main',
+                    borderRadius: '5px',
+                    paddingTop: '2px',
+                    paddingBottom: '2px',
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
+                }}
+            >
                 {ChatMessage.type}: {ChatMessage.message}
             </Box>
         </Box>
@@ -147,7 +157,11 @@ export default function Game(){
                   alignItems: 'flex-start',
                   justifyContent: 'flex-start',
                   flexDirection: 'column',
-                  width: '100%',
+                  width: '100% - 40px',
+                  marginTop: '3px',
+                  marginBottom: '8px',
+                  marginLeft: '8px',
+                  marginRight: '8px',
               }}>
                   {listChatMessages}
                   <ListItem ref={scrollBottomRef}></ListItem>
