@@ -1,5 +1,5 @@
 import "styles/views/Game.scss";
-import {Box, Divider, Button, TextField, ListItem, List, ListItemText} from "@mui/material";
+import {Box, Divider, Button, TextField, ListItem} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import {useEffect, useRef, useState} from "react";
 import {ChatMessage} from "models/ChatMessage";
@@ -90,9 +90,17 @@ export default function Game(){
     * a new array of ListItem components
      */
     const listChatMessages = chatMessages.map((ChatMessage, index) =>
-        <ListItem key={index}>
-            <ListItemText primary={`${ChatMessage.type}: ${ChatMessage.message}`}/>
-        </ListItem>
+        <Box key={index}
+        sx={{
+            display: 'flex',
+            flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse',
+            width: '100%',
+            alignItems: 'flex-start',
+        }}>
+            <Box>
+                {ChatMessage.type}: {ChatMessage.message}
+            </Box>
+        </Box>
     );
 
     return (
@@ -134,11 +142,15 @@ export default function Game(){
               marginBottom: '20px',
               flex: '1',
               position: 'relative',}}>
-              <Box sx={{ flex: '1' }}>
-                  <List id="chat-window-messages">
-                      {listChatMessages}
-                      <ListItem ref={scrollBottomRef}></ListItem>
-                  </List>
+              <Box sx={{ flex: '1',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                  flexDirection: 'column',
+                  width: '100%',
+              }}>
+                  {listChatMessages}
+                  <ListItem ref={scrollBottomRef}></ListItem>
               </Box>
               <Box sx={{
                   display: 'flex',
