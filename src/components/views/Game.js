@@ -4,6 +4,7 @@ import SendIcon from '@mui/icons-material/Send';
 import {useEffect, useRef, useState} from "react";
 import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
+import Team from "../../models/Team";
 
 export default function Game(){
 
@@ -16,6 +17,13 @@ export default function Game(){
     // const [user, setUser] = useState('');
     const [message, setMessage] = useState('');
 
+    // Get the actual user from the backend.
+    const user = new User({username: "felix"});
+    // Get the actual team from the backend.
+    const team = new Team({aRole: "clueGiver", players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})], idxClueGiver: 0});
+
+    // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
+    const messageType = team.getClueGiver() === user ? "description" : "guess";
 
     // Websocket code
     useEffect(() => {
@@ -46,7 +54,8 @@ export default function Game(){
             console.log('Message:', ChatMessage);
             setChatMessages([...chatMessages, {
                 user: ChatMessage.user,
-                message: ChatMessage.message
+                message: ChatMessage.message,
+                type: ChatMessage.type
             }]);
             if(scrollBottomRef.current) {
                 scrollBottomRef.current.scrollIntoView({ behavior: 'smooth'});
@@ -68,22 +77,21 @@ export default function Game(){
 
     // Websocket code
     const sendMessage = () => {
-
-        // Delete this line as soon as the actual user is obtained from the backend.
-        const user = new User({username: "felix"});
-
-        if(user && message) {
+        if(user && message && messageType) {
             console.log('Send!');
             webSocket.current.send(
-                JSON.stringify(new ChatMessage(user, message))
+                JSON.stringify(new ChatMessage(user, message, messageType))
             );
             setMessage('');
         }
     };
 
+    /* This code is iterating over an array of chatMessages and returning
+    * a new array of ListItem components
+     */
     const listChatMessages = chatMessages.map((ChatMessage, index) =>
         <ListItem key={index}>
-            <ListItemText primary={`${ChatMessage.user}: ${ChatMessage.message}`}/>
+            <ListItemText primary={`${ChatMessage.type}: ${ChatMessage.message}`}/>
         </ListItem>
     );
 
