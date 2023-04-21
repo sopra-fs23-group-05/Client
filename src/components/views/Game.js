@@ -42,11 +42,11 @@ export default function Game(){
     // Websocket code
     useEffect(() => {
         webSocket.current.onmessage = (event) => {
-            const ChatMessageDTO = JSON.parse(event.data);
-            console.log('Message:', ChatMessageDTO);
+            const ChatMessageClueGiver = JSON.parse(event.data);
+            console.log('Message:', ChatMessageClueGiver);
             setChatMessages([...chatMessages, {
-                user: ChatMessageDTO.user,
-                message: ChatMessageDTO.message
+                user: ChatMessageClueGiver.user,
+                message: ChatMessageClueGiver.message
             }]);
             if(scrollBottomRef.current) {
                 scrollBottomRef.current.scrollIntoView({ behavior: 'smooth'});
