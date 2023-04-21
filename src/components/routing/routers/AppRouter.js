@@ -2,13 +2,13 @@ import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import AdminLogin from "../../views/AdminLogin";
 import UserLogin from "../../views/UserLogin";
 import LobbyPage from "../../views/LobbyPage";
-import Homepage from "components/views/Homepage";
-import Rules from "components/views/Rules";
-import Invite from "components/views/Invite";
-import Settings from "components/views/Settings";
+import Homepage from "../../views/Homepage";
+import Rules from "../../views/Rules";
+import Invite from "../../views/Invite";
+import Settings from "../../views/Settings";
 import PreGame from "../../views/PreGame";
 import Game from "../../views/Game";
-import Endscreen from "components/views/Endscreen";
+import Endscreen from "../../views/Endscreen";
 
 
 
