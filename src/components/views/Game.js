@@ -157,11 +157,10 @@ export default function Game(){
                   alignItems: 'flex-start',
                   justifyContent: 'flex-start',
                   flexDirection: 'column',
-                  width: '100% - 40px',
-                  marginTop: '3px',
-                  marginBottom: '8px',
-                  marginLeft: '8px',
-                  marginRight: '8px',
+                  width: '100%',
+                  paddingTop: '3px',
+                  paddingLeft: '8px',
+                  paddingRight: '8px',
               }}>
                   {listChatMessages}
                   <ListItem ref={scrollBottomRef}></ListItem>
