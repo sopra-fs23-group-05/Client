@@ -1,6 +1,8 @@
+import React, {useState} from 'react';
 import "styles/views/Game.scss";
-import {Box, Divider, Button, TextField} from "@mui/material";
+import {Box, Divider, Button, TextField, DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
+
 
 const Game = () => {
   /*
@@ -31,13 +33,43 @@ const Game = () => {
     fetchData();
   }, []);*/
 
+    const [wordDefinition, setWordDefinition] = useState("");
+    const [word] = useState("Apple");
+    const [open, setOpen] = useState(false);
+
+    
+
     return (
     <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
       <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
           <div className="card-and-timer-box">
               <div className="card-box">
                   <div className="side-box">
-                      <Button variant="contained" sx={{width: '80%', bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' }, '&:active': { bgcolor: 'darkgreen' } }}>Word</Button>
+                    <Button variant="contained" sx={{width: '80%', bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' }, '&:active': { bgcolor: 'darkgreen' } }}
+                            onClick={async () => {
+                            const response = await fetch(`https://api.datamuse.com/words?sp=${word}&md=d`);
+                            const data = await response.json();
+                            if (data.length > 0 && data[0].defs) {
+                                setWordDefinition(data[0].defs[0]);
+                            } else {
+                                setWordDefinition("No definition found");
+                            }
+                            setOpen(true);
+                            }}>
+                    {word}
+                    </Button>
+
+                <Dialog open={open} onClose={() => setOpen(false)}>
+                <DialogTitle>{word}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>{wordDefinition}</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpen(false)}>Close</Button>
+                </DialogActions>
+                </Dialog>
+
+
                       <Button variant="contained" sx={{width: '80%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}>Skip Card</Button>
                   </div>
                   <div className="side-box">
