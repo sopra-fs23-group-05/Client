@@ -18,7 +18,7 @@ export default function Game(){
     const [message, setMessage] = useState('');
 
     // Get the actual user from the backend.
-    const user = new User({username: "felix"});
+    const user = new User({username: "felix", id: 666});
     // Get the actual team from the backend.
     const team = new Team({aRole: "clueGiver", players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})], idxClueGiver: 0});
 
@@ -29,9 +29,9 @@ export default function Game(){
     useEffect(() => {
         console.log('Opening WebSocket');
         // Activate the following line for deployment.
-        webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
+        // webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
         // Activate the following line for local testing.
-        // webSocket.current = new WebSocket('ws://localhost:8080/chat');
+        webSocket.current = new WebSocket('ws://localhost:8080/chat');
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
                 console.log('Open:', event);
@@ -53,7 +53,8 @@ export default function Game(){
             const ChatMessage = JSON.parse(event.data);
             console.log('Message:', ChatMessage);
             setChatMessages([...chatMessages, {
-                user: ChatMessage.user,
+                accessCode: ChatMessage.accessCode,
+                userId: ChatMessage.userId,
                 message: ChatMessage.message,
                 type: ChatMessage.type
             }]);
@@ -80,7 +81,8 @@ export default function Game(){
         if(user && message && messageType) {
             console.log('Send!');
             webSocket.current.send(
-                JSON.stringify(new ChatMessage(user, message, messageType))
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new ChatMessage(window.location.href.slice(-6), user.id, message, messageType))
             );
             setMessage('');
         }
