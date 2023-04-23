@@ -1,5 +1,5 @@
 import "styles/views/Game.scss";
-import {Box, Divider, Button, TextField, ListItem, List, ListItemText, DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions} from "@mui/material";
+import {Box, Divider, Button, TextField, ListItem, DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import {useEffect, useRef, useState} from "react";
 import {ChatMessage} from "models/ChatMessage";
