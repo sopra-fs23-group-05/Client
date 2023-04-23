@@ -12,3 +12,4 @@ class Card {
     Object.assign(this, data);
   }
 }
+export default Card;
