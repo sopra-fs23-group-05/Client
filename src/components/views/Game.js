@@ -2,8 +2,9 @@ import "styles/views/Game.scss";
 import {Box, Divider, Button, TextField, ListItem, List, ListItemText, DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import {useEffect, useRef, useState} from "react";
-import {ChatMessageClueGiver} from "models/ChatMessageClueGiver";
+import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
+import Team from "../../models/Team";
 
 export default function Game(){
 
@@ -16,6 +17,13 @@ export default function Game(){
     // const [user, setUser] = useState('');
     const [message, setMessage] = useState('');
 
+    // Get the actual user from the backend.
+    const user = new User({username: "felix", id: 666});
+    // Get the actual team from the backend.
+    const team = new Team({aRole: "clueGiver", players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})], idxClueGiver: 0});
+
+    // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
+    const messageType = team.getClueGiver() === user ? "description" : "guess";
 
     // Websocket code
     useEffect(() => {
@@ -42,11 +50,13 @@ export default function Game(){
     // Websocket code
     useEffect(() => {
         webSocket.current.onmessage = (event) => {
-            const ChatMessageDTO = JSON.parse(event.data);
-            console.log('Message:', ChatMessageDTO);
+            const ChatMessage = JSON.parse(event.data);
+            console.log('Message:', ChatMessage);
             setChatMessages([...chatMessages, {
-                user: ChatMessageDTO.user,
-                message: ChatMessageDTO.message
+                accessCode: ChatMessage.accessCode,
+                userId: ChatMessage.userId,
+                message: ChatMessage.message,
+                type: ChatMessage.type
             }]);
             if(scrollBottomRef.current) {
                 scrollBottomRef.current.scrollIntoView({ behavior: 'smooth'});
@@ -68,23 +78,41 @@ export default function Game(){
 
     // Websocket code
     const sendMessage = () => {
-
-        // Delete this line as soon as the actual user is obtained from the backend.
-        const user = new User({username: "felix"});
-
-        if(user && message) {
+        if(user && message && messageType) {
             console.log('Send!');
             webSocket.current.send(
-                JSON.stringify(new ChatMessageClueGiver(user, message))
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new ChatMessage(window.location.href.slice(-6), user.id, message, messageType))
             );
             setMessage('');
         }
     };
 
-    const listChatMessages = chatMessages.map((ChatMessageClueGiver, index) =>
-        <ListItem key={index}>
-            <ListItemText primary={`${ChatMessageClueGiver.user}: ${ChatMessageClueGiver.message}`}/>
-        </ListItem>
+    /* This code is iterating over an array of chatMessages and returning
+    * a new array of ListItem components
+     */
+    const listChatMessages = chatMessages.map((ChatMessage, index) =>
+        <Box key={index}
+        sx={{
+            display: 'flex',
+            flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse',
+            width: '100%',
+            alignItems: 'flex-start',
+            marginTop: '5px',
+        }}>
+            <Box
+                sx={{
+                    backgroundColor: ChatMessage.type === "description" ? 'primary.main' : 'secondary.main',
+                    borderRadius: '5px',
+                    paddingTop: '2px',
+                    paddingBottom: '2px',
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
+                }}
+            >
+                {ChatMessage.type}: {ChatMessage.message}
+            </Box>
+        </Box>
     );
     
     const [wordDefinition, setWordDefinition] = useState("");
@@ -152,11 +180,18 @@ export default function Game(){
               marginBottom: '20px',
               flex: '1',
               position: 'relative',}}>
-              <Box sx={{ flex: '1' }}>
-                  <List id="chat-window-messages">
-                      {listChatMessages}
-                      <ListItem ref={scrollBottomRef}></ListItem>
-                  </List>
+              <Box sx={{ flex: '1',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                  flexDirection: 'column',
+                  width: '100%',
+                  paddingTop: '3px',
+                  paddingLeft: '8px',
+                  paddingRight: '8px',
+              }}>
+                  {listChatMessages}
+                  <ListItem ref={scrollBottomRef}></ListItem>
               </Box>
               <Box sx={{
                   display: 'flex',
