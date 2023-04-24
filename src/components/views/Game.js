@@ -18,7 +18,7 @@ export default function Game(){
     // Activate the following line as soon as the actual user is obtained from the backend.
     // const [user, setUser] = useState('');
     const [message, setMessage] = useState('');
-    let [displayedCard, setCard] = useState(null);
+    let [displayedCard, setCard] = useState(new Card({word: "Loading...", taboo1: "Loading...", taboo2: "Loading...", taboo3: "Loading...", taboo4: "Loading...", taboo5: "Loading..."}));
 
     // Get the actual user from the backend.
     const user = new User({username: "felix", id: 666});
@@ -30,22 +30,22 @@ export default function Game(){
 
     // Websocket code
     useEffect(() => {
-        console.log('Opening WebSocket');
+        console.log('Opening Chat WebSocket');
         // Activate the following line for deployment.
         webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
         // Activate the following line for local testing.
         // webSocket.current = new WebSocket('ws://localhost:8080/chat');
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
-                console.log('Open:', event);
+                console.log('Open Chat WebSocket:', event);
             }
             webSocket.current.onclose = (event) => {
-                console.log('Close:', event);
+                console.log('Close Chat WebSocket:', event);
             }
         }
         openWebSocket();
         return () => {
-            console.log('Closing WebSocket');
+            console.log('Closing Chat WebSocket');
             webSocket.current.close();
         }
     }, []);
@@ -59,15 +59,15 @@ export default function Game(){
         cardWebSocket.current = new WebSocket('ws://localhost:8080/cards');
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
-                console.log('Open:', event);
+                console.log('Open Card WebSocket:', event);
             }
             cardWebSocket.current.onclose = (event) => {
-                console.log('Close:', event);
+                console.log('Close Card WebSocket:', event);
             }
         }
         openCardWebSocket();
         return () => {
-            console.log('Closing WebSocket');
+            console.log('Closing Card WebSocket');
             cardWebSocket.current.close();
         }
     }, []);
@@ -76,7 +76,7 @@ export default function Game(){
     useEffect(() => {
         webSocket.current.onmessage = (event) => {
             const ChatMessage = JSON.parse(event.data);
-            console.log('Message:', ChatMessage);
+            console.log('Message Chat:', ChatMessage);
             setChatMessages([...chatMessages, {
                 accessCode: ChatMessage.accessCode,
                 userId: ChatMessage.userId,
@@ -93,7 +93,7 @@ export default function Game(){
     useEffect(() => {
         cardWebSocket.current.onmessage = (event) => {
             const CardDTO = JSON.parse(event.data);
-            console.log('Message:', Card);
+            console.log('Message Card:', CardDTO);
             setCard(new Card({
                 word: CardDTO.word,
                 taboo1: CardDTO.taboo1,
