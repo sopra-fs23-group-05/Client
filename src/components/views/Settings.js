@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {api} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Settings.scss';
 import {Container, TextField, Button, Typography, Box} from "@mui/material";
@@ -8,7 +9,9 @@ const Settings = props => {
     const history = useHistory();
     
     const [rounds, setRounds] = useState(null);
-    const [time, setTime] = useState(null);
+    const [roundTime, setTime] = useState(null);
+    const [topic, setTopic] = useState(null);
+
 
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const handleRoundsChange = (event) => {
@@ -17,6 +20,23 @@ const Settings = props => {
     const handleTimeChange = (event) => {
         setTime(event.target.value)
     }
+    const handleTopicsChange = (topics) => {
+        setTopic(topics)
+    }
+    
+
+    
+
+      const doSave = async () => {
+        console.log(accessCode);      
+        const requestBody = JSON.stringify({rounds, topic, roundTime});
+        console.log(requestBody);
+        const url = "/lobbies/" + accessCode + "/settings";
+        console.log(url);
+        await api.put(url, requestBody);
+        window.location.reload();
+      };
+
 
     const doBack = () => {
         localStorage.removeItem('token');
@@ -45,6 +65,7 @@ const Settings = props => {
         <Box className="saveBox">
             <div></div>
             <Button variant="contained" className="saveButton"
+            onClick={() => doSave()}
             >
             Save
             </Button>
@@ -58,7 +79,7 @@ const Settings = props => {
                     className='textField'
                     id='outlined-basic'
                     label='Enter time in seconds...'
-                    value={time}
+                    value={roundTime}
                     onChange={handleTimeChange}
                     variant='outlined'
                     InputLabelProps={{ className: 'input' }}
@@ -67,6 +88,7 @@ const Settings = props => {
                 <Box className="saveBox">
                     <div></div>
                     <Button variant="contained" className="saveButton"
+                    onClick={() => doSave()}
                     >
                     Save
                     </Button>
@@ -83,26 +105,34 @@ const Settings = props => {
 
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button variant="contained" className="topicsButton" style={{ backgroundColor: '#DB8E56', margin: '-30px 10px -30px 0px'}}>
+            <Button variant="contained" className="topicsButton" style={{ backgroundColor: '#DB8E56', margin: '-30px 10px -30px 0px'}}
+            onClick={() => handleTopicsChange("Animals")}
+            >
                 <h1>
                     Animals
                 </h1>
             </Button>
 
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#77DE5D', margin: '-30px 0 -30px 10px'}}>
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#77DE5D', margin: '-30px 0 -30px 10px'}}
+            onClick={() => handleTopicsChange("Sports")}
+            >
                 <h1>
                     Sports
                 </h1>
             </Button>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#EA4848', margin: '-30px 10px -30px 0px'}}>
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#EA4848', margin: '-30px 10px -30px 0px'}}
+            onClick={() => handleTopicsChange("Movies")}
+            >
                 <h1>
                     Movies
                 </h1>
             </Button>
             
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#4D7CF3', margin: '-30px 0 -30px 10px'}}>
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#4D7CF3', margin: '-30px 0 -30px 10px'}}
+            onClick={() => handleTopicsChange("Countries")}
+            >
                 <h1>
                     Countries
                 </h1>
@@ -111,13 +141,17 @@ const Settings = props => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#EEF167', margin: '-30px 10px -30px 0px'}}>
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#EEF167', margin: '-30px 10px -30px 0px'}}
+            onClick={() => handleTopicsChange("Food")}
+            >
                 <h1>
                     Food
                 </h1>
             </Button>
 
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#F666CE', margin: '-30px 0 -30px 10px'}}>
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#F666CE', margin: '-30px 0 -30px 10px'}}
+            onClick={() => handleTopicsChange("Music")}
+            >
                 <h1>
                     Music
                 </h1>
@@ -126,13 +160,17 @@ const Settings = props => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#C660F6', margin: '-30px 10px -30px 0px'}}>
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#C660F6', margin: '-30px 10px -30px 0px'}}
+            onClick={() => handleTopicsChange("Famous People")}
+            >
                 <h1>
                     Famous People
                 </h1>
             </Button>
 
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#C1BACB', margin: '-30px 0 -30px 10px'}}>
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#C1BACB', margin: '-30px 0 -30px 10px'}}
+            onClick={() => handleTopicsChange("Technology")}
+            >
                 <h1>
                     Technology
                 </h1>
