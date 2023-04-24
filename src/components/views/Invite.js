@@ -12,7 +12,6 @@ const Invite = props => {
     const accessCode = localStorage.getItem('lobbyAccessCode');
 
     const doBack = () => {
-        localStorage.removeItem('token');
         history.push(`/lobbies/${accessCode}`)
         window.location.reload();
     }

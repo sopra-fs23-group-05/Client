@@ -39,7 +39,6 @@ const Settings = props => {
 
 
     const doBack = () => {
-        localStorage.removeItem('token');
         history.push(`/lobbies/${accessCode}`);
         window.location.reload();
     }
