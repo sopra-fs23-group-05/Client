@@ -113,12 +113,13 @@ export default function Game(){
     // Websocket code
     const handleEnterKey = (event) => {
         if(event.keyCode === ENTER_KEY_CODE){
-            sendMessage();
+            sendChatMessage();
+            sendCardMessage();
         }
     }
 
     // Websocket code
-    const sendMessage = () => {
+    const sendChatMessage = () => {
         if(user && message && messageType) {
             console.log('Send!');
             webSocket.current.send(
@@ -126,6 +127,18 @@ export default function Game(){
                 JSON.stringify(new ChatMessage(window.location.href.slice(-6), user.id, message, messageType))
             );
             setMessage('');
+        }
+    };
+
+    // Card websocket code
+    const sendCardMessage = () => {
+        if (cardWebSocket) {
+            console.log('Send Card request!');
+            cardWebSocket.current.send(
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                // TODO This line does not work, it does not recognize the access code.
+                JSON.stringify(new ChatMessage(window.location.href.slice(-6), 111, "I want a card", "description"))
+            );
         }
     };
 
@@ -269,7 +282,7 @@ export default function Game(){
                          }}
                   />
                   <Button
-                      onClick={sendMessage}
+                      onClick={sendChatMessage}
                       variant="contained"
                       color="primary"
                           sx={{
