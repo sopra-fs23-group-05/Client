@@ -52,6 +52,17 @@ export default function Game(){
     }, []);
 
     // Card websocket code
+    const sendCardMessage = () => {
+        if (cardWebSocket) {
+            console.log('Send Card Request!');
+            cardWebSocket.current.send(
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new CardRequest(window.location.href.slice(-6), "draw"))
+            );
+        }
+    };
+
+    // Card websocket code
     useEffect(() => {
         console.log('Opening Card WebSocket');
         // Activate the following line for deployment.
@@ -61,6 +72,7 @@ export default function Game(){
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
+                sendCardMessage();
             }
             cardWebSocket.current.onclose = (event) => {
                 console.log('Close Card WebSocket:', event);
@@ -115,7 +127,6 @@ export default function Game(){
     const handleEnterKey = (event) => {
         if(event.keyCode === ENTER_KEY_CODE){
             sendChatMessage();
-            sendCardMessage();
         }
     }
 
@@ -128,17 +139,6 @@ export default function Game(){
                 JSON.stringify(new ChatMessage(window.location.href.slice(-6), user.id, message, messageType))
             );
             setMessage('');
-        }
-    };
-
-    // Card websocket code
-    const sendCardMessage = () => {
-        if (cardWebSocket) {
-            console.log('Send Card Request!');
-            cardWebSocket.current.send(
-                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                JSON.stringify(new CardRequest(window.location.href.slice(-6), "draw"))
-            );
         }
     };
 
