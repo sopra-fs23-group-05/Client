@@ -66,9 +66,9 @@ export default function Game(){
     useEffect(() => {
         console.log('Opening Card WebSocket');
         // Activate the following line for deployment.
-        // cardWebSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/cards');
+        cardWebSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/cards');
         // Activate the following line for local testing.
-        cardWebSocket.current = new WebSocket('ws://localhost:8080/cards');
+        // cardWebSocket.current = new WebSocket('ws://localhost:8080/cards');
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
