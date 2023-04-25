@@ -9,9 +9,9 @@ import {useEffect, useState} from "react";
 const Settings = props => {
     const history = useHistory();
     
-    const [rounds, setRounds] = useState(null);
-    const [roundTime, setTime] = useState(null);
-    const [topic, setTopic] = useState(null);
+    const [rounds, setRounds] = useState("");
+    const [roundTime, setTime] = useState("");
+    const [topic, setTopic] = useState("");
 
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const handleRoundsChange = (event) => {
@@ -50,7 +50,6 @@ const Settings = props => {
         const url = "/lobbies/" + accessCode + "/settings";
         console.log(url);
         await api.put(url, requestBody);
-        window.location.reload();
       };
 
 
@@ -62,7 +61,7 @@ const Settings = props => {
   return (
     <div className="settingsRoot" style={{ overflowY: 'scroll' }}>
     
-    <h1 style={{ color: 'white', marginTop:'1100px', marginRight: '150px', fontFamily: 'Inter, sans-serif', fontWeight: '600', fontSize: '40px' }}>Settings</h1>
+    <h1 style={{ color: 'white', marginTop:'1250px', marginRight: '150px', fontFamily: 'Inter, sans-serif', fontWeight: '600', fontSize: '40px' }}>Settings</h1>
     <Container sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
     <Box className="inputBox" sx={{marginTop: '-120px'}}>
         <Typography variant="h6" sx={{color: 'white', mb: 1, fontFamily: 'Inter, sans-serif', fontWeight: '600', fontSize: '24px', textShadow: '2px 2px 4px rgba(0,0,0,0.4)'}}>Number of Rounds</Typography>
@@ -118,7 +117,7 @@ const Settings = props => {
 
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button variant="contained" className="topicsButton" style={{ backgroundColor: '#DB8E56', margin: '-30px 10px -30px 0px'}}
+            <Button variant="contained" className="topicsButton" style={{ backgroundColor: '#DB8E56', boxShadow: topic === "ANIMALS" ? "0 0 50px 0 #FFF" : "", margin: '-30px 10px -30px 0px'}}
             onClick={() =>handleTopicsChange("ANIMALS")}
             >
                 <h1>
@@ -126,7 +125,7 @@ const Settings = props => {
                 </h1>
             </Button>
 
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#77DE5D', margin: '-30px 0 -30px 10px'}}
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#77DE5D', boxShadow: topic === "SPORTS" ? "0 0 50px 0 #FFF" : "", margin: '-30px 0 -30px 10px'}}
             onClick={() => handleTopicsChange("SPORTS")}
             >
                 <h1>
@@ -135,7 +134,7 @@ const Settings = props => {
             </Button>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#EA4848', margin: '-30px 10px -30px 0px'}}
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#EA4848', boxShadow: topic === "MOVIES" ? "0 0 50px 0 #FFF" : "", margin: '-30px 10px -30px 0px'}}
             onClick={() => handleTopicsChange("MOVIES")}
             >
                 <h1>
@@ -143,7 +142,7 @@ const Settings = props => {
                 </h1>
             </Button>
             
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#4D7CF3', margin: '-30px 0 -30px 10px'}}
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#4D7CF3', boxShadow: topic === "COUNTRIES" ? "0 0 50px 0 #FFF" : "", margin: '-30px 0 -30px 10px'}}
             onClick={() => handleTopicsChange("COUNTRIES")}
             >
                 <h1>
@@ -154,7 +153,7 @@ const Settings = props => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#EEF167', margin: '-30px 10px -30px 0px'}}
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#EEF167', boxShadow: topic === "FOOD" ? "0 0 50px 0 #FFF" : "", margin: '-30px 10px -30px 0px'}}
             onClick={() => handleTopicsChange("FOOD")}
             >
                 <h1>
@@ -162,7 +161,7 @@ const Settings = props => {
                 </h1>
             </Button>
 
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#F666CE', margin: '-30px 0 -30px 10px'}}
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#F666CE', boxShadow: topic === "MUSIC" ? "0 0 50px 0 #FFF" : "", margin: '-30px 0 -30px 10px'}}
             onClick={() => handleTopicsChange("MUSIC")}
             >
                 <h1>
@@ -173,7 +172,7 @@ const Settings = props => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#C660F6', margin: '-30px 10px -30px 0px'}}
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#C660F6', boxShadow: topic === "FAMOUS_PEOPLE" ? "0 0 50px 0 #FFF" : "", margin: '-30px 10px -30px 0px'}}
             onClick={() => handleTopicsChange("FAMOUS_PEOPLE")}
             >
                 <h1>
@@ -181,7 +180,7 @@ const Settings = props => {
                 </h1>
             </Button>
 
-            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#C1BACB', margin: '-30px 0 -30px 10px'}}
+            <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#C1BACB', boxShadow: topic === "TECHNOLOGY" ? "0 0 50px 0 #FFF" : "", margin: '-30px 0 -30px 10px'}}
             onClick={() => handleTopicsChange("TECHNOLOGY")}
             >
                 <h1>
