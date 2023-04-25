@@ -5,6 +5,8 @@ import {useEffect, useRef, useState} from "react";
 import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
 import Team from "../../models/Team";
+import Card from "../../models/Card";
+import {CardRequest} from "../../models/CardRequest";
 
 export default function Game(){
 
@@ -12,10 +14,12 @@ export default function Game(){
 
     const scrollBottomRef = useRef(null);
     const webSocket = useRef(null);
+    const cardWebSocket = useRef(null);
     const [chatMessages, setChatMessages] = useState([]);
     // Activate the following line as soon as the actual user is obtained from the backend.
     // const [user, setUser] = useState('');
     const [message, setMessage] = useState('');
+    let [displayedCard, setCard] = useState(new Card({word: "Loading...", taboo1: "Loading...", taboo2: "Loading...", taboo3: "Loading...", taboo4: "Loading...", taboo5: "Loading..."}));
 
     // Get the actual user from the backend.
     const user = new User({username: "felix", id: 666});
@@ -27,23 +31,57 @@ export default function Game(){
 
     // Websocket code
     useEffect(() => {
-        console.log('Opening WebSocket');
+        console.log('Opening Chat WebSocket');
         // Activate the following line for deployment.
         webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
         // Activate the following line for local testing.
         // webSocket.current = new WebSocket('ws://localhost:8080/chat');
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
-                console.log('Open:', event);
+                console.log('Open Chat WebSocket:', event);
             }
             webSocket.current.onclose = (event) => {
-                console.log('Close:', event);
+                console.log('Close Chat WebSocket:', event);
             }
         }
         openWebSocket();
         return () => {
-            console.log('Closing WebSocket');
+            console.log('Closing Chat WebSocket');
             webSocket.current.close();
+        }
+    }, []);
+
+    // Card websocket code
+    const sendCardMessage = () => {
+        if (cardWebSocket) {
+            console.log('Send Card Request!');
+            cardWebSocket.current.send(
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new CardRequest(window.location.href.slice(-6), "draw"))
+            );
+        }
+    };
+
+    // Card websocket code
+    useEffect(() => {
+        console.log('Opening Card WebSocket');
+        // Activate the following line for deployment.
+        cardWebSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/cards');
+        // Activate the following line for local testing.
+        // cardWebSocket.current = new WebSocket('ws://localhost:8080/cards');
+        const openCardWebSocket = () => {
+            cardWebSocket.current.onopen = (event) => {
+                console.log('Open Card WebSocket:', event);
+                sendCardMessage();
+            }
+            cardWebSocket.current.onclose = (event) => {
+                console.log('Close Card WebSocket:', event);
+            }
+        }
+        openCardWebSocket();
+        return () => {
+            console.log('Closing Card WebSocket');
+            cardWebSocket.current.close();
         }
     }, []);
 
@@ -51,7 +89,7 @@ export default function Game(){
     useEffect(() => {
         webSocket.current.onmessage = (event) => {
             const ChatMessage = JSON.parse(event.data);
-            console.log('Message:', ChatMessage);
+            console.log('Received Chat Message:', ChatMessage);
             setChatMessages([...chatMessages, {
                 accessCode: ChatMessage.accessCode,
                 userId: ChatMessage.userId,
@@ -64,6 +102,22 @@ export default function Game(){
         }
     }, [chatMessages]);
 
+    // Card websocket code
+    useEffect(() => {
+        cardWebSocket.current.onmessage = (event) => {
+            const Card = JSON.parse(event.data);
+            console.log('Received Card:', Card);
+            setCard({
+                word: Card.word,
+                taboo1: Card.taboo1,
+                taboo2: Card.taboo2,
+                taboo3: Card.taboo3,
+                taboo4: Card.taboo4,
+                taboo5: Card.taboo5
+            });
+        }
+    }, [displayedCard]);
+
     // Websocket code
     const handleMessageChange = (event) => {
         setMessage(event.target.value);
@@ -72,14 +126,14 @@ export default function Game(){
     // Websocket code
     const handleEnterKey = (event) => {
         if(event.keyCode === ENTER_KEY_CODE){
-            sendMessage();
+            sendChatMessage();
         }
     }
 
     // Websocket code
-    const sendMessage = () => {
+    const sendChatMessage = () => {
         if(user && message && messageType) {
-            console.log('Send!');
+            console.log('Send Chat Message!');
             webSocket.current.send(
                 // Take the access code from the URL, e.g. http://localhost:3000/game/123456
                 JSON.stringify(new ChatMessage(window.location.href.slice(-6), user.id, message, messageType))
@@ -119,6 +173,20 @@ export default function Game(){
     const [word] = useState("Apple");
     const [open, setOpen] = useState(false);
 
+    let cardContent = null;
+
+    if(displayedCard) {
+        cardContent = (
+            <div className="side-box">
+                <div>{displayedCard.taboo1}</div>
+                <div>{displayedCard.taboo2}</div>
+                <div>{displayedCard.taboo3}</div>
+                <div>{displayedCard.taboo4}</div>
+                <div>{displayedCard.taboo5}</div>
+            </div>
+      );
+    }
+
     return (
     <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
       <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
@@ -136,7 +204,7 @@ export default function Game(){
                                 }
                                 setOpen(true);
                                 }}>
-                        {word}
+                        {displayedCard.word}
                         </Button>
 
                         <Dialog open={open} onClose={() => setOpen(false)}>
@@ -150,13 +218,7 @@ export default function Game(){
                         </Dialog>
                       <Button variant="contained" sx={{width: '80%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}>Skip Card</Button>
                   </div>
-                  <div className="side-box">
-                      <div>Taboo 1</div>
-                      <div>Taboo 2</div>
-                      <div>Taboo 3</div>
-                      <div>Taboo 4</div>
-                      <div>Taboo 5</div>
-                  </div>
+                  {cardContent}
               </div>
                   <div className="timer-box">
                       <div>Timer</div>
@@ -220,7 +282,7 @@ export default function Game(){
                          }}
                   />
                   <Button
-                      onClick={sendMessage}
+                      onClick={sendChatMessage}
                       variant="contained"
                       color="primary"
                           sx={{
