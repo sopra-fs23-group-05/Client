@@ -135,12 +135,9 @@ export default function Game(){
     const sendCardMessage = () => {
         if (cardWebSocket) {
             console.log('Send Card Request!');
-            const tRequest = new CardRequest(window.location.href.slice(-6), "draw");
-            console.log(tRequest);
             cardWebSocket.current.send(
                 // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                // TODO This line does not work, it does not recognize the access code.
-                JSON.stringify(tRequest)
+                JSON.stringify(new CardRequest(window.location.href.slice(-6), "draw"))
             );
         }
     };
