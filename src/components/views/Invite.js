@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import QRCode from "react-qr-code";
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Invite.scss';
@@ -9,16 +9,16 @@ import {Container, Button, Typography, Box} from "@mui/material";
 
 const Invite = props => {
     const history = useHistory();
-    const [accessCode] = useState("12345");
+    const accessCode = localStorage.getItem('lobbyAccessCode');
 
     const doBack = () => {
         localStorage.removeItem('token');
-        history.push('/lobbies');
+        history.push(`/lobbies/${accessCode}`)
         window.location.reload();
     }
 
     const copyToClipboard = () => {
-        navigator.clipboard.writeText("https://sopra-fs23-group-05-client.oa.r.appspot.com/lobbies/1");
+        navigator.clipboard.writeText(`https://sopra-fs23-group-05-client.oa.r.appspot.com/user-login/${accessCode}`);
       };
 
   return (
@@ -45,7 +45,7 @@ const Invite = props => {
             <QRCode
             size={256}
             style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-            value={"https://sopra-fs23-group-05-client.oa.r.appspot.com/lobbies/1"}
+            value={`https://sopra-fs23-group-05-client.oa.r.appspot.com/user-login/${accessCode}`}
             viewBox={`0 0 256 256`}
             />
         </div>

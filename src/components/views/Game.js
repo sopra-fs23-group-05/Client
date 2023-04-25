@@ -1,35 +1,123 @@
 import "styles/views/Game.scss";
-import {Box, Divider, Button, TextField} from "@mui/material";
+import {Box, Divider, Button, TextField, ListItem, DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
+import {useEffect, useRef, useState} from "react";
+import {ChatMessage} from "models/ChatMessage";
+import User from "../../models/User";
+import Team from "../../models/Team";
 
-const Game = () => {
-  /*
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await api.get('/users');
-        await new Promise(resolve => setTimeout(resolve, 1000));
+export default function Game(){
 
-        setUsers(response.data);
+    const ENTER_KEY_CODE = 13;
 
-        // This is just some data for you to see what is available.
-        // Feel free to remove it.
-        console.log('request to:', response.request.responseURL);
-        console.log('status code:', response.status);
-        console.log('status text:', response.statusText);
-        console.log('requested data:', response.data);
+    const scrollBottomRef = useRef(null);
+    const webSocket = useRef(null);
+    const [chatMessages, setChatMessages] = useState([]);
+    // Activate the following line as soon as the actual user is obtained from the backend.
+    // const [user, setUser] = useState('');
+    const [message, setMessage] = useState('');
 
-        // See here to get more data.
-        console.log(response);
-      } catch (error) {
-        console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
-        console.error("Details:", error);
-        alert("Something went wrong while fetching the users! See the console for details.");
-      }
+    // Get the actual user from the backend.
+    const user = new User({username: "felix", id: 666});
+    // Get the actual team from the backend.
+    const team = new Team({aRole: "clueGiver", players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})], idxClueGiver: 0});
+
+    // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
+    const messageType = team.getClueGiver() === user ? "description" : "guess";
+
+    // Websocket code
+    useEffect(() => {
+        console.log('Opening WebSocket');
+        // Activate the following line for deployment.
+        webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
+        // Activate the following line for local testing.
+        // webSocket.current = new WebSocket('ws://localhost:8080/chat');
+        const openWebSocket = () => {
+            webSocket.current.onopen = (event) => {
+                console.log('Open:', event);
+            }
+            webSocket.current.onclose = (event) => {
+                console.log('Close:', event);
+            }
+        }
+        openWebSocket();
+        return () => {
+            console.log('Closing WebSocket');
+            webSocket.current.close();
+        }
+    }, []);
+
+    // Websocket code
+    useEffect(() => {
+        webSocket.current.onmessage = (event) => {
+            const ChatMessage = JSON.parse(event.data);
+            console.log('Message:', ChatMessage);
+            setChatMessages([...chatMessages, {
+                accessCode: ChatMessage.accessCode,
+                userId: ChatMessage.userId,
+                message: ChatMessage.message,
+                type: ChatMessage.type
+            }]);
+            if(scrollBottomRef.current) {
+                scrollBottomRef.current.scrollIntoView({ behavior: 'smooth'});
+            }
+        }
+    }, [chatMessages]);
+
+    // Websocket code
+    const handleMessageChange = (event) => {
+        setMessage(event.target.value);
     }
 
-    fetchData();
-  }, []);*/
+    // Websocket code
+    const handleEnterKey = (event) => {
+        if(event.keyCode === ENTER_KEY_CODE){
+            sendMessage();
+        }
+    }
+
+    // Websocket code
+    const sendMessage = () => {
+        if(user && message && messageType) {
+            console.log('Send!');
+            webSocket.current.send(
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new ChatMessage(window.location.href.slice(-6), user.id, message, messageType))
+            );
+            setMessage('');
+        }
+    };
+
+    /* This code is iterating over an array of chatMessages and returning
+    * a new array of ListItem components
+     */
+    const listChatMessages = chatMessages.map((ChatMessage, index) =>
+        <Box key={index}
+        sx={{
+            display: 'flex',
+            flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse',
+            width: '100%',
+            alignItems: 'flex-start',
+            marginTop: '5px',
+        }}>
+            <Box
+                sx={{
+                    backgroundColor: ChatMessage.type === "description" ? 'primary.main' : 'secondary.main',
+                    borderRadius: '5px',
+                    paddingTop: '2px',
+                    paddingBottom: '2px',
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
+                }}
+            >
+                {ChatMessage.type}: {ChatMessage.message}
+            </Box>
+        </Box>
+    );
+    
+    const [wordDefinition, setWordDefinition] = useState("");
+    const [word] = useState("Apple");
+    const [open, setOpen] = useState(false);
 
     return (
     <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
@@ -37,7 +125,29 @@ const Game = () => {
           <div className="card-and-timer-box">
               <div className="card-box">
                   <div className="side-box">
-                      <Button variant="contained" sx={{width: '80%', bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' }, '&:active': { bgcolor: 'darkgreen' } }}>Word</Button>
+                        <Button variant="contained" sx={{width: '80%', bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' }, '&:active': { bgcolor: 'darkgreen' } }}
+                                onClick={async () => {
+                                const response = await fetch(`https://api.datamuse.com/words?sp=${word}&md=d`);
+                                const data = await response.json();
+                                if (data.length > 0 && data[0].defs) {
+                                    setWordDefinition(data[0].defs[0]);
+                                } else {
+                                    setWordDefinition("No definition found");
+                                }
+                                setOpen(true);
+                                }}>
+                        {word}
+                        </Button>
+
+                        <Dialog open={open} onClose={() => setOpen(false)}>
+                        <DialogTitle>{word}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>{wordDefinition}</DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setOpen(false)}>Close</Button>
+                        </DialogActions>
+                        </Dialog>
                       <Button variant="contained" sx={{width: '80%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}>Skip Card</Button>
                   </div>
                   <div className="side-box">
@@ -70,8 +180,18 @@ const Game = () => {
               marginBottom: '20px',
               flex: '1',
               position: 'relative',}}>
-              <Box sx={{ flex: '1' }}>
-                  {/* A Box component with flex: '1' to fill the remaining space */}
+              <Box sx={{ flex: '1',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                  flexDirection: 'column',
+                  width: '100%',
+                  paddingTop: '3px',
+                  paddingLeft: '8px',
+                  paddingRight: '8px',
+              }}>
+                  {listChatMessages}
+                  <ListItem ref={scrollBottomRef}></ListItem>
               </Box>
               <Box sx={{
                   display: 'flex',
@@ -80,6 +200,10 @@ const Game = () => {
                   width: 'calc(100% - 10px)',
               }}>
                   <TextField className={"textField-chat-input"}
+                             onChange={handleMessageChange}
+                             onKeyDown={handleEnterKey}
+                             label="Type your message..."
+                             value={message}
                       variant="outlined"
                       // placeholder="Describe the word"
                       InputProps={{
@@ -94,8 +218,11 @@ const Game = () => {
                      sx={{
                              flexGrow: '1',
                          }}
-                  ></TextField>
-                  <Button variant="contained" color="primary"
+                  />
+                  <Button
+                      onClick={sendMessage}
+                      variant="contained"
+                      color="primary"
                           sx={{
                               borderRadius: '15px',
                               height: '100%',
@@ -106,14 +233,7 @@ const Game = () => {
               </Box>
           </Box>
           <Button variant="contained"
-                  sx={{backgroundColor: 'red',
-                      color: 'black',
-                      '&:hover': { backgroundColor: 'darkred'},
-                      width: '100%',
-                      fontWeight: 'bold',
-                      fontSize: '1.5rem',
-                      borderRadius: '20px',
-                  }}
+                  className="Buzzer"
           >
               Buzzer
           </Button>
@@ -121,5 +241,3 @@ const Game = () => {
     </div>
   );
 }
-
-export default Game;

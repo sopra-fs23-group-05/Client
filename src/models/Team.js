@@ -11,5 +11,9 @@ class Team {
         this.idxClueGiver = null;
         Object.assign(this, data);
     }
+
+    getClueGiver() {
+        return this.players[this.idxClueGiver];
+    }
 }
 export default Team;
