@@ -10,6 +10,8 @@ const PreGame = () => {
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const playerName = localStorage.getItem('userName')
     const [role,setRole] = useState(null);
+    const [team1,setTeam1] = useState(null);
+    const [team2,setTeam2] = useState(null);
 
 
     let timeLeft = 10;
@@ -27,9 +29,12 @@ const PreGame = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await api.get(`/games/${accessCode}/users/${playerName}`);
+                const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
+                const responseGame = await api.get(`/games/${accessCode}`);
                 await new Promise(resolve => setTimeout(resolve, 100));
-                setRole(response.data);
+                setRole(responseRole.data);
+                setTeam1(responseGame.data.team1.points);
+                setTeam2(responseGame.data.team2.points);
 
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
@@ -72,8 +77,8 @@ const PreGame = () => {
             }}
             >
                 <h1 className="score">Score</h1>
-                <h2 className="team">Team 1:</h2>
-                <h2 className="team">Team 2:</h2>
+                <h2 className="team">Team 1: {team1}</h2>
+                <h2 className="team">Team 2: {team2}</h2>
             </Box>
         </div>
     );
