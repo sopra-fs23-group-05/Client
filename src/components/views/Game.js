@@ -24,7 +24,7 @@ export default function Game(){
     // Get the actual user from the backend.
     const user = new User({username: "felix", id: 666});
     // Get the actual team from the backend.
-    const team = new Team({aRole: "guessingteam", players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})], idxClueGiver: 0});
+    const team = new Team({aRole: "clueGiver", players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})], idxClueGiver: 0});
 
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
     const messageType = team.getClueGiver() === user ? "description" : "guess";
