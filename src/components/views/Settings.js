@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+
 import {api} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Settings.scss';
 import {Container, TextField, Button, Typography, Box} from "@mui/material";
+import {useEffect, useState} from "react";
 
 
 const Settings = props => {
@@ -12,7 +13,6 @@ const Settings = props => {
     const [roundTime, setTime] = useState(null);
     const [topic, setTopic] = useState(null);
 
-
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const handleRoundsChange = (event) => {
         setRounds(event.target.value)
@@ -20,11 +20,27 @@ const Settings = props => {
     const handleTimeChange = (event) => {
         setTime(event.target.value)
     }
-    const handleTopicsChange = (topics) => {
-        setTopic(topics)
+    const handleTopicsChange = async (topics) => {
+        setTopic(topics);
     }
-    
 
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const responseGame = await api.get(`/lobbies/${accessCode}`);
+                await new Promise(resolve => setTimeout(resolve, 100));
+                setRounds(responseGame.data.settings.rounds);
+                setTopic(responseGame.data.settings.topic);
+                setTime(responseGame.data.settings.roundTime);
+
+            } catch (error) {
+                alert("Something went wrong while fetching the users! See the console for details.");
+            }
+        }
+
+
+        fetchData()
+    }, [accessCode]);
     
 
       const doSave = async () => {
@@ -53,7 +69,6 @@ const Settings = props => {
         <TextField
             className='textField'
             id='outlined-basic'
-            label='Enter number...'
             value={rounds}
             onChange={handleRoundsChange}
             variant='outlined'
@@ -77,7 +92,6 @@ const Settings = props => {
                 <TextField
                     className='textField'
                     id='outlined-basic'
-                    label='Enter time in seconds...'
                     value={roundTime}
                     onChange={handleTimeChange}
                     variant='outlined'
@@ -105,7 +119,7 @@ const Settings = props => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button variant="contained" className="topicsButton" style={{ backgroundColor: '#DB8E56', margin: '-30px 10px -30px 0px'}}
-            onClick={() => handleTopicsChange("Animals")}
+            onClick={() =>handleTopicsChange("ANIMALS")}
             >
                 <h1>
                     Animals
@@ -113,7 +127,7 @@ const Settings = props => {
             </Button>
 
             <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#77DE5D', margin: '-30px 0 -30px 10px'}}
-            onClick={() => handleTopicsChange("Sports")}
+            onClick={() => handleTopicsChange("SPORTS")}
             >
                 <h1>
                     Sports
@@ -122,7 +136,7 @@ const Settings = props => {
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#EA4848', margin: '-30px 10px -30px 0px'}}
-            onClick={() => handleTopicsChange("Movies")}
+            onClick={() => handleTopicsChange("MOVIES")}
             >
                 <h1>
                     Movies
@@ -130,7 +144,7 @@ const Settings = props => {
             </Button>
             
             <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#4D7CF3', margin: '-30px 0 -30px 10px'}}
-            onClick={() => handleTopicsChange("Countries")}
+            onClick={() => handleTopicsChange("COUNTRIES")}
             >
                 <h1>
                     Countries
@@ -141,7 +155,7 @@ const Settings = props => {
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             
             <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#EEF167', margin: '-30px 10px -30px 0px'}}
-            onClick={() => handleTopicsChange("Food")}
+            onClick={() => handleTopicsChange("FOOD")}
             >
                 <h1>
                     Food
@@ -149,7 +163,7 @@ const Settings = props => {
             </Button>
 
             <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#F666CE', margin: '-30px 0 -30px 10px'}}
-            onClick={() => handleTopicsChange("Music")}
+            onClick={() => handleTopicsChange("MUSIC")}
             >
                 <h1>
                     Music
@@ -160,7 +174,7 @@ const Settings = props => {
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             
             <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#C660F6', margin: '-30px 10px -30px 0px'}}
-            onClick={() => handleTopicsChange("Famous People")}
+            onClick={() => handleTopicsChange("FAMOUS_PEOPLE")}
             >
                 <h1>
                     Famous People
@@ -168,14 +182,18 @@ const Settings = props => {
             </Button>
 
             <Button variant="contained" className='topicsButton' style={{ backgroundColor: '#C1BACB', margin: '-30px 0 -30px 10px'}}
-            onClick={() => handleTopicsChange("Technology")}
+            onClick={() => handleTopicsChange("TECHNOLOGY")}
             >
                 <h1>
                     Technology
                 </h1>
             </Button>
             </div>
-
+        <Button variant="contained" className="backButton"
+                onClick={() => doSave()}
+        >
+            Save
+        </Button>
             <Button variant="contained" className="backButton"            
                 onClick={() => doBack()}
                 >
