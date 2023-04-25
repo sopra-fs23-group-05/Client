@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import {Button, Typography, Box,} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import 'styles/views/LobbyPage.scss';
+import TabooData from "taboo-data";
 
 const Lobby = () => {
 
@@ -12,6 +13,8 @@ const Lobby = () => {
     const [lobby, setLobby] = useState(null);
     const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
+    const [settings, setSettings] = useState(null);
+    const [deck, setDeck] = useState(null);
 
 
 
@@ -30,7 +33,9 @@ const Lobby = () => {
                 //get teams
                 const lobbyResponse = await api.get(`/lobbies/${accessCode}`);
                 setLobby(lobbyResponse.data);
+                setSettings(lobbyResponse.data.settings);
                 console.log('lobby info:', lobbyResponse.data);
+                console.log('lobby settings', lobbyResponse.data.settings);
 
             } catch (error) {
                 console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
@@ -51,19 +56,6 @@ const Lobby = () => {
 
     const joinTeam = async (teamNr) => {
         try {
-            for (let i=0; i<lobby.team1.length; i++) {
-                if (lobby.team1[i].id === user.id) {
-                    alert('you already joined team 1');
-                    teamNr = 0;
-                }
-            }
-
-            for (let i=0; i<lobby.team2.length; i++) {
-                if (lobby.team2[i].id === user.id) {
-                    alert('you already joined team 2');
-                }
-            }
-
             if (teamNr === 1) {
                 const requestBody = JSON.stringify({accessCode, teamNr, userId});
                 await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
@@ -86,6 +78,11 @@ const Lobby = () => {
     const goToInvitePage = () => {history.push(`/lobbies/${accessCode}/invite`)}
     const goToSettingsPage = () => {history.push(`/lobbies/${accessCode}/settings`)}
     const startGame = async () => {
+        const cat = await TabooData.getCategory('animals', 'de');
+        const jsonCat = JSON.stringify(cat);
+        console.log(jsonCat);
+        const keys = Object.keys(jsonCat)
+        console.log(keys);
         await api.post(`/games/${accessCode}`);
 
         history.push(`/games/${accessCode}/pregame`);
