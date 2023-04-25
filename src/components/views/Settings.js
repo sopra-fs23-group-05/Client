@@ -9,7 +9,8 @@ const Settings = props => {
     
     const [rounds, setRounds] = useState(null);
     const [time, setTime] = useState(null);
-    
+
+    const accessCode = localStorage.getItem('lobbyAccessCode');
     const handleRoundsChange = (event) => {
         setRounds(event.target.value)
     }
@@ -19,7 +20,7 @@ const Settings = props => {
 
     const doBack = () => {
         localStorage.removeItem('token');
-        history.push('/lobbies');
+        history.push(`/lobbies/${accessCode}`);
         window.location.reload();
     }
 

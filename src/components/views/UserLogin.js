@@ -10,8 +10,15 @@ import Lobby from "../../models/Lobby";
 const UserLogin = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
-    const isLeader = false;
+    const leader = false;
     const [givenAccessCode, setGivenAccessCode] = useState(null);
+    const url = window.location.href;
+    const parts = url.split("/");
+    var lastPart = parts.pop().toString();
+    if(lastPart==='user-login'){
+        lastPart=null;
+    }
+
 
 
     const handleUsernameChange = (event) => {
@@ -36,7 +43,7 @@ const UserLogin = () => {
             localStorage.setItem('lobbyAccessCode', lobby.accessCode);
 
             //create user
-            const requestBody = JSON.stringify({username, isLeader});
+            const requestBody = JSON.stringify({username, leader});
             const response = await api.post('/users', requestBody);
             const user = new User(response.data);
             localStorage.setItem('token', user.id);

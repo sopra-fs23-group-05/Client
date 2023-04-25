@@ -2,12 +2,14 @@ import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import AdminLogin from "../../views/AdminLogin";
 import UserLogin from "../../views/UserLogin";
 import LobbyPage from "../../views/LobbyPage";
-import Homepage from "components/views/Homepage";
-import Rules from "components/views/Rules";
-import Invite from "components/views/Invite";
-import Settings from "components/views/Settings";
+import Homepage from "../../views/Homepage";
+import Rules from "../../views/Rules";
+import Invite from "../../views/Invite";
+import Settings from "../../views/Settings";
 import PreGame from "../../views/PreGame";
 import Game from "../../views/Game";
+import Endscreen from "../../views/Endscreen";
+
 
 
 /**
@@ -29,10 +31,10 @@ const AppRouter = () => {
                   <Route exact path="/rules">
                       <Rules/>
                   </Route>
-                  <Route exact path="/invite">
+                  <Route exact path="/lobbies/:accessCode/invite">
                       <Invite/>
                   </Route>
-                  <Route exact path="/settings">
+                  <Route exact path="/lobbies/:accessCode/settings">
                     <Settings/>
                   </Route>
                   <Route exact path="/">
@@ -44,6 +46,9 @@ const AppRouter = () => {
                   <Route exact path="/user-login">
                       <UserLogin/>
                   </Route>
+                  <Route exact path="/user-login/:accessCode">
+                      <UserLogin/>
+                  </Route>
                   <Route exact path="/lobbies/:accessCode">
                       <LobbyPage/>
                   </Route>
@@ -52,6 +57,9 @@ const AppRouter = () => {
                   </Route>
                   <Route exact path="/games/:accessCode/pregame">
                       <PreGame/>
+                  </Route>
+                  <Route exact path="/games/:accessCode/endscreen">
+                      <Endscreen/>
                   </Route>
               </Switch>
           </BrowserRouter>

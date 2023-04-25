@@ -1,13 +1,16 @@
 import {Box} from "@mui/material";
 import 'styles/views/PreGame.scss';
+
 import {useHistory} from 'react-router-dom';
 import {useEffect, useState} from "react";
 import {api} from "../../helpers/api";
 
 
+
 const PreGame = () => {
     const history = useHistory();
     const accessCode = localStorage.getItem('lobbyAccessCode');
+
     const playerName = localStorage.getItem('userName')
     const [role,setRole] = useState(null);
 
@@ -24,6 +27,7 @@ const PreGame = () => {
     }, 1000);
 
 
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -37,6 +41,7 @@ const PreGame = () => {
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
         }
+
 
         fetchData();
     }, []);
@@ -77,6 +82,7 @@ const PreGame = () => {
             </Box>
         </div>
     );
+
 };
 
 /**
