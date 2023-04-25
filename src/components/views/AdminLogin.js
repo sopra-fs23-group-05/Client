@@ -10,7 +10,7 @@ import TabooLogo from "./TabooLogo.png";
 
 const AdminLogin = () => {
     const history = useHistory();
-    const [username, setUsername] = useState(null);
+    const [username, setUsername] = useState("");
     const leader = true;
 
     const handleUsernameChange = (event) => {
@@ -34,6 +34,8 @@ const AdminLogin = () => {
             const user = new User(response.data);
             setUsername(user.username)
 
+            console.log(user.username);
+
             // Store the token=id into the local storage.
             localStorage.setItem('token', user.id);
             localStorage.setItem('userName', user.username);
@@ -43,8 +45,10 @@ const AdminLogin = () => {
 
             //create lobby object
             const lobby = new Lobby(lobbyEmpty.data);
-
+            
+            console.log(lobby.accessCode);
             const accessCode = lobby.accessCode;
+
 
             //add user to lobby
             const putBody = JSON.stringify({accessCode, username});
@@ -66,7 +70,8 @@ const AdminLogin = () => {
             window.location.reload();
         }
     };
-    console.log(username)
+    
+
 
     return (
             <div className="homePageRoot">
