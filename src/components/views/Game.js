@@ -207,7 +207,7 @@ export default function Game(){
                                 }
                                 setOpen(true);
                                 }}>
-                        {word}
+                        {displayedCard.word}
                         </Button>
 
                         <Dialog open={open} onClose={() => setOpen(false)}>
