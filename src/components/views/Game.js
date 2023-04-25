@@ -6,6 +6,7 @@ import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
 import Team from "../../models/Team";
 import Card from "../../models/Card";
+import {CardRequest} from "../../models/CardRequest";
 
 export default function Game(){
 
@@ -76,7 +77,7 @@ export default function Game(){
     useEffect(() => {
         webSocket.current.onmessage = (event) => {
             const ChatMessage = JSON.parse(event.data);
-            console.log('Message Chat:', ChatMessage);
+            console.log('Received Chat Message:', ChatMessage);
             setChatMessages([...chatMessages, {
                 accessCode: ChatMessage.accessCode,
                 userId: ChatMessage.userId,
@@ -92,16 +93,16 @@ export default function Game(){
     // Card websocket code
     useEffect(() => {
         cardWebSocket.current.onmessage = (event) => {
-            const CardDTO = JSON.parse(event.data);
-            console.log('Message Card:', CardDTO);
-            setCard(new Card({
-                word: CardDTO.word,
-                taboo1: CardDTO.taboo1,
-                taboo2: CardDTO.taboo2,
-                taboo3: CardDTO.taboo3,
-                taboo4: CardDTO.taboo4,
-                taboo5: CardDTO.taboo5
-            }));
+            const Card = JSON.parse(event.data);
+            console.log('Received Card:', Card);
+            setCard({
+                word: Card.word,
+                taboo1: Card.taboo1,
+                taboo2: Card.taboo2,
+                taboo3: Card.taboo3,
+                taboo4: Card.taboo4,
+                taboo5: Card.taboo5
+            });
         }
     }, [displayedCard]);
 
@@ -121,7 +122,7 @@ export default function Game(){
     // Websocket code
     const sendChatMessage = () => {
         if(user && message && messageType) {
-            console.log('Send!');
+            console.log('Send Chat Message!');
             webSocket.current.send(
                 // Take the access code from the URL, e.g. http://localhost:3000/game/123456
                 JSON.stringify(new ChatMessage(window.location.href.slice(-6), user.id, message, messageType))
@@ -133,11 +134,13 @@ export default function Game(){
     // Card websocket code
     const sendCardMessage = () => {
         if (cardWebSocket) {
-            console.log('Send Card request!');
+            console.log('Send Card Request!');
+            const tRequest = new CardRequest(window.location.href.slice(-6), "draw");
+            console.log(tRequest);
             cardWebSocket.current.send(
                 // Take the access code from the URL, e.g. http://localhost:3000/game/123456
                 // TODO This line does not work, it does not recognize the access code.
-                JSON.stringify(new ChatMessage(window.location.href.slice(-6), 111, "I want a card", "description"))
+                JSON.stringify(tRequest)
             );
         }
     };
