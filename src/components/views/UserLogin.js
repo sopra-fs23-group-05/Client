@@ -11,13 +11,13 @@ const UserLogin = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
     const leader = false;
-    const [givenAccessCode, setGivenAccessCode] = useState(null);
     const url = window.location.href;
     const parts = url.split("/");
-    var lastPart = parts.pop().toString();
-    if(lastPart==='user-login'){
-        lastPart=null;
+    var accessCodeURL = parts.pop().toString();
+    if(accessCodeURL==='user-login'){
+        accessCodeURL=null;
     }
+    const [givenAccessCode, setGivenAccessCode] = useState(accessCodeURL);
 
 
 
