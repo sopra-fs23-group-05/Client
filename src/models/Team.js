@@ -15,5 +15,9 @@ class Team {
     getClueGiver() {
         return this.players[this.idxClueGiver];
     }
+
+    getTeamRole() {
+        return this.aRole.toString().toLowerCase();
+    }
 }
 export default Team;

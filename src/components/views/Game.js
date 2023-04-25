@@ -24,7 +24,7 @@ export default function Game(){
     // Get the actual user from the backend.
     const user = new User({username: "felix", id: 666});
     // Get the actual team from the backend.
-    const team = new Team({aRole: "clueGiver", players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})], idxClueGiver: 0});
+    const team = new Team({aRole: "guessingteam", players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})], idxClueGiver: 0});
 
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
     const messageType = team.getClueGiver() === user ? "description" : "guess";
@@ -237,7 +237,7 @@ export default function Game(){
     );
 
 
-    if (team.aRole.toString().toLowerCase() === "buzzingteam") {
+    if (team.getTeamRole() === "buzzingteam") {
         buzzerButton = (
             <Button variant="contained"
                     className="Buzzer"
@@ -255,7 +255,7 @@ export default function Game(){
     let cardComponent = null;
 
     //TODO clueGiver in the guessingteam has to see the card
-    if (team.aRole.toString().toLowerCase() !== "guessingteam") {
+    if (team.getTeamRole() !== "guessingteam" || team.getClueGiver() === user) {
         cardComponent = (
                 <div className="card-box">
                     <div className="side-box">
