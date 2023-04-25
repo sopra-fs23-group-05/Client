@@ -1,7 +1,7 @@
 import {Box} from "@mui/material";
 import 'styles/views/PreGame.scss';
 import {useHistory} from 'react-router-dom';
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {api} from "../../helpers/api";
 
 
@@ -9,6 +9,7 @@ const PreGame = () => {
     const history = useHistory();
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const playerName = localStorage.getItem('userName')
+    const [role,setRole] = useState(null);
 
 
     let timeLeft = 10;
@@ -22,12 +23,13 @@ const PreGame = () => {
         timeLeft -= 1;
     }, 1000);
 
+
     useEffect(() => {
         async function fetchData() {
             try {
                 const response = await api.get(`/games/${accessCode}/users/${playerName}`);
                 await new Promise(resolve => setTimeout(resolve, 100));
-                document.getElementById("countdown").innerHTML = response.data.toString();
+                setRole(response.data);
 
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
@@ -55,7 +57,7 @@ const PreGame = () => {
             ><h2 className="h2"> round starts in:</h2>
                 <div id="countdown" className="countdown"></div>
                 <h2 className="h2"> your role:</h2>
-                <h2 className="role"> ROLE</h2>
+                <h2 className="role"> {role}</h2>
             </Box>
             <Box sx={{
                 display: 'flex',
