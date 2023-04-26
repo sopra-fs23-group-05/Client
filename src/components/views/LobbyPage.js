@@ -14,7 +14,6 @@ const Lobby = () => {
     const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
     const [settings, setSettings] = useState(null);
-    const [deck, setDeck] = useState(null);
 
 
 
@@ -30,10 +29,10 @@ const Lobby = () => {
                 console.log('user info', userResponse.data);
                 setIsLeader(userResponse.data.leader);
 
-                //get teams
+                //get lobby
                 const lobbyResponse = await api.get(`/lobbies/${accessCode}`);
                 setLobby(lobbyResponse.data);
-                setSettings(lobbyResponse.data.settings);
+                setSettings(lobbyResponse.data.settings.topic.toString().toLowerCase());
                 console.log('lobby info:', lobbyResponse.data);
                 console.log('lobby settings', lobbyResponse.data.settings);
 
@@ -78,12 +77,49 @@ const Lobby = () => {
     const goToInvitePage = () => {history.push(`/lobbies/${accessCode}/invite`)}
     const goToSettingsPage = () => {history.push(`/lobbies/${accessCode}/settings`)}
     const startGame = async () => {
-        const cat = await TabooData.getCategory('animals', 'de');
-        const jsonCat = JSON.stringify(cat);
-        console.log(jsonCat);
-        const keys = Object.keys(jsonCat)
-        console.log(keys);
+        //create Game
         await api.post(`/games/${accessCode}`);
+
+        //get json file for the selected category
+        const categoryFile = await TabooData.getCategory(settings, 'de');
+        console.log("taken settings", settings);
+        const categoryJSONFile = JSON.stringify(categoryFile);
+        const originalObj = JSON.parse(categoryJSONFile);
+
+        // post all cards from the json file
+        const newObj = {};
+
+        for (const word in originalObj) {
+            const tabooWords = originalObj[word]
+            newObj[word] = {
+                word
+            }
+            let numberOfTabooWords = 0;
+            for (let i=0; i< tabooWords.length; i++) {
+                numberOfTabooWords += 1;
+                newObj[word]["taboo" + (i+1)] = tabooWords[i];
+            }
+            //if number of taboo words in json file != 5, we add "-" to all remaining
+            if (numberOfTabooWords !== 5) {
+                const leftTabooWords = 5-numberOfTabooWords;
+                for (let i=0; i<leftTabooWords; i++) {
+                    newObj[word]["taboo" + (numberOfTabooWords+1+i)] = "-";
+                }
+            }
+        }
+
+        console.log("newObj", newObj);
+        const newJson = JSON.stringify(Object.values(newObj));
+        console.log("newJson", newJson);
+
+        const array = JSON.parse(newJson);
+        console.log("array", array);
+        for (let i=0; i<array.length; i++) {
+            const item = JSON.stringify(array[i]);
+            const slicedCard = item.slice();
+            console.log("sliced", slicedCard);
+            await api.post(`/games/${accessCode}/cards`, slicedCard);
+        }
 
         history.push(`/games/${accessCode}/pregame`);
     }
