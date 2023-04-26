@@ -142,6 +142,28 @@ export default function Game(){
         }
     };
 
+    // Card websocket code
+    const sendCardMessageBuzz = () => {
+        if (cardWebSocket) {
+            console.log('Send Buzz Request!');
+            cardWebSocket.current.send(
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new CardRequest(window.location.href.slice(-6), "buzz"))
+            );
+        }
+    };
+
+    // Card websocket code
+    const sendCardMessageSkip = () => {
+        if (cardWebSocket) {
+            console.log('Send Skip Request!');
+            cardWebSocket.current.send(
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new CardRequest(window.location.href.slice(-6), "skip"))
+            );
+        }
+    };
+
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components
      */
@@ -216,7 +238,11 @@ export default function Game(){
                             <Button onClick={() => setOpen(false)}>Close</Button>
                         </DialogActions>
                         </Dialog>
-                      <Button variant="contained" sx={{width: '80%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}>Skip Card</Button>
+                      <Button
+                          variant="contained"
+                          sx={{width: '80%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}
+                          onClick={sendCardMessageSkip}
+                      >Skip Card</Button>
                   </div>
                   {cardContent}
               </div>
@@ -294,8 +320,10 @@ export default function Game(){
                   </Button>
               </Box>
           </Box>
-          <Button variant="contained"
-                  className="Buzzer"
+          <Button
+              variant="contained"
+              className="Buzzer"
+              onClick={sendCardMessageBuzz}
           >
               Buzzer
           </Button>
