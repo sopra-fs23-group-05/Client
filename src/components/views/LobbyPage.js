@@ -49,41 +49,19 @@ const Lobby = () => {
   
     const joinTeam = async (teamNr) => {
         try {
-          for (let i = 0; i < lobby.team1.length; i++) {
-            if (lobby.team1[i].id === user.id) {
-              alert("you already joined team 1");
-              teamNr = 0;
+            if (teamNr === 1) {
+                const requestBody = JSON.stringify({accessCode, teamNr, userId});
+                await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
+                lobby.team1.push(user);
+                window.location.reload();
             }
-          }
-      
-          for (let i = 0; i < lobby.team2.length; i++) {
-            if (lobby.team2[i].id === user.id) {
-              alert("you already joined team 2");
-              teamNr = 0;
+
+            else if (teamNr === 2) {
+                const requestBody = JSON.stringify({accessCode, teamNr, userId});
+                await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
+                lobby.team2.push(user);
+                window.location.reload();
             }
-          }
-      
-          if (teamNr === 1) {
-            const requestBody = JSON.stringify({ accessCode, teamNr, userId });
-            await api.put(
-              `/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`,
-              requestBody
-            );
-            const updatedLobby = { ...lobby };
-            updatedLobby.team1.push(user);
-            setLobby(updatedLobby);
-      
-          } else if (teamNr === 2) {
-            const requestBody = JSON.stringify({ accessCode, teamNr, userId });
-            await api.put(
-              `/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`,
-              requestBody
-            );
-            const updatedLobby = { ...lobby };
-            updatedLobby.team2.push(user);
-            setLobby(updatedLobby);
-      
-          }
         } catch (error) {
           alert(`Something went wrong during the join: \n${handleError(error)}`);
         }
@@ -92,9 +70,14 @@ const Lobby = () => {
     const goToInvitePage = () => {history.push(`/lobbies/${accessCode}/invite`)}
     const goToSettingsPage = () => {history.push(`/lobbies/${accessCode}/settings`)}
     const startGame = async () => {
+        try {
         await api.post(`/games/${accessCode}`);
 
         history.push(`/games/${accessCode}/pregame`);
+        }
+        catch (error) {
+            alert(`Error: \n${handleError(error)} `)
+        }
     }
 
     let content = <div className="horizontal-box"></div>
