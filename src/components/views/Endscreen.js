@@ -5,11 +5,19 @@ import TabooLogo from './TabooLogo.png';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
+import {useEffect ,useState} from "react";
+import {api} from "../../helpers/api";
 
 
 const Endscreen = props => {
   const history = useHistory();
   const canvasRef = useRef(null);
+
+  const accessCode = localStorage.getItem('lobbyAccessCode');
+  const [team1,setTeam1] = useState(null);
+  const [team2,setTeam2] = useState(null);
+  const [roundsPlayed,setRoundsPlayed] = useState("");
+  const[winner, setWinner] = useState("");
 
   const doHomepage = () => {
     localStorage.removeItem('token');
@@ -36,12 +44,37 @@ const Endscreen = props => {
     });
     const json = await response.json();
     const imageUrl = json.data.link;
-    const tweetText = 'New Taboo Win!';
+    const tweetText = `New Taboo Win! Final Score: ${team1} | ${team2}`;
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(window.location.href)}&hashtags=Taboo&media=${encodeURIComponent(imageUrl)}`;
     
     window.open(tweetUrl, '_blank');
   };
-  
+
+  useEffect(() => {
+    async function fetchData() {
+        try {
+            const responseGame = await api.get(`/games/${accessCode}`);
+            await new Promise(resolve => setTimeout(resolve, 100));
+            setTeam1(responseGame.data.team1.points);
+            setTeam2(responseGame.data.team2.points);
+            setRoundsPlayed(responseGame.data.roundsPlayed);
+            if(team1>team2){
+              setWinner(1)
+            }
+            else{
+              setWinner(2);
+            }
+
+        } catch (error) {
+            console.error(`Something went wrong while fetching the users:`);
+            console.error("Details:", error);
+            alert("Something went wrong while fetching the users! See the console for details.");
+        }
+    }
+
+
+    fetchData();
+}, [accessCode, team1, team2]);
     
 
   return (
@@ -55,17 +88,17 @@ const Endscreen = props => {
       }}
     >
       
-      <h1 className="h1">YOU PLAYED 7 ROUNDS</h1>
+      <h1 className="h1">YOU PLAYED {roundsPlayed} ROUNDS</h1>
       <h1 className="h1">SCORES</h1>
       
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '50px', marginBottom: '50px'}}>
       <div className="textPanel" style={{margin: '-30px 20px -30px 50px'}}>
         <h1 className="h1" style={{fontSize: '26px'}}>TEAM 1</h1>
-        <h1 className="h1" style={{fontSize: '50px', marginTop: '-45px'}}>10</h1>
+        <h1 className="h1" style={{fontSize: '50px', marginTop: '-45px'}}>{team1}</h1>
       </div>
       <div className="textPanel" style={{margin: '-30px 50px -30px 20px'}}>
       <h1 className="h1" style={{fontSize: '26px'}}>TEAM 2</h1>
-      <h1 className="h1" style={{fontSize: '50px', marginTop: '-45px'}}>12</h1>
+      <h1 className="h1" style={{fontSize: '50px', marginTop: '-45px'}}>{team2}</h1>
       </div>
     </div>
 
@@ -73,7 +106,7 @@ const Endscreen = props => {
 
     <div style={{ display: 'flex', alignItems: 'center', gap: '20px'}}>
     <StarIcon style={{ color: '#EA854C', margin: '0 -20 0 75', fontSize: '50px'}} />
-    <h1 className="h1" style={{ fontSize: '24px', width: '200px'}}>TEAM 2 WINS!</h1>
+    <h1 className="h1" style={{ fontSize: '24px', width: '200px'}}>TEAM {winner} WINS!</h1>
     <StarIcon style={{ color: '#EA854C', margin: '0 50 0 -20', fontSize: '50px'}} />
     </div>
 

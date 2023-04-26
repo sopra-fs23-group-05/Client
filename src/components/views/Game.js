@@ -1,7 +1,9 @@
 import "styles/views/Game.scss";
 import {Box, Divider, Button, TextField, ListItem, DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
-import React, {useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
+import {useHistory} from 'react-router-dom';
+import {api, handleError} from 'helpers/api';
 import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
 import Team from "../../models/Team";
@@ -12,6 +14,8 @@ export default function Game(){
 
     const ENTER_KEY_CODE = 13;
 
+    const history = useHistory();
+    const accessCode = localStorage.getItem('lobbyAccessCode');
     const scrollBottomRef = useRef(null);
     const webSocket = useRef(null);
     const cardWebSocket = useRef(null);
@@ -19,7 +23,33 @@ export default function Game(){
     // Activate the following line as soon as the actual user is obtained from the backend.
     // const [user, setUser] = useState('');
     const [message, setMessage] = useState('');
+    const [scoredPoints] = useState(4);
+    const [roundsPlayed,setRoundsPlayed] = useState("");
+    
+    
     let [displayedCard, setCard] = useState(new Card({word: "Loading...", taboo1: "Loading...", taboo2: "Loading...", taboo3: "Loading...", taboo4: "Loading...", taboo5: "Loading..."}));
+
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const responseGame = await api.get(`/games/${accessCode}`);
+                await new Promise(resolve => setTimeout(resolve, 100));
+                setRounds(responseGame.data.settings.rounds);
+                setRoundsPlayed(responseGame.data.roundsPlayed);
+                setTime(responseGame.data.settings.roundTime);
+
+            } catch (error) {
+                alert("Something went wrong while fetching the users! See the console for details.");
+            }
+        }
+
+
+        fetchData()
+    }, [accessCode]);
+
+    const [rounds, setRounds] = useState("");
+    const [roundTime, setTime] = useState("");
 
     // Get the actual user from the backend.
     const user = new User({username: "felix", id: 666});
@@ -142,6 +172,28 @@ export default function Game(){
         }
     };
 
+    // Card websocket code
+    const sendCardMessageBuzz = () => {
+        if (cardWebSocket) {
+            console.log('Send Buzz Request!');
+            cardWebSocket.current.send(
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new CardRequest(window.location.href.slice(-6), "buzz"))
+            );
+        }
+    };
+
+    // Card websocket code
+    const sendCardMessageSkip = () => {
+        if (cardWebSocket) {
+            console.log('Send Skip Request!');
+            cardWebSocket.current.send(
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new CardRequest(window.location.href.slice(-6), "skip"))
+            );
+        }
+    };
+
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components
      */
@@ -172,6 +224,41 @@ export default function Game(){
     const [wordDefinition, setWordDefinition] = useState("");
     const [word] = useState("Apple");
     const [open, setOpen] = useState(false);
+
+    let timeLeft = roundTime;
+    const downloadTimer = setInterval(function () {
+        if (timeLeft <= 0) {
+            if(roundsPlayed<=rounds){
+                console.log(scoredPoints);
+                updateTeamScore(scoredPoints);
+                clearInterval(downloadTimer);
+                history.push(`/games/${accessCode}/pregame`);
+            }
+            else{
+                console.log(scoredPoints);
+                updateTeamScore(scoredPoints);
+                clearInterval(downloadTimer);
+                history.push(`/games/${accessCode}/endscreen`);
+            }
+        } else {
+            document.getElementById("countdown").innerHTML = timeLeft;
+        }
+        timeLeft -= 1;
+    }, 1000);
+
+    const updateTeamScore = async (scoredPoints) => {
+        try {
+            const requestBody = JSON.stringify({accessCode, scoredPoints});
+            await api.put(
+              `/games/${accessCode}/turns/${scoredPoints}`,
+              requestBody
+            );
+          
+          }
+          catch (error) {
+          alert(`Something went wrong during the join: \n${handleError(error)}`);
+        }
+      };
 
     let cardContent = null;
 
@@ -296,10 +383,10 @@ export default function Game(){
               {cardComponent}
                   <div className="timer-box">
                       <div>Timer</div>
-                      <div>01:45</div>
+                      <div id="countdown" className="countdown" style={{fontSize: "25px"}}></div>
                       <Divider sx={{color: 'white', border: '1px solid white', width: '80%', marginBottom: '15px', marginTop: '15px'}} />
                       <div>Score</div>
-                      <div>4</div>
+                      <div>{scoredPoints}</div>
                   </div>
           </div>
           <Box
