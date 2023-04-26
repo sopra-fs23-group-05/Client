@@ -274,43 +274,113 @@ export default function Game(){
       );
     }
 
+    //Buzzer Button is only visible for buzzing team
+    //Skip Button is not visible for buzzing team
+    //chat input field and send button not visible for buzzing team
+
+    let buzzerButton = null;
+    let skipButton = (
+            <Button variant="contained" sx={{width: '95%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}>Skip Card</Button>
+    );
+    let sendFields = (
+            <Box sx={{
+                display: 'flex',
+                alignSelf: 'flex-end',
+                margin: '5px',
+                width: 'calc(100% - 10px)',
+            }}>
+                <TextField className={"textField-chat-input"}
+                           onChange={handleMessageChange}
+                           onKeyDown={handleEnterKey}
+                           label="Type your message..."
+                           value={message}
+                           variant="outlined"
+                        // placeholder="Describe the word"
+                           InputProps={{
+                               sx: {
+                                   '& fieldset': {
+                                       backgroundColor: '#6600B6', // Set background color only within the borders
+                                       opacity: '0.43',
+                                       marginRight: '5px', // Add margin between TextField and Button
+                                   },
+                               },
+                           }}
+                           sx={{
+                               flexGrow: '1',
+                           }}
+                />
+                <Button
+                        onClick={sendChatMessage}
+                        variant="contained"
+                        color="primary"
+                        sx={{
+                            borderRadius: '15px',
+                            height: '100%',
+                            flexGrow: '0',
+                        }}>
+                    <SendIcon />
+                </Button>
+            </Box>
+    );
+
+
+    if (team.getTeamRole() === "buzzingteam") {
+        buzzerButton = (
+            <Button variant="contained"
+                    className="Buzzer"
+            >
+                Buzzer
+            </Button>
+        );
+        skipButton = null;
+        sendFields = null;
+    }
+
+
+
+    //card component is not visible for guessing team
+    let cardComponent = null;
+
+    //TODO clueGiver in the guessingteam has to see the card
+    if (team.getTeamRole() !== "guessingteam" || team.getClueGiver() === user) {
+        cardComponent = (
+                <div className="card-box">
+                    <div className="side-box">
+                        <Button variant="contained" sx={{width: '95%', bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' }, '&:active': { bgcolor: 'darkgreen' } }}
+                                onClick={async () => {
+                                    const response = await fetch(`https://api.datamuse.com/words?sp=${word}&md=d`);
+                                    const data = await response.json();
+                                    if (data.length > 0 && data[0].defs) {
+                                        setWordDefinition(data[0].defs[0]);
+                                    } else {
+                                        setWordDefinition("No definition found");
+                                    }
+                                    setOpen(true);
+                                }}>
+                            {displayedCard.word}
+                        </Button>
+
+                        <Dialog open={open} onClose={() => setOpen(false)}>
+                            <DialogTitle>{word}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>{wordDefinition}</DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => setOpen(false)}>Close</Button>
+                            </DialogActions>
+                        </Dialog>
+                        {skipButton}
+                    </div>
+                    {cardContent}
+                </div>
+        );
+    }
+
     return (
     <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
       <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
           <div className="card-and-timer-box">
-              <div className="card-box">
-                  <div className="side-box">
-                        <Button variant="contained" sx={{width: '80%', bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' }, '&:active': { bgcolor: 'darkgreen' } }}
-                                onClick={async () => {
-                                const response = await fetch(`https://api.datamuse.com/words?sp=${word}&md=d`);
-                                const data = await response.json();
-                                if (data.length > 0 && data[0].defs) {
-                                    setWordDefinition(data[0].defs[0]);
-                                } else {
-                                    setWordDefinition("No definition found");
-                                }
-                                setOpen(true);
-                                }}>
-                        {displayedCard.word}
-                        </Button>
-
-                        <Dialog open={open} onClose={() => setOpen(false)}>
-                        <DialogTitle>{word}</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText>{wordDefinition}</DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={() => setOpen(false)}>Close</Button>
-                        </DialogActions>
-                        </Dialog>
-                      <Button
-                          variant="contained"
-                          sx={{width: '80%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}
-                          onClick={sendCardMessageSkip}
-                      >Skip Card</Button>
-                  </div>
-                  {cardContent}
-              </div>
+              {cardComponent}
                   <div className="timer-box">
                       <div>Timer</div>
                       <div id="countdown" className="countdown" style={{fontSize: "25px"}}></div>
@@ -346,52 +416,9 @@ export default function Game(){
                   {listChatMessages}
                   <ListItem ref={scrollBottomRef}></ListItem>
               </Box>
-              <Box sx={{
-                  display: 'flex',
-                  alignSelf: 'flex-end',
-                  margin: '5px',
-                  width: 'calc(100% - 10px)',
-              }}>
-                  <TextField className={"textField-chat-input"}
-                             onChange={handleMessageChange}
-                             onKeyDown={handleEnterKey}
-                             label="Type your message..."
-                             value={message}
-                      variant="outlined"
-                      // placeholder="Describe the word"
-                      InputProps={{
-                          sx: {
-                              '& fieldset': {
-                                  backgroundColor: '#6600B6', // Set background color only within the borders
-                                  opacity: '0.43',
-                                  marginRight: '5px', // Add margin between TextField and Button
-                              },
-                          },
-                      }}
-                     sx={{
-                             flexGrow: '1',
-                         }}
-                  />
-                  <Button
-                      onClick={sendChatMessage}
-                      variant="contained"
-                      color="primary"
-                          sx={{
-                              borderRadius: '15px',
-                              height: '100%',
-                              flexGrow: '0',
-                          }}>
-                      <SendIcon />
-                  </Button>
-              </Box>
+              {sendFields}
           </Box>
-          <Button
-              variant="contained"
-              className="Buzzer"
-              onClick={sendCardMessageBuzz}
-          >
-              Buzzer
-          </Button>
+          {buzzerButton}
       </Box>
     </div>
   );
