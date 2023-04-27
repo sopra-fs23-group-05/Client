@@ -1,4 +1,4 @@
-.endScreenRoot{
+.endScreenRoot {
     gap: 114px;
     display: flex;
     flex-direction: column;
@@ -19,6 +19,7 @@
     height: 100%;
     max-height: 1200px;
 }
+
 .tabooLogo {
     min-width: 0;
     min-height: 0;
@@ -27,12 +28,14 @@
     display: block;
     margin: 0 auto;
 }
+
 .rules {
     position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
 }
+
 .textPanel {
     width: 150px;
     height: 175px;
@@ -56,6 +59,7 @@
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     cursor: pointer;
 }
+
 .h1 {
     color: white;
     font-family: 'Inter', sans-serif;
@@ -63,5 +67,5 @@
     font-size: 26px;
     margin-bottom: 20px;
     text-align: center;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-  }
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}

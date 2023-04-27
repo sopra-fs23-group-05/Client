@@ -11,7 +11,6 @@ import Game from "../../views/Game";
 import Endscreen from "../../views/Endscreen";
 
 
-
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
@@ -22,48 +21,48 @@ import Endscreen from "../../views/Endscreen";
  * Documentation about routing in React: https://reacttraining.com/react-router/web/guides/quick-start
  */
 const AppRouter = () => {
-  return (
-          <BrowserRouter>
-              <Switch>
-                  <Route exact path="/homepage">
-                      <Homepage/>
-                  </Route>
-                  <Route exact path="/rules">
-                      <Rules/>
-                  </Route>
-                  <Route exact path="/lobbies/:accessCode/invite">
-                      <Invite/>
-                  </Route>
-                  <Route exact path="/lobbies/:accessCode/settings">
-                    <Settings/>
-                  </Route>
-                  <Route exact path="/">
-                      <Redirect to="/homepage"/>
-                  </Route>
-                  <Route exact path="/admin-login">
-                      <AdminLogin/>
-                  </Route>
-                  <Route exact path="/user-login">
-                      <UserLogin/>
-                  </Route>
-                  <Route exact path="/user-login/:accessCode">
-                      <UserLogin/>
-                  </Route>
-                  <Route exact path="/lobbies/:accessCode">
-                      <LobbyPage/>
-                  </Route>
-                  <Route exact path="/games/:accessCode">
-                      <Game/>
-                  </Route>
-                  <Route exact path="/games/:accessCode/pregame">
-                      <PreGame/>
-                  </Route>
-                  <Route exact path="/games/:accessCode/endscreen">
-                      <Endscreen/>
-                  </Route>
-              </Switch>
-          </BrowserRouter>
-  );
+    return (
+            <BrowserRouter>
+                <Switch>
+                    <Route exact path="/homepage">
+                        <Homepage/>
+                    </Route>
+                    <Route exact path="/rules">
+                        <Rules/>
+                    </Route>
+                    <Route exact path="/lobbies/:accessCode/invite">
+                        <Invite/>
+                    </Route>
+                    <Route exact path="/lobbies/:accessCode/settings">
+                        <Settings/>
+                    </Route>
+                    <Route exact path="/">
+                        <Redirect to="/homepage"/>
+                    </Route>
+                    <Route exact path="/admin-login">
+                        <AdminLogin/>
+                    </Route>
+                    <Route exact path="/user-login">
+                        <UserLogin/>
+                    </Route>
+                    <Route exact path="/user-login/:accessCode">
+                        <UserLogin/>
+                    </Route>
+                    <Route exact path="/lobbies/:accessCode">
+                        <LobbyPage/>
+                    </Route>
+                    <Route exact path="/games/:accessCode">
+                        <Game/>
+                    </Route>
+                    <Route exact path="/games/:accessCode/pregame">
+                        <PreGame/>
+                    </Route>
+                    <Route exact path="/games/:accessCode/endscreen">
+                        <Endscreen/>
+                    </Route>
+                </Switch>
+            </BrowserRouter>
+    );
 };
 
 /*

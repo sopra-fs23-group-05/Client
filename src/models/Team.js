@@ -20,4 +20,5 @@ class Team {
         return this.aRole.toString().toLowerCase();
     }
 }
+
 export default Team;

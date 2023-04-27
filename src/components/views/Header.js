@@ -11,13 +11,13 @@ import "styles/views/Header.scss";
  * @FunctionalComponent
  */
 const Header = props => (
-  <div className="header container" style={{height: props.height, backgroundColor: "transparent"}}>
-    <img src="https://file.rendit.io/n/LtWICUUcBdXDDqhPUH8O.png" alt="" />
-  </div>
+        <div className="header container" style={{height: props.height, backgroundColor: "transparent"}}>
+            <img src="https://file.rendit.io/n/LtWICUUcBdXDDqhPUH8O.png" alt=""/>
+        </div>
 );
 
 Header.propTypes = {
-  height: PropTypes.string
+    height: PropTypes.string
 };
 
 /**

@@ -9,4 +9,5 @@ class Lobby {
         Object.assign(this, data);
     }
 }
+
 export default Lobby;
