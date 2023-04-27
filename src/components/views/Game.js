@@ -1,5 +1,16 @@
 import "styles/views/Game.scss";
-import {Box, Divider, Button, TextField, ListItem, DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions} from "@mui/material";
+import {
+    Box,
+    Divider,
+    Button,
+    TextField,
+    ListItem,
+    DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogActions
+} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import {useEffect, useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
@@ -10,10 +21,10 @@ import Team from "../../models/Team";
 import Card from "../../models/Card";
 import {CardRequest} from "../../models/CardRequest";
 
-export default function Game(){
+export default function Game() {
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const playerName = localStorage.getItem('userName')
-    const [role,setRole] = useState(null);
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
         async function fetchData() {
@@ -44,10 +55,17 @@ export default function Game(){
     // const [user, setUser] = useState('');
     const [message, setMessage] = useState('');
     const [scoredPoints] = useState(4);
-    const [roundsPlayed,setRoundsPlayed] = useState("");
-    
-    
-    let [displayedCard, setCard] = useState(new Card({word: "Loading...", taboo1: "Loading...", taboo2: "Loading...", taboo3: "Loading...", taboo4: "Loading...", taboo5: "Loading..."}));
+    const [roundsPlayed, setRoundsPlayed] = useState("");
+
+
+    let [displayedCard, setCard] = useState(new Card({
+        word: "Loading...",
+        taboo1: "Loading...",
+        taboo2: "Loading...",
+        taboo3: "Loading...",
+        taboo4: "Loading...",
+        taboo5: "Loading..."
+    }));
 
 
     useEffect(() => {
@@ -73,7 +91,11 @@ export default function Game(){
     // Get the actual user from the backend.
     const user = new User({username: "felix", id: 666});
     // Get the actual team from the backend.
-    const team = new Team({aRole: "clueGiver", players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})], idxClueGiver: 0});
+    const team = new Team({
+        aRole: "clueGiver",
+        players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})],
+        idxClueGiver: 0
+    });
 
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
     const messageType = team.getClueGiver() === user ? "description" : "guess";
@@ -136,8 +158,8 @@ export default function Game(){
         if (cardWebSocket) {
             console.log('Send Card Request!');
             cardWebSocket.current.send(
-                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                JSON.stringify(new CardRequest(window.location.href.slice(-6), "draw"))
+                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                    JSON.stringify(new CardRequest(window.location.href.slice(-6), "draw"))
             );
         }
     };
@@ -176,8 +198,8 @@ export default function Game(){
                 message: ChatMessage.message,
                 type: ChatMessage.type
             }]);
-            if(scrollBottomRef.current) {
-                scrollBottomRef.current.scrollIntoView({ behavior: 'smooth'});
+            if (scrollBottomRef.current) {
+                scrollBottomRef.current.scrollIntoView({behavior: 'smooth'});
             }
         }
     }, [chatMessages]);
@@ -205,18 +227,18 @@ export default function Game(){
 
     // Websocket code
     const handleEnterKey = (event) => {
-        if(event.keyCode === ENTER_KEY_CODE){
+        if (event.keyCode === ENTER_KEY_CODE) {
             sendChatMessage();
         }
     }
 
     // Websocket code
     const sendChatMessage = () => {
-        if(user && message && messageType) {
+        if (user && message && messageType) {
             console.log('Send Chat Message!');
             webSocket.current.send(
-                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                JSON.stringify(new ChatMessage(window.location.href.slice(-6), user.id, message, messageType))
+                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                    JSON.stringify(new ChatMessage(window.location.href.slice(-6), user.id, message, messageType))
             );
             setMessage('');
         }
@@ -227,8 +249,8 @@ export default function Game(){
         if (cardWebSocket) {
             console.log('Send Buzz Request!');
             cardWebSocket.current.send(
-                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                JSON.stringify(new CardRequest(window.location.href.slice(-6), "buzz"))
+                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                    JSON.stringify(new CardRequest(window.location.href.slice(-6), "buzz"))
             );
         }
     };
@@ -238,8 +260,8 @@ export default function Game(){
         if (cardWebSocket) {
             console.log('Send Skip Request!');
             cardWebSocket.current.send(
-                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                JSON.stringify(new CardRequest(window.location.href.slice(-6), "skip"))
+                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                    JSON.stringify(new CardRequest(window.location.href.slice(-6), "skip"))
             );
         }
     };
@@ -248,45 +270,44 @@ export default function Game(){
     * a new array of ListItem components
      */
     const listChatMessages = chatMessages.map((ChatMessage, index) =>
-        <Box key={index}
-        sx={{
-            display: 'flex',
-            flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse',
-            width: '100%',
-            alignItems: 'flex-start',
-            marginTop: '5px',
-        }}>
-            <Box
-                sx={{
-                    backgroundColor: ChatMessage.type === "description" ? 'primary.main' : 'secondary.main',
-                    borderRadius: '5px',
-                    paddingTop: '2px',
-                    paddingBottom: '2px',
-                    paddingLeft: '5px',
-                    paddingRight: '5px',
-                }}
-            >
-                {ChatMessage.type}: {ChatMessage.message}
+            <Box key={index}
+                 sx={{
+                     display: 'flex',
+                     flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse',
+                     width: '100%',
+                     alignItems: 'flex-start',
+                     marginTop: '5px',
+                 }}>
+                <Box
+                        sx={{
+                            backgroundColor: ChatMessage.type === "description" ? 'primary.main' : 'secondary.main',
+                            borderRadius: '5px',
+                            paddingTop: '2px',
+                            paddingBottom: '2px',
+                            paddingLeft: '5px',
+                            paddingRight: '5px',
+                        }}
+                >
+                    {ChatMessage.type}: {ChatMessage.message}
+                </Box>
             </Box>
-        </Box>
     );
-    
+
     const [wordDefinition, setWordDefinition] = useState("");
     const [open, setOpen] = useState(false);
 
-
     let cardContent = null;
 
-    if(displayedCard) {
+    if (displayedCard) {
         cardContent = (
-            <div className="side-box">
-                <div>{displayedCard.taboo1}</div>
-                <div>{displayedCard.taboo2}</div>
-                <div>{displayedCard.taboo3}</div>
-                <div>{displayedCard.taboo4}</div>
-                <div>{displayedCard.taboo5}</div>
-            </div>
-      );
+                <div className="side-box">
+                    <div>{displayedCard.taboo1}</div>
+                    <div>{displayedCard.taboo2}</div>
+                    <div>{displayedCard.taboo3}</div>
+                    <div>{displayedCard.taboo4}</div>
+                    <div>{displayedCard.taboo5}</div>
+                </div>
+        );
     }
 
     //Buzzer Button is only visible for buzzing team
@@ -295,7 +316,12 @@ export default function Game(){
 
     let buzzerButton = null;
     let skipButton = (
-            <Button variant="contained" sx={{width: '95%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}
+            <Button variant="contained" sx={{
+                width: '95%',
+                bgcolor: 'red',
+                '&:hover': {bgcolor: 'darkred'},
+                '&:active': {bgcolor: 'darkred'}
+            }}
                     onClick={sendCardMessageSkip}
             >Skip Card</Button>
     );
@@ -335,7 +361,7 @@ export default function Game(){
                             height: '100%',
                             flexGrow: '0',
                         }}>
-                    <SendIcon />
+                    <SendIcon/>
                 </Button>
             </Box>
     );
@@ -343,17 +369,16 @@ export default function Game(){
 
     if (role === "buzzer") {
         buzzerButton = (
-            <Button variant="contained"
-                    className="Buzzer"
-                    onClick={sendCardMessageBuzz}
-            >
-                Buzzer
-            </Button>
+                <Button variant="contained"
+                        className="Buzzer"
+                        onClick={sendCardMessageBuzz}
+                >
+                    Buzzer
+                </Button>
         );
         skipButton = null;
         sendFields = null;
     }
-
 
 
     //card component is not visible for guessing team
@@ -363,7 +388,12 @@ export default function Game(){
         cardComponent = (
                 <div className="card-box">
                     <div className="side-box">
-                        <Button variant="contained" sx={{width: '95%', bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' }, '&:active': { bgcolor: 'darkgreen' } }}
+                        <Button variant="contained" sx={{
+                            width: '95%',
+                            bgcolor: 'green',
+                            '&:hover': {bgcolor: 'darkgreen'},
+                            '&:active': {bgcolor: 'darkgreen'}
+                        }}
                                 onClick={async () => {
                                     const response = await fetch(`https://api.datamuse.com/words?sp=${displayedCard.word}&md=d`);
                                     const data = await response.json();
@@ -394,6 +424,7 @@ export default function Game(){
     }
 
     return (
+    
     <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
       <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
           <div className="card-and-timer-box">

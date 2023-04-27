@@ -1,5 +1,5 @@
 export class ChatMessage {
-    constructor(accessCode, userId, message, type){
+    constructor(accessCode, userId, message, type) {
         this.accessCode = accessCode
         this.userId = userId;
         this.message = message;

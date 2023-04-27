@@ -9,7 +9,7 @@ import TabooData from "taboo-data";
 const Lobby = () => {
 
     const history = useHistory();
-  
+
     const [lobby, setLobby] = useState(null);
     const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
@@ -17,7 +17,7 @@ const Lobby = () => {
 
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const userId = localStorage.getItem('token');
-  
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -39,18 +39,18 @@ const Lobby = () => {
                 console.error("Details:", error);
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
-      }
-      fetchData();
+        }
+
+        fetchData();
     }, [accessCode, userId, setUser]);
-  
+
     const goBack = () => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('lobbyAccessCode');
-      //TODO remove user from team if already joined
-      history.push('/homepage');
-      window.location.reload();
+        localStorage.removeItem('token');
+        localStorage.removeItem('lobbyAccessCode');
+        history.push('/homepage');
+        window.location.reload();
     };
-  
+
     const joinTeam = async (teamNr) => {
         try {
             if (teamNr === 1) {
@@ -58,21 +58,23 @@ const Lobby = () => {
                 await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
                 lobby.team1.push(user);
                 window.location.reload();
-            }
-
-            else if (teamNr === 2) {
+            } else if (teamNr === 2) {
                 const requestBody = JSON.stringify({accessCode, teamNr, userId});
                 await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
                 lobby.team2.push(user);
                 window.location.reload();
             }
         } catch (error) {
-          alert(`Something went wrong during the join: \n${handleError(error)}`);
+            alert(`Something went wrong during the join: \n${handleError(error)}`);
         }
-      };
+    };
 
-    const goToInvitePage = () => {history.push(`/lobbies/${accessCode}/invite`)}
-    const goToSettingsPage = () => {history.push(`/lobbies/${accessCode}/settings`)}
+    const goToInvitePage = () => {
+        history.push(`/lobbies/${accessCode}/invite`)
+    }
+    const goToSettingsPage = () => {
+        history.push(`/lobbies/${accessCode}/settings`)
+    }
     const startGame = async () => {
         try {
             //create Game
@@ -150,7 +152,8 @@ const Lobby = () => {
             <div className="homePageRoot">
                 <div className="horizontal-box">
                     <Typography variant="h5" sx={{color: 'white', fontWeight: 700}}>Access Code:</Typography>
-                    <Typography variant="h5" sx={{color: 'white', fontWeight: 700, marginLeft: '10px'}}>{accessCode}</Typography>
+                    <Typography variant="h5"
+                                sx={{color: 'white', fontWeight: 700, marginLeft: '10px'}}>{accessCode}</Typography>
                 </div>
 
                 <Box sx={{display: 'flex', flexDirection: 'column', marginBottom: '-80px'}}>
@@ -174,7 +177,7 @@ const Lobby = () => {
                         <ul className="team-member-box">
                             {lobby?.team2?.map(user => (
                                     <div className="team-member" key={user.id}>{user.username}</div>
-                                    ))}
+                            ))}
                         </ul>
                         <Button variant="contained"
                                 className="buttonLogin"

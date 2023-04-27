@@ -25,6 +25,7 @@
         border-color: white;
     }
 }
+
 .horizontal-box {
     display: flex;
     flex-direction: row;
@@ -36,7 +37,7 @@
 .MuiButton-root.buttonLogin {
     width: 200px;
     margin-inline: 3px;
-    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.25);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     background-color: #7f5dab;
     border-color: white;
     border-style: solid;
