@@ -300,7 +300,9 @@ export default function Game(){
 
     let buzzerButton = null;
     let skipButton = (
-            <Button variant="contained" sx={{width: '95%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}>Skip Card</Button>
+            <Button variant="contained" sx={{width: '95%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}
+                    onClick={sendCardMessageSkip}
+            >Skip Card</Button>
     );
     let sendFields = (
             <Box sx={{
@@ -348,6 +350,7 @@ export default function Game(){
         buzzerButton = (
             <Button variant="contained"
                     className="Buzzer"
+                    onClick={sendCardMessageBuzz}
             >
                 Buzzer
             </Button>
