@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import {Button, Typography, Box,} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import 'styles/views/LobbyPage.scss';
+import TabooData from "taboo-data";
 
 const Lobby = () => {
 
@@ -12,29 +13,32 @@ const Lobby = () => {
     const [lobby, setLobby] = useState(null);
     const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
-  
+    const [settings, setSettings] = useState(null);
+
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const userId = localStorage.getItem('token');
   
     useEffect(() => {
-      async function fetchData() {
-        try {
-          //get user
-          const userResponse = await api.get(`/users/${userId}`);
-          setUser(userResponse.data);
-          console.log('user info', userResponse.data);
-          setIsLeader(userResponse.data.leader);
-  
-          //get teams
-          const lobbyResponse = await api.get(`/lobbies/${accessCode}`);
-          setLobby(lobbyResponse.data);
-          console.log('lobby info:', lobbyResponse.data);
-  
-        } catch (error) {
-          console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
-          console.error("Details:", error);
-          alert("Something went wrong while fetching the users! See the console for details.");
-        }
+        async function fetchData() {
+            try {
+                //get user
+                const userResponse = await api.get(`/users/${userId}`);
+                setUser(userResponse.data);
+                console.log('user info', userResponse.data);
+                setIsLeader(userResponse.data.leader);
+
+                //get lobby
+                const lobbyResponse = await api.get(`/lobbies/${accessCode}`);
+                setLobby(lobbyResponse.data);
+                setSettings(lobbyResponse.data.settings.topic.toString().toLowerCase());
+                console.log('lobby info:', lobbyResponse.data);
+                console.log('lobby settings', lobbyResponse.data.settings);
+
+            } catch (error) {
+                console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
+                console.error("Details:", error);
+                alert("Something went wrong while fetching the users! See the console for details.");
+            }
       }
       fetchData();
     }, [accessCode, userId, setUser]);
@@ -71,12 +75,53 @@ const Lobby = () => {
     const goToSettingsPage = () => {history.push(`/lobbies/${accessCode}/settings`)}
     const startGame = async () => {
         try {
-        await api.post(`/games/${accessCode}`);
+            //create Game
+            await api.post(`/games/${accessCode}`);
 
-        history.push(`/games/${accessCode}/pregame`);
-        }
-        catch (error) {
-            alert(`Error: \n${handleError(error)} `)
+            //get json file for the selected category
+            const categoryFile = await TabooData.getCategory(settings, 'de');
+            console.log("taken settings", settings);
+            const categoryJSONFile = JSON.stringify(categoryFile);
+            const originalObj = JSON.parse(categoryJSONFile);
+
+            // post all cards from the json file
+            const newObj = {};
+
+            for (const word in originalObj) {
+                const tabooWords = originalObj[word]
+                newObj[word] = {
+                    word
+                }
+                let numberOfTabooWords = 0;
+                for (let i = 0; i < tabooWords.length; i++) {
+                    numberOfTabooWords += 1;
+                    newObj[word]["taboo" + (i + 1)] = tabooWords[i];
+                }
+                //if number of taboo words in json file != 5, we add "-" to all remaining
+                if (numberOfTabooWords !== 5) {
+                    const leftTabooWords = 5 - numberOfTabooWords;
+                    for (let i = 0; i < leftTabooWords; i++) {
+                        newObj[word]["taboo" + (numberOfTabooWords + 1 + i)] = "-";
+                    }
+                }
+            }
+
+            console.log("newObj", newObj);
+            const newJson = JSON.stringify(Object.values(newObj));
+            console.log("newJson", newJson);
+
+            const array = JSON.parse(newJson);
+            console.log("array", array);
+            for (let i = 0; i < array.length; i++) {
+                const item = JSON.stringify(array[i]);
+                const slicedCard = item.slice();
+                console.log("sliced", slicedCard);
+                await api.post(`/games/${accessCode}/cards`, slicedCard);
+            }
+
+            history.push(`/games/${accessCode}/pregame`);
+        } catch (error) {
+            alert(`Error: \n${handleError(error)}`);
         }
     }
 
