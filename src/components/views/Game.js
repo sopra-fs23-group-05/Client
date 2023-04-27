@@ -111,7 +111,7 @@ export default function Game() {
         //webSocket.current = new WebSocket('ws://localhost:8080/chat');
 
         webSocket.current.addEventListener('open', () => {
-            let timeLeft = 5; // Set timer to 60 seconds
+            let timeLeft = 60; // Set timer to 60 seconds
             const timerElement = document.getElementById('timer');
       
             // Update timer every second
@@ -431,7 +431,7 @@ export default function Game() {
               {cardComponent}
                   <div className="timer-box">
                       <div>Timer</div>
-                      <p>Time remaining: <span id="timer">60</span> seconds</p>
+                      <p><span id="timer">60</span> seconds</p>
                       <Divider sx={{color: 'white', border: '1px solid white', width: '80%', marginBottom: '15px', marginTop: '15px'}} />
                       <div>Score</div>
                       <div>{scoredPoints}</div>
