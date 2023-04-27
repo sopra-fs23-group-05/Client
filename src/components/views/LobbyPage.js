@@ -79,7 +79,7 @@ const Lobby = () => {
             await api.post(`/games/${accessCode}`);
 
             //get json file for the selected category
-            const categoryFile = await TabooData.getCategory(settings, 'de');
+            const categoryFile = await TabooData.getCategory(settings, 'en');
             console.log("taken settings", settings);
             const categoryJSONFile = JSON.stringify(categoryFile);
             const originalObj = JSON.parse(categoryJSONFile);
