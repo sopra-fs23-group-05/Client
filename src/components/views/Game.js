@@ -85,7 +85,8 @@ export default function Game(){
         // Activate the following line for deployment.
         webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
         // Activate the following line for local testing.
-        // webSocket.current = new WebSocket('ws://localhost:8080/chat');
+        startDownloadTimer();
+        //webSocket.current = new WebSocket('ws://localhost:8080/chat');
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
                 console.log('Open Chat WebSocket:', event);
@@ -118,14 +119,17 @@ export default function Game(){
         // Activate the following line for deployment.
         cardWebSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/cards');
         // Activate the following line for local testing.
-        // cardWebSocket.current = new WebSocket('ws://localhost:8080/cards');
+        startDownloadTimer();
+        //cardWebSocket.current = new WebSocket('ws://localhost:8080/cards');
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
+                startDownloadTimer();
                 sendCardMessage();
             }
             cardWebSocket.current.onclose = (event) => {
                 console.log('Close Card WebSocket:', event);
+                clearInterval(downloadTimer);
             }
         }
         openCardWebSocket();
@@ -242,30 +246,32 @@ export default function Game(){
     );
     
     const [wordDefinition, setWordDefinition] = useState("");
-    const [word] = useState("Apple");
     const [open, setOpen] = useState(false);
 
-    let timeLeft = roundTime;
-    const downloadTimer = setInterval(function () {
+    let timeLeft = 120;
+    let downloadTimer;
+    const countdownElement = document.getElementById("countdown");
+
+    function startDownloadTimer() {
+    downloadTimer = setInterval(function() {
         if (timeLeft <= 0) {
-            if(roundsPlayed<=rounds){
-                console.log(scoredPoints);
-                updateTeamScore(scoredPoints);
-                clearInterval(downloadTimer);
-                history.push(`/games/${accessCode}/pregame`);
-            }
-            else{
-                console.log(scoredPoints);
-                updateTeamScore(scoredPoints);
-                clearInterval(downloadTimer);
-                history.push(`/games/${accessCode}/endscreen`);
-            }
+        if (roundsPlayed <= rounds) {
+            console.log(scoredPoints);
+            updateTeamScore(scoredPoints);
+            clearInterval(downloadTimer);
+            history.push(`/games/${accessCode}/pregame`);
         } else {
-            document.getElementById("countdown").innerHTML = timeLeft;
+            console.log(scoredPoints);
+            updateTeamScore(scoredPoints);
+            clearInterval(downloadTimer);
+            history.push(`/games/${accessCode}/endscreen`);
+        }
+        } else {
+        countdownElement.innerHTML = timeLeft;
         }
         timeLeft -= 1;
     }, 1000);
-
+    }
     const updateTeamScore = async (scoredPoints) => {
         try {
             const requestBody = JSON.stringify({accessCode, scoredPoints});
@@ -370,7 +376,7 @@ export default function Game(){
                     <div className="side-box">
                         <Button variant="contained" sx={{width: '95%', bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' }, '&:active': { bgcolor: 'darkgreen' } }}
                                 onClick={async () => {
-                                    const response = await fetch(`https://api.datamuse.com/words?sp=${word}&md=d`);
+                                    const response = await fetch(`https://api.datamuse.com/words?sp=${displayedCard.word}&md=d`);
                                     const data = await response.json();
                                     if (data.length > 0 && data[0].defs) {
                                         setWordDefinition(data[0].defs[0]);
@@ -383,7 +389,7 @@ export default function Game(){
                         </Button>
 
                         <Dialog open={open} onClose={() => setOpen(false)}>
-                            <DialogTitle>{word}</DialogTitle>
+                            <DialogTitle>{displayedCard.word}</DialogTitle>
                             <DialogContent>
                                 <DialogContentText>{wordDefinition}</DialogContentText>
                             </DialogContent>
