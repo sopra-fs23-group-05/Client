@@ -11,11 +11,31 @@ import Card from "../../models/Card";
 import {CardRequest} from "../../models/CardRequest";
 
 export default function Game(){
+    const accessCode = localStorage.getItem('lobbyAccessCode');
+    const playerName = localStorage.getItem('userName')
+    const [role,setRole] = useState(null);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
+                setRole(responseRole.data.toString().toLowerCase());
+
+
+            } catch (error) {
+                console.error(`Something went wrong while fetching the users:`);
+                console.error("Details:", error);
+                alert("Something went wrong while fetching the users! See the console for details.");
+            }
+        }
+
+
+        fetchData();
+    }, [accessCode, playerName]);
 
     const ENTER_KEY_CODE = 13;
 
     const history = useHistory();
-    const accessCode = localStorage.getItem('lobbyAccessCode');
     const scrollBottomRef = useRef(null);
     const webSocket = useRef(null);
     const cardWebSocket = useRef(null);
@@ -280,7 +300,9 @@ export default function Game(){
 
     let buzzerButton = null;
     let skipButton = (
-            <Button variant="contained" sx={{width: '95%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}>Skip Card</Button>
+            <Button variant="contained" sx={{width: '95%', bgcolor: 'red', '&:hover': { bgcolor: 'darkred' }, '&:active': { bgcolor: 'darkred' } }}
+                    onClick={sendCardMessageSkip}
+            >Skip Card</Button>
     );
     let sendFields = (
             <Box sx={{
@@ -324,10 +346,11 @@ export default function Game(){
     );
 
 
-    if (team.getTeamRole() === "buzzingteam") {
+    if (role === "buzzer") {
         buzzerButton = (
             <Button variant="contained"
                     className="Buzzer"
+                    onClick={sendCardMessageBuzz}
             >
                 Buzzer
             </Button>
@@ -341,8 +364,7 @@ export default function Game(){
     //card component is not visible for guessing team
     let cardComponent = null;
 
-    //TODO clueGiver in the guessingteam has to see the card
-    if (team.getTeamRole() !== "guessingteam" || team.getClueGiver() === user) {
+    if (role !== "guesser" || role === "cluegiver") {
         cardComponent = (
                 <div className="card-box">
                     <div className="side-box">
