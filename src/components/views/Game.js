@@ -14,7 +14,7 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import {useEffect, useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
-import {api, handleError} from 'helpers/api';
+import {api} from 'helpers/api';
 import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
 import Team from "../../models/Team";
@@ -87,6 +87,7 @@ export default function Game() {
 
     const [rounds, setRounds] = useState("");
 
+
     // Get the actual user from the backend.
     const user = new User({username: "felix", id: 666});
     // Get the actual team from the backend.
@@ -101,11 +102,42 @@ export default function Game() {
 
     // Websocket code
     useEffect(() => {
+
+
         console.log('Opening Chat WebSocket');
         // Activate the following line for deployment.
         webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
         // Activate the following line for local testing.
         //webSocket.current = new WebSocket('ws://localhost:8080/chat');
+
+        webSocket.current.addEventListener('open', () => {
+            let timeLeft = 5; // Set timer to 60 seconds
+            const timerElement = document.getElementById('timer');
+      
+            // Update timer every second
+            const timerInterval = setInterval(() => {
+              // Display time remaining
+              timerElement.innerText = timeLeft;
+      
+              // Decrease time remaining
+              timeLeft--;
+      
+              // If timer reaches 0, stop timer and close websocket
+              if (timeLeft < 0) {
+                clearInterval(timerInterval);
+                webSocket.current.close();
+                if(roundsPlayed<=rounds){
+                    console.log(scoredPoints);
+                    history.push(`/games/${accessCode}/pregame`);
+                }
+                else{
+                    console.log(scoredPoints);
+                    history.push(`/games/${accessCode}/endscreen`);
+                }
+              }
+            }, 1000);
+        });
+
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
                 console.log('Open Chat WebSocket:', event);
@@ -119,7 +151,7 @@ export default function Game() {
             console.log('Closing Chat WebSocket');
             webSocket.current.close();
         }
-    }, []);
+    }, [accessCode, history, rounds, roundsPlayed, scoredPoints]);
 
     // Card websocket code
     const sendCardMessage = () => {
@@ -264,40 +296,6 @@ export default function Game() {
     const [wordDefinition, setWordDefinition] = useState("");
     const [open, setOpen] = useState(false);
 
-    let timeLeft = 60;
-    const downloadTimer = setInterval(function () {
-        if (timeLeft <= 0) {
-            if (roundsPlayed <= rounds) {
-                console.log(scoredPoints);
-                updateTeamScore(scoredPoints);
-                clearInterval(downloadTimer);
-                history.push(`/games/${accessCode}/pregame`);
-            } else {
-                console.log(scoredPoints);
-                updateTeamScore(scoredPoints);
-                clearInterval(downloadTimer);
-                history.push(`/games/${accessCode}/endscreen`);
-            }
-        } else {
-            document.getElementById("countdown").innerHTML = timeLeft;
-        }
-        timeLeft -= 1;
-    }, 1000);
-
-
-    const updateTeamScore = async (scoredPoints) => {
-        try {
-            const requestBody = JSON.stringify({accessCode, scoredPoints});
-            await api.put(
-                    `/games/${accessCode}/turns`,
-                    requestBody
-            );
-
-        } catch (error) {
-            alert(`Something went wrong during the join: \n${handleError(error)}`);
-        }
-    };
-
     let cardContent = null;
 
     if (displayedCard) {
@@ -426,58 +424,50 @@ export default function Game() {
     }
 
     return (
-            <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
-                <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
-                    <div className="card-and-timer-box">
-                        {cardComponent}
-                        <div className="timer-box">
-                            <div>Timer</div>
-                            <div id="countdown" className="countdown" style={{fontSize: "25px"}}></div>
-                            <Divider sx={{
-                                color: 'white',
-                                border: '1px solid white',
-                                width: '80%',
-                                marginBottom: '15px',
-                                marginTop: '15px'
-                            }}/>
-                            <div>Score</div>
-                            <div>{scoredPoints}</div>
-                        </div>
-                    </div>
-                    <Box
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexDirection: 'column',
-                                width: '100%',
-                                height: 300,
-                                backgroundColor: '#D1C4E9',
-                                borderRadius: '20px',
-                                border: '1px solid white',
-                                marginTop: '20px',
-                                marginBottom: '20px',
-                                flex: '1',
-                                position: 'relative',
-                            }}>
-                        <Box sx={{
-                            flex: '1',
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            justifyContent: 'flex-start',
-                            flexDirection: 'column',
-                            width: '100%',
-                            paddingTop: '3px',
-                            paddingLeft: '8px',
-                            paddingRight: '8px',
-                        }}>
-                            {listChatMessages}
-                            <ListItem ref={scrollBottomRef}></ListItem>
-                        </Box>
-                        {sendFields}
-                    </Box>
-                    {buzzerButton}
-                </Box>
-            </div>
-    );
+    
+    <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
+      <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
+          <div className="card-and-timer-box">
+              {cardComponent}
+                  <div className="timer-box">
+                      <div>Timer</div>
+                      <p>Time remaining: <span id="timer">60</span> seconds</p>
+                      <Divider sx={{color: 'white', border: '1px solid white', width: '80%', marginBottom: '15px', marginTop: '15px'}} />
+                      <div>Score</div>
+                      <div>{scoredPoints}</div>
+                  </div>
+          </div>
+          <Box
+              sx={{display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              width: '100%',
+              height: 300,
+              backgroundColor: '#D1C4E9',
+              borderRadius: '20px',
+              border: '1px solid white',
+              marginTop: '20px',
+              marginBottom: '20px',
+              flex: '1',
+              position: 'relative',}}>
+              <Box sx={{ flex: '1',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                  flexDirection: 'column',
+                  width: '100%',
+                  paddingTop: '3px',
+                  paddingLeft: '8px',
+                  paddingRight: '8px',
+              }}>
+                  {listChatMessages}
+                  <ListItem ref={scrollBottomRef}></ListItem>
+              </Box>
+              {sendFields}
+          </Box>
+          {buzzerButton}
+      </Box>
+    </div>
+  );
 }
