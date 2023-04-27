@@ -270,7 +270,7 @@ export default function Game(){
         try {
             const requestBody = JSON.stringify({accessCode, scoredPoints});
             await api.put(
-              `/games/${accessCode}/turns/${scoredPoints}`,
+              `/games/${accessCode}/turns`,
               requestBody
             );
           
