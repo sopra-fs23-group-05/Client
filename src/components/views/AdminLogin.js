@@ -45,7 +45,7 @@ const AdminLogin = () => {
 
             //create lobby object
             const lobby = new Lobby(lobbyEmpty.data);
-            
+
             console.log(lobby);
             const accessCode = lobby.accessCode;
 
@@ -69,38 +69,37 @@ const AdminLogin = () => {
             window.location.reload();
         }
     };
-    
 
 
     return (
             <div className="homePageRoot">
-                <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}} />
+                <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
                 }}
                 >
                     <div className="buttonPanel">
-                    <Typography variant="h5" sx={{color: 'white'}}>Login</Typography>
-                    <TextField className="custom-outlined-text-field"
-                            label='Username'
-                            value={username}
-                            onChange={handleUsernameChange}>
-                    </TextField>
-                    <div className="horizontal-box">
-                        <Button variant="contained"
-                                className="buttonLogin"
-                                onClick={() => goBack()}
-                        >
-                            Back
-                        </Button>
-                        <Button variant="contained"
-                                className="buttonLogin"
-                                onClick={() => doLogin()}
-                        >
-                            Enter
-                        </Button>
-                    </div>
+                        <Typography variant="h5" sx={{color: 'white'}}>Login</Typography>
+                        <TextField className="custom-outlined-text-field"
+                                   label='Username'
+                                   value={username}
+                                   onChange={handleUsernameChange}>
+                        </TextField>
+                        <div className="horizontal-box">
+                            <Button variant="contained"
+                                    className="buttonLogin"
+                                    onClick={() => goBack()}
+                            >
+                                Back
+                            </Button>
+                            <Button variant="contained"
+                                    className="buttonLogin"
+                                    onClick={() => doLogin()}
+                            >
+                                Enter
+                            </Button>
+                        </div>
                     </div>
                 </Box>
             </div>
