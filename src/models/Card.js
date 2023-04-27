@@ -1,7 +1,7 @@
 /**
  * Lobby model
  */
-class Lobby {
+class Card {
     constructor(data = {}) {
         this.word = null;
         this.taboo1 = null;
@@ -12,4 +12,4 @@ class Lobby {
         Object.assign(this, data);
     }
 }
-export default Lobby;
+export default Card;

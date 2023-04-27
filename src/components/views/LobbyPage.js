@@ -77,51 +77,55 @@ const Lobby = () => {
     const goToInvitePage = () => {history.push(`/lobbies/${accessCode}/invite`)}
     const goToSettingsPage = () => {history.push(`/lobbies/${accessCode}/settings`)}
     const startGame = async () => {
-        //create Game
-        await api.post(`/games/${accessCode}`);
+        try {
+            //create Game
+            await api.post(`/games/${accessCode}`);
 
-        //get json file for the selected category
-        const categoryFile = await TabooData.getCategory(settings, 'de');
-        console.log("taken settings", settings);
-        const categoryJSONFile = JSON.stringify(categoryFile);
-        const originalObj = JSON.parse(categoryJSONFile);
+            //get json file for the selected category
+            const categoryFile = await TabooData.getCategory(settings, 'de');
+            console.log("taken settings", settings);
+            const categoryJSONFile = JSON.stringify(categoryFile);
+            const originalObj = JSON.parse(categoryJSONFile);
 
-        // post all cards from the json file
-        const newObj = {};
+            // post all cards from the json file
+            const newObj = {};
 
-        for (const word in originalObj) {
-            const tabooWords = originalObj[word]
-            newObj[word] = {
-                word
-            }
-            let numberOfTabooWords = 0;
-            for (let i=0; i< tabooWords.length; i++) {
-                numberOfTabooWords += 1;
-                newObj[word]["taboo" + (i+1)] = tabooWords[i];
-            }
-            //if number of taboo words in json file != 5, we add "-" to all remaining
-            if (numberOfTabooWords !== 5) {
-                const leftTabooWords = 5-numberOfTabooWords;
-                for (let i=0; i<leftTabooWords; i++) {
-                    newObj[word]["taboo" + (numberOfTabooWords+1+i)] = "-";
+            for (const word in originalObj) {
+                const tabooWords = originalObj[word]
+                newObj[word] = {
+                    word
+                }
+                let numberOfTabooWords = 0;
+                for (let i = 0; i < tabooWords.length; i++) {
+                    numberOfTabooWords += 1;
+                    newObj[word]["taboo" + (i + 1)] = tabooWords[i];
+                }
+                //if number of taboo words in json file != 5, we add "-" to all remaining
+                if (numberOfTabooWords !== 5) {
+                    const leftTabooWords = 5 - numberOfTabooWords;
+                    for (let i = 0; i < leftTabooWords; i++) {
+                        newObj[word]["taboo" + (numberOfTabooWords + 1 + i)] = "-";
+                    }
                 }
             }
+
+            console.log("newObj", newObj);
+            const newJson = JSON.stringify(Object.values(newObj));
+            console.log("newJson", newJson);
+
+            const array = JSON.parse(newJson);
+            console.log("array", array);
+            for (let i = 0; i < array.length; i++) {
+                const item = JSON.stringify(array[i]);
+                const slicedCard = item.slice();
+                console.log("sliced", slicedCard);
+                await api.post(`/games/${accessCode}/cards`, slicedCard);
+            }
+
+            history.push(`/games/${accessCode}/pregame`);
+        } catch (error) {
+            alert(`Error: \n${handleError(error)}`);
         }
-
-        console.log("newObj", newObj);
-        const newJson = JSON.stringify(Object.values(newObj));
-        console.log("newJson", newJson);
-
-        const array = JSON.parse(newJson);
-        console.log("array", array);
-        for (let i=0; i<array.length; i++) {
-            const item = JSON.stringify(array[i]);
-            const slicedCard = item.slice();
-            console.log("sliced", slicedCard);
-            await api.post(`/games/${accessCode}/cards`, slicedCard);
-        }
-
-        history.push(`/games/${accessCode}/pregame`);
     }
 
     let content = <div className="horizontal-box"></div>
