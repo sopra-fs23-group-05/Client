@@ -237,6 +237,7 @@ export default function Game() {
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components
     *
+    *
      */
     const listChatMessages = chatMessages.map((ChatMessage, index) =>
             <Box key={index}
