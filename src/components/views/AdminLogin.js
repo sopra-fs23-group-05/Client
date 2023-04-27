@@ -34,7 +34,7 @@ const AdminLogin = () => {
             const user = new User(response.data);
             setUsername(user.username)
 
-            console.log(user.username);
+            console.log(user);
 
             // Store the token=id into the local storage.
             localStorage.setItem('token', user.id);
@@ -46,18 +46,17 @@ const AdminLogin = () => {
             //create lobby object
             const lobby = new Lobby(lobbyEmpty.data);
             
-            console.log(lobby.accessCode);
+            console.log(lobby);
             const accessCode = lobby.accessCode;
 
 
             //add user to lobby
-            const putBody = JSON.stringify({accessCode, username});
-            await api.put(`/lobbies/${accessCode}/additions/users/${user.id}`, putBody);
+            await api.put(`/lobbies/${accessCode}/additions/users/${user.id}`);
 
             //add user to lobby userList
             lobby.lobbyUsers.push(user);
 
-            console.log('user list:', lobby.lobbyUsers);
+            console.log('current state of lobby:', lobby);
 
             localStorage.setItem('lobbyAccessCode', accessCode.toString());
             console.log('access code when login:', accessCode);
