@@ -57,7 +57,6 @@ export default function Game(){
                 await new Promise(resolve => setTimeout(resolve, 100));
                 setRounds(responseGame.data.settings.rounds);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
-                setTime(responseGame.data.settings.roundTime);
 
             } catch (error) {
                 alert("Something went wrong while fetching the users! See the console for details.");
@@ -69,7 +68,6 @@ export default function Game(){
     }, [accessCode]);
 
     const [rounds, setRounds] = useState("");
-    const [roundTime, setTime] = useState("");
 
     // Get the actual user from the backend.
     const user = new User({username: "felix", id: 666});
@@ -85,7 +83,6 @@ export default function Game(){
         // Activate the following line for deployment.
         webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
         // Activate the following line for local testing.
-        startDownloadTimer();
         //webSocket.current = new WebSocket('ws://localhost:8080/chat');
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
@@ -119,17 +116,14 @@ export default function Game(){
         // Activate the following line for deployment.
         cardWebSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/cards');
         // Activate the following line for local testing.
-        startDownloadTimer();
         //cardWebSocket.current = new WebSocket('ws://localhost:8080/cards');
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
-                startDownloadTimer();
                 sendCardMessage();
             }
             cardWebSocket.current.onclose = (event) => {
                 console.log('Close Card WebSocket:', event);
-                clearInterval(downloadTimer);
             }
         }
         openCardWebSocket();
@@ -248,30 +242,28 @@ export default function Game(){
     const [wordDefinition, setWordDefinition] = useState("");
     const [open, setOpen] = useState(false);
 
-    let timeLeft = 120;
-    let downloadTimer;
-    const countdownElement = document.getElementById("countdown");
-
-    function startDownloadTimer() {
-    downloadTimer = setInterval(function() {
+    let timeLeft = 60;
+    const downloadTimer = setInterval(function () {
         if (timeLeft <= 0) {
-        if (roundsPlayed <= rounds) {
-            console.log(scoredPoints);
-            updateTeamScore(scoredPoints);
-            clearInterval(downloadTimer);
-            history.push(`/games/${accessCode}/pregame`);
+            if(roundsPlayed<=rounds){
+                console.log(scoredPoints);
+                updateTeamScore(scoredPoints);
+                clearInterval(downloadTimer);
+                history.push(`/games/${accessCode}/pregame`);
+            }
+            else{
+                console.log(scoredPoints);
+                updateTeamScore(scoredPoints);
+                clearInterval(downloadTimer);
+                history.push(`/games/${accessCode}/endscreen`);
+            }
         } else {
-            console.log(scoredPoints);
-            updateTeamScore(scoredPoints);
-            clearInterval(downloadTimer);
-            history.push(`/games/${accessCode}/endscreen`);
-        }
-        } else {
-        countdownElement.innerHTML = timeLeft;
+            document.getElementById("countdown").innerHTML = timeLeft;
         }
         timeLeft -= 1;
     }, 1000);
-    }
+
+
     const updateTeamScore = async (scoredPoints) => {
         try {
             const requestBody = JSON.stringify({accessCode, scoredPoints});
