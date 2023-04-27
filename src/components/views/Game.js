@@ -6,7 +6,6 @@ import {useHistory} from 'react-router-dom';
 import {api, handleError} from 'helpers/api';
 import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
-import Team from "../../models/Team";
 import Card from "../../models/Card";
 import {CardRequest} from "../../models/CardRequest";
 
@@ -73,11 +72,9 @@ export default function Game(){
 
     // Get the actual user from the backend.
     const user = new User({username: "felix", id: 666});
-    // Get the actual team from the backend.
-    const team = new Team({aRole: "clueGiver", players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})], idxClueGiver: 0});
 
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
-    const messageType = team.getClueGiver() === user ? "description" : "guess";
+    const messageType = role === "cluegiver" ? "description" : "guess";
 
     // Websocket code
     useEffect(() => {
@@ -236,7 +233,7 @@ export default function Game(){
                     paddingRight: '5px',
                 }}
             >
-                {ChatMessage.type}: {ChatMessage.message}
+                {ChatMessage.message}
             </Box>
         </Box>
     );
