@@ -11,13 +11,13 @@ const UserLogin = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
     const leader = false;
-    const [givenAccessCode, setGivenAccessCode] = useState(null);
     const url = window.location.href;
     const parts = url.split("/");
-    var lastPart = parts.pop().toString();
-    if(lastPart==='user-login'){
-        lastPart=null;
+    var accessCodeURL = parts.pop().toString();
+    if(accessCodeURL==='user-login'){
+        accessCodeURL=null;
     }
+    const [givenAccessCode, setGivenAccessCode] = useState(accessCodeURL);
 
 
 
@@ -47,6 +47,7 @@ const UserLogin = () => {
             const response = await api.post('/users', requestBody);
             const user = new User(response.data);
             localStorage.setItem('token', user.id);
+            localStorage.setItem('userName', user.username);
 
             //add user to lobby
             const putBody = JSON.stringify({givenAccessCode, username});

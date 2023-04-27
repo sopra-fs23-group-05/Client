@@ -9,17 +9,15 @@ import TabooData from "taboo-data";
 const Lobby = () => {
 
     const history = useHistory();
-
+  
     const [lobby, setLobby] = useState(null);
     const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
     const [settings, setSettings] = useState(null);
 
-
-
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const userId = localStorage.getItem('token');
-
+  
     useEffect(() => {
         async function fetchData() {
             try {
@@ -41,18 +39,18 @@ const Lobby = () => {
                 console.error("Details:", error);
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
-        }
-        fetchData();
+      }
+      fetchData();
     }, [accessCode, userId, setUser]);
-
+  
     const goBack = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('lobbyAccessCode');
-        //TODO remove user from team if already joined
-        history.push('/homepage');
-        window.location.reload();
+      localStorage.removeItem('token');
+      localStorage.removeItem('lobbyAccessCode');
+      //TODO remove user from team if already joined
+      history.push('/homepage');
+      window.location.reload();
     };
-
+  
     const joinTeam = async (teamNr) => {
         try {
             if (teamNr === 1) {
@@ -68,11 +66,10 @@ const Lobby = () => {
                 lobby.team2.push(user);
                 window.location.reload();
             }
+        } catch (error) {
+          alert(`Something went wrong during the join: \n${handleError(error)}`);
         }
-        catch (error) {
-            alert(`Something went wrong during the join: \n${handleError(error)}`);
-        }
-    };
+      };
 
     const goToInvitePage = () => {history.push(`/lobbies/${accessCode}/invite`)}
     const goToSettingsPage = () => {history.push(`/lobbies/${accessCode}/settings`)}
