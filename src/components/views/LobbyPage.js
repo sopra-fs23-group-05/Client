@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
-import {Button, Typography, Box,} from "@mui/material";
+import {Box, Button, Typography,} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import 'styles/views/LobbyPage.scss';
 import TabooData from "taboo-data";
+import {TeamRequest} from "../../models/TeamRequest";
 
 const Lobby = () => {
 
@@ -17,6 +18,8 @@ const Lobby = () => {
 
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const userId = localStorage.getItem('token');
+
+    const teamWebSocket = useRef(null);
 
     useEffect(() => {
         async function fetchData() {
@@ -33,7 +36,6 @@ const Lobby = () => {
                 setSettings(lobbyResponse.data.settings.topic.toString().toLowerCase());
                 console.log('lobby info:', lobbyResponse.data);
                 console.log('lobby settings', lobbyResponse.data.settings);
-
             } catch (error) {
                 console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
                 console.error("Details:", error);
@@ -50,6 +52,60 @@ const Lobby = () => {
         history.push('/homepage');
         window.location.reload();
     };
+
+    // Team WebSocket code
+    useEffect(() => {
+        console.log('Opening Team WebSocket');
+        // TODO get correct domain when as soon as the code is available on main2
+        teamWebSocket.current = new WebSocket('ws://localhost:8080/teams');
+        const openWebSocket = () => {
+            teamWebSocket.current.onopen = (event) => {
+                console.log('Open Team WebSocket:', event);
+            }
+            teamWebSocket.current.onclose = (event) => {
+                console.log('Close Team WebSocket:', event);
+            }
+        }
+        openWebSocket();
+        return () => {
+            console.log('Closing Team WebSocket');
+            teamWebSocket.current.close();
+        }
+    }, []);
+
+    const changeTeam = (teamNr, type) => {
+        console.log('Send Team Message!');
+        teamWebSocket.current.send(
+            JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), teamNr, parseInt(userId, 10), type))
+        );
+    }
+
+    // TODO: Continue here
+    // Team WebSocket code
+    useEffect(() => {
+        teamWebSocket.current.onmessage = (event) => {
+            console.log('Incoming Message from Team WebSocket');
+            const IncomingMessage = JSON.parse(event.data);
+            console.log('Received Team Message:', IncomingMessage);
+
+            /*
+            if (IncomingMessage.type === 'addition') {
+                if (IncomingMessage.teamNr === 1) {
+                    lobby.team1.push(IncomingMessage.user);
+                } else if (IncomingMessage.teamNr === 2) {
+                    lobby.team2.push(IncomingMessage.user);
+                }
+            } else if (IncomingMessage.type === 'removal') {
+                if (IncomingMessage.teamNr === 1) {
+                    lobby.team1 = lobby.team1.filter(user => user.id !== IncomingMessage.user.id);
+                } else if (IncomingMessage.teamNr === 2) {
+                    lobby.team2 = lobby.team2.filter(user => user.id !== IncomingMessage.user.id);
+                }
+            }
+
+             */
+        }
+    }, [lobby]);
 
     const joinTeam = async (teamNr) => {
         try {
@@ -131,79 +187,79 @@ const Lobby = () => {
 
     if (isLeader) {
         content = (
-                <div className="horizontal-box" style={{marginTop: '-80px', marginBottom: '-100px'}}>
-                    <Button variant="contained"
-                            className="buttonLogin"
-                            onClick={() => goToSettingsPage()}
-                    >
-                        Settings
-                    </Button>
-                    <Button variant="contained"
-                            className="buttonLogin"
-                            onClick={() => startGame()}
-                    >
-                        Start Game
-                    </Button>
-                </div>
+            <div className="horizontal-box" style={{marginTop: '-80px', marginBottom: '-100px'}}>
+                <Button variant="contained"
+                        className="buttonLogin"
+                        onClick={() => goToSettingsPage()}
+                >
+                    Settings
+                </Button>
+                <Button variant="contained"
+                        className="buttonLogin"
+                        onClick={() => startGame()}
+                >
+                    Start Game
+                </Button>
+            </div>
         );
     }
 
     return (
-            <div className="homePageRoot">
-                <div className="horizontal-box">
-                    <Typography variant="h5" sx={{color: 'white', fontWeight: 700}}>Access Code:</Typography>
-                    <Typography variant="h5"
-                                sx={{color: 'white', fontWeight: 700, marginLeft: '10px'}}>{accessCode}</Typography>
-                </div>
-
-                <Box sx={{display: 'flex', flexDirection: 'column', marginBottom: '-80px'}}>
-                    <div className="buttonPanel">
-                        <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 1</Typography>
-                        <ul className="team-member-box">
-                            {lobby?.team1?.map(user => (
-                                    <div className="team-member" key={user.id}>{user.username}</div>
-                            ))}
-                        </ul>
-                        <Button variant="contained"
-                                className="buttonLogin"
-                                onClick={() => joinTeam(1)}
-                        >
-                            Join
-                        </Button>
-                    </div>
-
-                    <div className="buttonPanel" style={{marginTop: '20px'}}>
-                        <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 2</Typography>
-                        <ul className="team-member-box">
-                            {lobby?.team2?.map(user => (
-                                    <div className="team-member" key={user.id}>{user.username}</div>
-                            ))}
-                        </ul>
-                        <Button variant="contained"
-                                className="buttonLogin"
-                                onClick={() => joinTeam(2)}
-                        >
-                            Join
-                        </Button>
-                    </div>
-                </Box>
-
-                <div className="horizontal-box">
-                    <Button variant="contained"
-                            className="buttonLogin"
-                            onClick={() => goBack()}
-                    >
-                        Back
-                    </Button>
-                    <Button variant="contained"
-                            className="buttonLogin"
-                            onClick={() => goToInvitePage()}
-                    >
-                        Invite
-                    </Button>
-                </div>
-                {content}
+        <div className="homePageRoot">
+            <div className="horizontal-box">
+                <Typography variant="h5" sx={{color: 'white', fontWeight: 700}}>Access Code:</Typography>
+                <Typography variant="h5"
+                            sx={{color: 'white', fontWeight: 700, marginLeft: '10px'}}>{accessCode}</Typography>
             </div>
+
+            <Box sx={{display: 'flex', flexDirection: 'column', marginBottom: '-80px'}}>
+                <div className="buttonPanel">
+                    <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 1</Typography>
+                    <ul className="team-member-box">
+                        {lobby?.team1?.map(user => (
+                            <div className="team-member" key={user.id}>{user.username}</div>
+                        ))}
+                    </ul>
+                    <Button variant="contained"
+                            className="buttonLogin"
+                            onClick={() => changeTeam(1, "addition")}
+                    >
+                        Join
+                    </Button>
+                </div>
+
+                <div className="buttonPanel" style={{marginTop: '20px'}}>
+                    <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 2</Typography>
+                    <ul className="team-member-box">
+                        {lobby?.team2?.map(user => (
+                            <div className="team-member" key={user.id}>{user.username}</div>
+                        ))}
+                    </ul>
+                    <Button variant="contained"
+                            className="buttonLogin"
+                            onClick={() => changeTeam(2, "addition")}
+                    >
+                        Join
+                    </Button>
+                </div>
+            </Box>
+
+            <div className="horizontal-box">
+                <Button variant="contained"
+                        className="buttonLogin"
+                        onClick={() => goBack()}
+                >
+                    Back
+                </Button>
+                <Button variant="contained"
+                        className="buttonLogin"
+                        onClick={() => goToInvitePage()}
+                >
+                    Invite
+                </Button>
+            </div>
+            {content}
+        </div>
     );
 };
 export default Lobby;
