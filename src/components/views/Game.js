@@ -20,6 +20,7 @@ import User from "../../models/User";
 import Team from "../../models/Team";
 import Card from "../../models/Card";
 import {CardRequest} from "../../models/CardRequest";
+import {getWebSocketDomain} from 'helpers/getDomain';
 
 export default function Game() {
     const accessCode = localStorage.getItem('lobbyAccessCode');
@@ -102,10 +103,7 @@ export default function Game() {
     // Websocket code
     useEffect(() => {
         console.log('Opening Chat WebSocket');
-        // Activate the following line for deployment.
-        //webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
-        // Activate the following line for local testing.
-        webSocket.current = new WebSocket('ws://localhost:8080/chat');
+        webSocket.current = new WebSocket(getWebSocketDomain() + '/chat');
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
                 console.log('Open Chat WebSocket:', event);
@@ -135,10 +133,7 @@ export default function Game() {
     // Card websocket code
     useEffect(() => {
         console.log('Opening Card WebSocket');
-        // Activate the following line for deployment.
-        //cardWebSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/cards');
-        // Activate the following line for local testing.
-        cardWebSocket.current = new WebSocket('ws://localhost:8080/cards');
+        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards');
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);

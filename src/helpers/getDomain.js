@@ -12,3 +12,10 @@ export const getDomain = () => {
 
     return isProduction() ? prodUrl : devUrl
 }
+
+export const getWebSocketDomain = () => {
+    const prodWebSocketUrl = 'wss://sopra-fs23-group-05-server.oa.r.appspot.com'
+    const devWebSocketUrl = 'ws://localhost:8080'
+
+    return isProduction() ? prodWebSocketUrl : devWebSocketUrl
+}
