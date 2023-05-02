@@ -25,23 +25,20 @@ import {getWebSocketDomain} from 'helpers/getDomain';
 export default function Game() {
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const playerName = localStorage.getItem('userName')
-    const [role, setRole] = useState(null);
+    const [role, setRole] = useState("");
 
     useEffect(() => {
         async function fetchData() {
             try {
+                // response is "cluegiver", "guesser" or "buzzer"
                 const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
                 setRole(responseRole.data.toString().toLowerCase());
-
-
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
                 console.error("Details:", error);
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
         }
-
-
         fetchData();
     }, [accessCode, playerName]);
 
@@ -57,6 +54,8 @@ export default function Game() {
     const [message, setMessage] = useState('');
     const [scoredPoints] = useState(4);
     const [roundsPlayed, setRoundsPlayed] = useState("");
+    // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
+    const messageType = role === "cluegiver" ? "description" : "guess";
 
 
     let [displayedCard, setCard] = useState(new Card({
@@ -96,9 +95,6 @@ export default function Game() {
         players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})],
         idxClueGiver: 0
     });
-
-    // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
-    const messageType = team.getClueGiver() === user ? "description" : "guess";
 
     // Websocket code
     useEffect(() => {
