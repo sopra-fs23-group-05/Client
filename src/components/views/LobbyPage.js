@@ -21,6 +21,9 @@ const Lobby = () => {
 
     const teamWebSocket = useRef(null);
 
+    const [team1Members, setTeam1Members] = useState([]);
+    const [team2Members, setTeam2Members] = useState([]);
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -32,7 +35,14 @@ const Lobby = () => {
 
                 //get lobby
                 const lobbyResponse = await api.get(`/lobbies/${accessCode}`);
-                setLobby(lobbyResponse.data);
+                setLobby({
+                    accessCode: lobbyResponse.data.accessCode,
+                    lobbyLeader: lobbyResponse.data.lobbyLeader,
+                    aSettings: lobbyResponse.data.settings,
+                    lobbyUsers: lobbyResponse.data.lobbyUsers,
+                    team1: lobbyResponse.data.team1,
+                    team2: lobbyResponse.data.team2
+                });
                 setSettings(lobbyResponse.data.settings.topic.toString().toLowerCase());
                 console.log('lobby info:', lobbyResponse.data);
                 console.log('lobby settings', lobbyResponse.data.settings);
@@ -84,18 +94,22 @@ const Lobby = () => {
     // Team WebSocket code
     useEffect(() => {
         teamWebSocket.current.onmessage = (event) => {
-            console.log('Incoming Message from Team WebSocket');
             const IncomingMessage = JSON.parse(event.data);
             console.log('Received Team Message:', IncomingMessage);
 
-            /*
+
             if (IncomingMessage.type === 'addition') {
                 if (IncomingMessage.teamNr === 1) {
-                    lobby.team1.push(IncomingMessage.user);
+                    setTeam1Members([...team1Members, {userId: IncomingMessage.userId}]);
+                    lobby.team1.push(IncomingMessage.userId);
                 } else if (IncomingMessage.teamNr === 2) {
                     lobby.team2.push(IncomingMessage.user);
                 }
-            } else if (IncomingMessage.type === 'removal') {
+            }
+            console.log('team1', team1Members);
+            console.log('lobby', lobby);
+            /*
+            else if (IncomingMessage.type === 'removal') {
                 if (IncomingMessage.teamNr === 1) {
                     lobby.team1 = lobby.team1.filter(user => user.id !== IncomingMessage.user.id);
                 } else if (IncomingMessage.teamNr === 2) {
@@ -105,7 +119,7 @@ const Lobby = () => {
 
              */
         }
-    }, [lobby]);
+    }, [lobby, team1Members]);
 
     const joinTeam = async (teamNr) => {
         try {
@@ -204,6 +218,10 @@ const Lobby = () => {
         );
     }
 
+    const team1Content = team1Members.map((user, index) => (
+        <div key = {index} className="team-member" key={user.id}>{user.userId}</div>
+    ));
+
     return (
         <div className="homePageRoot">
             <div className="horizontal-box">
@@ -216,9 +234,7 @@ const Lobby = () => {
                 <div className="buttonPanel">
                     <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 1</Typography>
                     <ul className="team-member-box">
-                        {lobby?.team1?.map(user => (
-                            <div className="team-member" key={user.id}>{user.username}</div>
-                        ))}
+                        {team1Content}
                     </ul>
                     <Button variant="contained"
                             className="buttonLogin"
