@@ -22,7 +22,7 @@ import Card from "../../models/Card";
 import {CardRequest} from "../../models/CardRequest";
 
 export default function Game() {
-    const accessCode = localStorage.getItem('lobbyAccessCode');
+    const accessCode = window.location.pathname.slice(-6);
     const playerName = localStorage.getItem('userName')
     const [role, setRole] = useState(null);
 
@@ -54,7 +54,7 @@ export default function Game() {
     // Activate the following line as soon as the actual user is obtained from the backend.
     // const [user, setUser] = useState('');
     const [message, setMessage] = useState('');
-    const [scoredPoints] = useState(4);
+    let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
 
 
@@ -185,8 +185,9 @@ export default function Game() {
                 taboo4: Card.taboo4,
                 taboo5: Card.taboo5
             });
+            setScoredPoints(Card.turnPoints);
         }
-    }, [displayedCard]);
+    }, [displayedCard], [scoredPoints]);
 
     // Websocket code
     const handleMessageChange = (event) => {
