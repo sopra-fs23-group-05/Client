@@ -61,8 +61,6 @@ const Lobby = () => {
         if(lobby?.team1?.length > 0) {
             for(let i = 0; i < lobby.team1.length; i++) {
                 setTeam1Members([...team1Members, {
-                    userId:lobby.team1[i].id,
-                    isLeader:lobby.team1[i].leader,
                     username:lobby.team1[i].username
                 }]);
             }
@@ -113,8 +111,10 @@ const Lobby = () => {
 
             if (IncomingMessage.type === 'addition') {
                 if (IncomingMessage.teamNr === 1) {
-                    setTeam1Members([...team1Members, {userId: IncomingMessage.userId}]);
-                    lobby.team1.push(IncomingMessage.userId);
+                    setTeam1Members([...team1Members, {
+                        username: IncomingMessage.username
+                    }]);
+                    lobby.team1.push(IncomingMessage.username);
                 } else if (IncomingMessage.teamNr === 2) {
                     lobby.team2.push(IncomingMessage.user);
                 }
@@ -232,7 +232,7 @@ const Lobby = () => {
     }
 
     const team1Content = team1Members.map((user, index) => (
-        <div key = {index} className="team-member">{user.userId}</div>
+        <div key = {index} className="team-member">{user.username}</div>
     ));
 
     return (
