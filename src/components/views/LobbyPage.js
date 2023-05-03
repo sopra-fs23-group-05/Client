@@ -134,24 +134,6 @@ const Lobby = () => {
         }
     }, [lobby, team1Members]);
 
-    const joinTeam = async (teamNr) => {
-        try {
-            if (teamNr === 1) {
-                const requestBody = JSON.stringify({accessCode, teamNr, userId});
-                await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
-                lobby.team1.push(user);
-                window.location.reload();
-            } else if (teamNr === 2) {
-                const requestBody = JSON.stringify({accessCode, teamNr, userId});
-                await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
-                lobby.team2.push(user);
-                window.location.reload();
-            }
-        } catch (error) {
-            alert(`Something went wrong during the join: \n${handleError(error)}`);
-        }
-    };
-
     const goToInvitePage = () => {
         history.push(`/lobbies/${accessCode}/invite`)
     }
