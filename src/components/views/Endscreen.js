@@ -18,6 +18,7 @@ const Endscreen = () => {
     const [team2, setTeam2] = useState(null);
     const [roundsPlayed, setRoundsPlayed] = useState("");
     const [winner, setWinner] = useState("");
+    const [MVPPlayer, setMVPPlayer] = useState("");
 
     const doHomepage = () => {
         localStorage.removeItem('token');
@@ -63,6 +64,10 @@ const Endscreen = () => {
                 } else {
                     setWinner(2);
                 }
+                const responsePlayer = await api.get(`/games/${accessCode}/players/MVP`);
+                await new Promise(resolve => setTimeout(resolve, 100));
+                setMVPPlayer(responsePlayer.data.MVPPlayer.getName);
+
 
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
@@ -89,6 +94,8 @@ const Endscreen = () => {
 
                     <h1 className="h1">YOU PLAYED {roundsPlayed} ROUNDS</h1>
                     <h1 className="h1">SCORES</h1>
+
+                    <h1 className="h1">{MVPPlayer}</h1>
 
                     <div style={{
                         display: 'flex',
