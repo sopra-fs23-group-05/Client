@@ -134,7 +134,9 @@ const Lobby = () => {
                     const newTeam1Members = team1Members.filter(member => member.username !== IncomingMessage.username);
                     setTeam1Members(newTeam1Members);
                 } else if (IncomingMessage.teamNr === 2) {
-                    lobby.team2 = lobby.team2.filter(user => user.id !== IncomingMessage.user.id);
+                    lobby.team2 = lobby.team2.filter(user => user.username !== IncomingMessage.username);
+                    const newTeam2Members = team2Members.filter(member => member.username !== IncomingMessage.username);
+                    setTeam2Members(newTeam2Members);
                 }
             }
         }
