@@ -11,7 +11,6 @@ const Lobby = () => {
     const history = useHistory();
 
     const [lobby, setLobby] = useState(null);
-    const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
     const [settings, setSettings] = useState(null);
 
@@ -23,7 +22,6 @@ const Lobby = () => {
             try {
                 //get user
                 const userResponse = await api.get(`/users/${userId}`);
-                setUser(userResponse.data);
                 console.log('user info', userResponse.data);
                 setIsLeader(userResponse.data.leader);
 
@@ -42,7 +40,7 @@ const Lobby = () => {
         }
 
         fetchData();
-    }, [accessCode, userId, setUser]);
+    }, [accessCode, userId]);
 
     const goBack = () => {
         localStorage.removeItem('token');
@@ -54,14 +52,10 @@ const Lobby = () => {
     const joinTeam = async (teamNr) => {
         try {
             if (teamNr === 1) {
-                const requestBody = JSON.stringify({accessCode, teamNr, userId});
-                await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
-                lobby.team1.push(user);
+                await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`);
                 window.location.reload();
             } else if (teamNr === 2) {
-                const requestBody = JSON.stringify({accessCode, teamNr, userId});
-                await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
-                lobby.team2.push(user);
+                await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`);
                 window.location.reload();
             }
         } catch (error) {
