@@ -62,7 +62,7 @@ const Settings = () => {
 
                 <h1 style={{
                     color: 'white',
-                    marginTop: '1250px',
+                    marginTop: '1500px',
                     marginRight: '150px',
                     fontFamily: 'Inter, sans-serif',
                     fontWeight: '600',
@@ -145,7 +145,7 @@ const Settings = () => {
 
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <Button variant="contained" className="topicsButton" style={{
-                        backgroundColor: '#DB8E56',
+                        backgroundColor: '#d68042',
                         boxShadow: topic === "ANIMALS" ? "0 0 50px 0 #FFF" : "",
                         margin: '-30px 10px -30px 0px'
                     }}
@@ -157,7 +157,85 @@ const Settings = () => {
                     </Button>
 
                     <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#77DE5D',
+                        backgroundColor: '#EA4848',
+                        boxShadow: topic === "CARS" ? "0 0 50px 0 #FFF" : "",
+                        margin: '-30px 0 -30px 10px'
+                    }}
+                            onClick={() => handleTopicsChange("CARS")}
+                    >
+                        <h1>
+                            Cars
+                        </h1>
+                    </Button>
+                </div>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <Button variant="contained" className='topicsButton' style={{
+                        backgroundColor: '#e5e833',
+                        boxShadow: topic === "CITY_COUNTRY" ? "0 0 50px 0 #FFF" : "",
+                        margin: '-30px 10px -30px 0px'
+                    }}
+                            onClick={() => handleTopicsChange("CITY_COUNTRY")}
+                    >
+                        <h1>
+                            Cities
+                            /Countries
+                        </h1>
+                    </Button>
+
+                    <Button variant="contained" className='topicsButton' style={{
+                        backgroundColor: '#ff8b26',
+                        boxShadow: topic === "FOOD" ? "0 0 50px 0 #FFF" : "",
+                        margin: '-30px 0 -30px 10px'
+                    }}
+                            onClick={() => handleTopicsChange("FOOD")}
+                    >
+                        <h1>
+                            Food
+                        </h1>
+                    </Button>
+                </div>
+
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <Button variant="contained" className='topicsButton' style={{
+                        backgroundColor: '#4D7CF3',
+                        boxShadow: topic === "FAMOUS_PEOPLE" ? "0 0 50px 0 #FFF" : "",
+                        margin: '-30px 10px -30px 0px'
+                    }}
+                            onClick={() => handleTopicsChange("FAMOUS_PEOPLE")}
+                    >
+                        <h1>
+                            Famous People
+                        </h1>
+                    </Button>
+                    <Button variant="contained" className='topicsButton' style={{
+                        backgroundColor: '#C660F6',
+                        boxShadow: topic === "HOME_GOODS" ? "0 0 50px 0 #FFF" : "",
+                        margin: '-30px 0 -30px 10px'
+                    }}
+                            onClick={() => handleTopicsChange("HOME_GOODS")}
+                    >
+                        <h1>
+                            Home Goods
+                        </h1>
+                    </Button>
+                </div>
+
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+
+                    <Button variant="contained" className='topicsButton' style={{
+                        backgroundColor: '#a32a49',
+                        boxShadow: topic === "LITERATURE" ? "0 0 50px 0 #FFF" : "",
+                        margin: '-30px 10px -30px 0px'
+                    }}
+                            onClick={() => handleTopicsChange("LITERATURE")}
+                    >
+                        <h1>
+                            Literature
+                        </h1>
+                    </Button>
+
+                    <Button variant="contained" className='topicsButton' style={{
+                        backgroundColor: '#69db4d',
                         boxShadow: topic === "SPORTS" ? "0 0 50px 0 #FFF" : "",
                         margin: '-30px 0 -30px 10px'
                     }}
@@ -168,82 +246,31 @@ const Settings = () => {
                         </h1>
                     </Button>
                 </div>
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#EA4848',
-                        boxShadow: topic === "MOVIES" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 10px -30px 0px'
-                    }}
-                            onClick={() => handleTopicsChange("MOVIES")}
-                    >
-                        <h1>
-                            Movies
-                        </h1>
-                    </Button>
-
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#4D7CF3',
-                        boxShadow: topic === "COUNTRIES" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 0 -30px 10px'
-                    }}
-                            onClick={() => handleTopicsChange("COUNTRIES")}
-                    >
-                        <h1>
-                            Countries
-                        </h1>
-                    </Button>
-                </div>
 
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
-
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#EEF167',
-                        boxShadow: topic === "FOOD" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 10px -30px 0px'
-                    }}
-                            onClick={() => handleTopicsChange("FOOD")}
-                    >
-                        <h1>
-                            Food
-                        </h1>
-                    </Button>
-
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#F666CE',
-                        boxShadow: topic === "MUSIC" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 0 -30px 10px'
-                    }}
-                            onClick={() => handleTopicsChange("MUSIC")}
-                    >
-                        <h1>
-                            Music
-                        </h1>
-                    </Button>
-                </div>
-
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#C660F6',
-                        boxShadow: topic === "FAMOUS_PEOPLE" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 10px -30px 0px'
-                    }}
-                            onClick={() => handleTopicsChange("FAMOUS_PEOPLE")}
-                    >
-                        <h1>
-                            Famous People
-                        </h1>
-                    </Button>
 
                     <Button variant="contained" className='topicsButton' style={{
                         backgroundColor: '#C1BACB',
-                        boxShadow: topic === "TECHNOLOGY" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 0 -30px 10px'
+                        boxShadow: topic === "TV" ? "0 0 50px 0 #FFF" : "",
+                        margin: '-30px 10px -30px 0px'
                     }}
-                            onClick={() => handleTopicsChange("TECHNOLOGY")}
+                            onClick={() => handleTopicsChange("TV")}
                     >
                         <h1>
-                            Technology
+                            TV
+                        </h1>
+                    </Button>
+
+
+                    <Button variant="contained" className='topicsButton' style={{
+                        backgroundColor: '#42dbdb',
+                        boxShadow: topic === "WEB" ? "0 0 50px 0 #FFF" : "",
+                        margin: '-30px 0 -30px 10px'
+                    }}
+                            onClick={() => handleTopicsChange("WEB")}
+                    >
+                        <h1>
+                            Web
                         </h1>
                     </Button>
                 </div>
