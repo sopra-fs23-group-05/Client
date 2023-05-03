@@ -56,7 +56,9 @@ const Lobby = () => {
         fetchData();
     }, [accessCode, userId, setUser]);
 
-    // For displaying team 1 to a new client joining the lobby
+    /* For displaying the teams to a client who reloaded the page.
+    * This is necessary i.e. when a user comes back from the invite page.
+     */
     useEffect(() => {
         if(lobby?.team1?.length > 0) {
             for(let i = 0; i < lobby.team1.length; i++) {
@@ -65,7 +67,14 @@ const Lobby = () => {
                 }]);
             }
         }
-    }, [lobby?.team1]);
+        if(lobby?.team2?.length > 0) {
+            for(let i = 0; i < lobby.team2.length; i++) {
+                setTeam2Members([...team2Members, {
+                    username:lobby.team2[i].username
+                }]);
+            }
+        }
+    }, [lobby?.team1, lobby?.team2]);
 
     const goBack = () => {
         localStorage.removeItem('token');
