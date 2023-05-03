@@ -12,7 +12,6 @@ const Lobby = () => {
     const history = useHistory();
 
     const [lobby, setLobby] = useState(null);
-    const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
     const [settings, setSettings] = useState(null);
 
@@ -29,7 +28,6 @@ const Lobby = () => {
             try {
                 //get user
                 const userResponse = await api.get(`/users/${userId}`);
-                setUser(userResponse.data);
                 console.log('user info', userResponse.data);
                 setIsLeader(userResponse.data.leader);
 
@@ -54,7 +52,7 @@ const Lobby = () => {
         }
 
         fetchData();
-    }, [accessCode, userId, setUser]);
+    }, [accessCode, userId]);
 
     /* For displaying the teams to a client who reloaded the page.
     * This is necessary i.e. when a user comes back from the invite page.
@@ -110,7 +108,6 @@ const Lobby = () => {
         );
     }
 
-    // TODO: Continue here
     // Team WebSocket code
     useEffect(() => {
         teamWebSocket.current.onmessage = (event) => {
@@ -143,7 +140,7 @@ const Lobby = () => {
 
              */
         }
-    }, [lobby, team1Members]);
+    }, [lobby, team1Members, team2Members]);
 
     const goToInvitePage = () => {
         history.push(`/lobbies/${accessCode}/invite`)
