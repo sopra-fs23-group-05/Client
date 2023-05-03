@@ -9,7 +9,12 @@ import Settings from "../../views/Settings";
 import PreGame from "../../views/PreGame";
 import Game from "../../views/Game";
 import Endscreen from "../../views/Endscreen";
-
+import {GameGuard} from "../routeProtectors/GameGuard";
+import {InviteGuard} from "../routeProtectors/InviteGuard";
+import {SettingsGuard} from "../routeProtectors/SettingsGuard";
+import {LobbyGuard} from "../routeProtectors/LobbyGuard";
+import {PreGameGuard} from "../routeProtectors/PreGameGuard";
+import {EndscreenGuard} from "../routeProtectors/EndscreenGuard";
 
 
 /**
@@ -22,48 +27,61 @@ import Endscreen from "../../views/Endscreen";
  * Documentation about routing in React: https://reacttraining.com/react-router/web/guides/quick-start
  */
 const AppRouter = () => {
-  return (
-          <BrowserRouter>
-              <Switch>
-                  <Route exact path="/homepage">
-                      <Homepage/>
-                  </Route>
-                  <Route exact path="/rules">
-                      <Rules/>
-                  </Route>
-                  <Route exact path="/lobbies/:accessCode/invite">
-                      <Invite/>
-                  </Route>
-                  <Route exact path="/lobbies/:accessCode/settings">
-                    <Settings/>
-                  </Route>
-                  <Route exact path="/">
-                      <Redirect to="/homepage"/>
-                  </Route>
-                  <Route exact path="/admin-login">
-                      <AdminLogin/>
-                  </Route>
-                  <Route exact path="/user-login">
-                      <UserLogin/>
-                  </Route>
-                  <Route exact path="/user-login/:accessCode">
-                      <UserLogin/>
-                  </Route>
-                  <Route exact path="/lobbies/:accessCode">
-                      <LobbyPage/>
-                  </Route>
-                  <Route exact path="/games/:accessCode">
-                      <Game/>
-                  </Route>
-                  <Route exact path="/games/:accessCode/pregame">
-                      <PreGame/>
-                  </Route>
-                  <Route exact path="/games/:accessCode/endscreen">
-                      <Endscreen/>
-                  </Route>
-              </Switch>
-          </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <Switch>
+                <Route exact path="/homepage">
+                    <Homepage/>
+                </Route>
+                <Route exact path="/rules">
+                    <Rules/>
+                </Route>
+
+                <Route exact path="/lobbies/:accessCode/invite">
+                    <InviteGuard>
+                        <Invite/>
+                    </InviteGuard>
+                </Route>
+                <Route exact path="/lobbies/:accessCode/settings">
+                    <SettingsGuard>
+                        <Settings/>
+                    </SettingsGuard>
+                </Route>
+                <Route exact path="/">
+                    <Redirect to="/homepage"/>
+                </Route>
+                <Route exact path="/admin-login">
+                    <AdminLogin/>
+                </Route>
+                <Route exact path="/user-login">
+                    <UserLogin/>
+                </Route>
+                <Route exact path="/user-login/:accessCode">
+                    <UserLogin/>
+                </Route>
+                <Route exact path="/lobbies/:accessCode">
+                    <LobbyGuard>
+                        <LobbyPage/>
+                    </LobbyGuard>
+                </Route>
+                <Route exact path="/games/:accessCode">
+                    <GameGuard>
+                        <Game/>
+                    </GameGuard>
+                </Route>
+                <Route exact path="/games/:accessCode/pregame">
+                    <PreGameGuard>
+                        <PreGame/>
+                    </PreGameGuard>
+                </Route>
+                <Route exact path="/games/:accessCode/endscreen">
+                    <EndscreenGuard>
+                        <Endscreen/>
+                    </EndscreenGuard>
+                </Route>
+            </Switch>
+        </BrowserRouter>
+    );
 };
 
 /*
