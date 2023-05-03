@@ -116,10 +116,12 @@ const Lobby = () => {
                     }]);
                     lobby.team1.push(IncomingMessage.username);
                 } else if (IncomingMessage.teamNr === 2) {
-                    lobby.team2.push(IncomingMessage.user);
+                    setTeam2Members([...team2Members, {
+                        username: IncomingMessage.username
+                    }]);
+                    lobby.team2.push(IncomingMessage.username);
                 }
             }
-            console.log('team1', team1Members);
             console.log('lobby', lobby);
             /*
             else if (IncomingMessage.type === 'removal') {
@@ -217,6 +219,10 @@ const Lobby = () => {
         <div key = {index} className="team-member">{user.username}</div>
     ));
 
+    const team2Content = team2Members.map((user, index) => (
+        <div key = {index} className="team-member">{user.username}</div>
+    ));
+
     return (
         <div className="homePageRoot">
             <div className="horizontal-box">
@@ -242,9 +248,7 @@ const Lobby = () => {
                 <div className="buttonPanel" style={{marginTop: '20px'}}>
                     <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 2</Typography>
                     <ul className="team-member-box">
-                        {lobby?.team2?.map(user => (
-                            <div className="team-member" key={user.id}>{user.username}</div>
-                        ))}
+                        {team2Content}
                     </ul>
                     <Button variant="contained"
                             className="buttonLogin"
