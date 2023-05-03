@@ -219,7 +219,7 @@ const Lobby = () => {
     }
 
     const team1Content = team1Members.map((user, index) => (
-        <div key = {index} className="team-member" key={user.id}>{user.userId}</div>
+        <div key = {index} className="team-member">{user.userId}</div>
     ));
 
     return (
