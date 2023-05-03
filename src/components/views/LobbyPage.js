@@ -111,6 +111,7 @@ const Lobby = () => {
     // Team WebSocket code
     useEffect(() => {
         teamWebSocket.current.onmessage = (event) => {
+            console.log(event.data);
             const IncomingMessage = JSON.parse(event.data);
             console.log('Received Team Message:', IncomingMessage);
 
@@ -127,18 +128,15 @@ const Lobby = () => {
                     }]);
                     lobby.team2.push(IncomingMessage.username);
                 }
-            }
-            console.log('lobby', lobby);
-            /*
-            else if (IncomingMessage.type === 'removal') {
+            }else if (IncomingMessage.type === 'removal') {
                 if (IncomingMessage.teamNr === 1) {
-                    lobby.team1 = lobby.team1.filter(user => user.id !== IncomingMessage.user.id);
+                    lobby.team1 = lobby.team1.filter(user => user.username !== IncomingMessage.username);
+                    const newTeam1Members = team1Members.filter(member => member.username !== IncomingMessage.username);
+                    setTeam1Members(newTeam1Members);
                 } else if (IncomingMessage.teamNr === 2) {
                     lobby.team2 = lobby.team2.filter(user => user.id !== IncomingMessage.user.id);
                 }
             }
-
-             */
         }
     }, [lobby, team1Members, team2Members]);
 
