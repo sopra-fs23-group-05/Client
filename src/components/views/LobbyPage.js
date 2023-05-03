@@ -56,6 +56,19 @@ const Lobby = () => {
         fetchData();
     }, [accessCode, userId, setUser]);
 
+    // For displaying team 1 to a new client joining the lobby
+    useEffect(() => {
+        if(lobby?.team1?.length > 0) {
+            for(let i = 0; i < lobby.team1.length; i++) {
+                setTeam1Members([...team1Members, {
+                    userId:lobby.team1[i].id,
+                    isLeader:lobby.team1[i].leader,
+                    username:lobby.team1[i].username
+                }]);
+            }
+        }
+    }, [lobby?.team1]);
+
     const goBack = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('lobbyAccessCode');
