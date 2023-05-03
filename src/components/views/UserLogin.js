@@ -14,11 +14,10 @@ const UserLogin = () => {
     const url = window.location.href;
     const parts = url.split("/");
     var accessCodeURL = parts.pop().toString();
-    if(accessCodeURL==='user-login'){
-        accessCodeURL=null;
+    if (accessCodeURL === 'user-login') {
+        accessCodeURL = null;
     }
     const [givenAccessCode, setGivenAccessCode] = useState(accessCodeURL);
-
 
 
     const handleUsernameChange = (event) => {
@@ -71,39 +70,40 @@ const UserLogin = () => {
 
     return (
             <div className="homePageRoot">
-                <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}} />
+                <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
                 <Box sx={{
                     display: 'flex',
-                    flexDirection: 'column',}}
+                    flexDirection: 'column',
+                }}
                 >
                     <div className="buttonPanel">
-                    <Typography variant="h5" sx={{color: 'white'}}>Login</Typography>
-                    <TextField className="custom-outlined-text-field"
-                            label='Access Code'
-                            value={givenAccessCode}
-                            onChange={handleAccessCodeChange}
-                    >
-                    </TextField>
-                    <TextField className="custom-outlined-text-field"
-                            label='Username'
-                            value={username}
-                            onChange={handleUsernameChange}
-                    >
-                    </TextField>
-                    <div className="horizontal-box">
-                        <Button variant="contained"
-                                className="buttonLogin"
-                                onClick={() =>goBack()}
+                        <Typography variant="h5" sx={{color: 'white'}}>Login</Typography>
+                        <TextField className="custom-outlined-text-field"
+                                   label='Access Code'
+                                   value={givenAccessCode}
+                                   onChange={handleAccessCodeChange}
                         >
-                            Back
-                        </Button>
-                        <Button variant="contained"
-                                className="buttonLogin"
-                                onClick={() =>doLogin()}
+                        </TextField>
+                        <TextField className="custom-outlined-text-field"
+                                   label='Username'
+                                   value={username}
+                                   onChange={handleUsernameChange}
                         >
-                            Enter
-                        </Button>
-                    </div>
+                        </TextField>
+                        <div className="horizontal-box">
+                            <Button variant="contained"
+                                    className="buttonLogin"
+                                    onClick={() => goBack()}
+                            >
+                                Back
+                            </Button>
+                            <Button variant="contained"
+                                    className="buttonLogin"
+                                    onClick={() => doLogin()}
+                            >
+                                Enter
+                            </Button>
+                        </div>
                     </div>
                 </Box>
             </div>

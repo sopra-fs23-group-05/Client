@@ -16,7 +16,6 @@ import {LobbyGuard} from "../routeProtectors/LobbyGuard";
 import {PreGameGuard} from "../routeProtectors/PreGameGuard";
 import {EndscreenGuard} from "../routeProtectors/EndscreenGuard";
 
-
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
@@ -28,6 +27,7 @@ import {EndscreenGuard} from "../routeProtectors/EndscreenGuard";
  */
 const AppRouter = () => {
     return (
+
         <BrowserRouter>
             <Switch>
                 <Route exact path="/homepage">
@@ -81,6 +81,7 @@ const AppRouter = () => {
                 </Route>
             </Switch>
         </BrowserRouter>
+
     );
 };
 
