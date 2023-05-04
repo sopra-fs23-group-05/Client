@@ -20,29 +20,32 @@ import User from "../../models/User";
 import Team from "../../models/Team";
 import Card from "../../models/Card";
 import {CardRequest} from "../../models/CardRequest";
+import {getWebSocketDomain} from 'helpers/getDomain';
 
 export default function Game() {
     const accessCode = window.location.pathname.slice(-6);
+    const userId = localStorage.getItem('token');
     const playerName = localStorage.getItem('userName')
-    const [role, setRole] = useState(null);
+    const [role, setRole] = useState("");
+    const [isLeader, setIsLeader] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
             try {
+                // response is "cluegiver", "guesser" or "buzzer"
                 const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
                 setRole(responseRole.data.toString().toLowerCase());
-
-
+                
+                const userResponse = await api.get(`/users/${userId}`);
+                setIsLeader(userResponse.data.leader);
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
                 console.error("Details:", error);
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
         }
-
-
         fetchData();
-    }, [accessCode, playerName]);
+    }, [accessCode, playerName, userId]);
 
     const ENTER_KEY_CODE = 13;
 
@@ -56,7 +59,16 @@ export default function Game() {
     const [message, setMessage] = useState('');
     let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
+    // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
+    const messageType = role === "cluegiver" ? "description" : "guess";
 
+    const doLeave = () => {
+        localStorage.removeItem('lobbyAccessCode');
+        localStorage.removeItem('token');
+        localStorage.removeItem('userName')
+        history.push('/homepage');
+        window.location.reload();
+    }
 
     let [displayedCard, setCard] = useState(new Card({
         word: "Loading...",
@@ -96,16 +108,10 @@ export default function Game() {
         idxClueGiver: 0
     });
 
-    // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
-    const messageType = team.getClueGiver() === user ? "description" : "guess";
-
     // Websocket code
     useEffect(() => {
         console.log('Opening Chat WebSocket');
-        // Activate the following line for deployment.
-        //webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
-        // Activate the following line for local testing.
-        webSocket.current = new WebSocket('ws://localhost:8080/chat');
+        webSocket.current = new WebSocket(getWebSocketDomain() + '/chat');
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
                 console.log('Open Chat WebSocket:', event);
@@ -135,10 +141,7 @@ export default function Game() {
     // Card websocket code
     useEffect(() => {
         console.log('Opening Card WebSocket');
-        // Activate the following line for deployment.
-        //cardWebSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/cards');
-        // Activate the following line for local testing.
-        cardWebSocket.current = new WebSocket('ws://localhost:8080/cards');
+        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards');
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
@@ -237,8 +240,6 @@ export default function Game() {
 
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components
-    *
-    *
      */
     const listChatMessages = chatMessages.map((ChatMessage, index) =>
             <Box key={index}
@@ -428,6 +429,20 @@ export default function Game() {
         );
     }
 
+
+    let leaveButton=null;
+    //leave button is not visible for leader
+    if(!isLeader){
+        leaveButton = (
+            <Button variant="contained" className="leaveButton"
+                        onClick={() => doLeave()}
+                >
+                    Leave Game
+                </Button>
+
+        )
+    }
+
     return (
             <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
                 <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
@@ -480,6 +495,7 @@ export default function Game() {
                         {sendFields}
                     </Box>
                     {buzzerButton}
+                    {leaveButton}
                 </Box>
             </div>
     );
