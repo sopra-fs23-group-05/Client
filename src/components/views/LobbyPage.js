@@ -129,6 +129,9 @@ const Lobby = () => {
                     lobby.team2.push(IncomingMessage.username);
                 }
             }else if (IncomingMessage.type === 'removal') {
+                // TODO This does not work properly.
+                // When removing a user, the element isn't deleted from team1Members. It just sets the username of the
+                // element to undefined.
                 if (IncomingMessage.teamNr === 1) {
                     lobby.team1 = lobby.team1.filter(user => user.username !== IncomingMessage.username);
                     const newTeam1Members = team1Members.filter(member => member.username !== IncomingMessage.username);
