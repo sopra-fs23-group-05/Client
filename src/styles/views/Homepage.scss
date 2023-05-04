@@ -1,4 +1,4 @@
-.homePageRoot{
+.homePageRoot {
     gap: 114px;
     display: flex;
     flex-direction: column;
@@ -23,6 +23,7 @@
     left: 0;
     right: 0;
 }
+
 .tabooLogo {
     min-width: 0;
     min-height: 0;
@@ -31,12 +32,14 @@
     display: block;
     margin: 0 auto;
 }
+
 .rules {
     position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
 }
+
 .buttonPanel {
     width: 225px;
     gap: 44px;
@@ -64,6 +67,7 @@
     margin-top: -50px;
     cursor: pointer;
 }
+
 .MuiButton-root.button {
     width: 219px;
     display: flex;
