@@ -44,9 +44,11 @@ const Lobby = () => {
         fetchData();
     }, [accessCode, userId, setUser]);
 
-    const goBack = () => {
+    const goBack = async () => {
+        await api.delete(`/lobbies/${accessCode}`);
         localStorage.removeItem('token');
         localStorage.removeItem('lobbyAccessCode');
+
         history.push('/homepage');
         window.location.reload();
     };
