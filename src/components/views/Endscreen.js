@@ -94,7 +94,7 @@ const Endscreen = () => {
 
                     <h1 className="h1">YOU PLAYED {roundsPlayed} ROUNDS</h1>
                     <h1 className="h1">SCORES</h1>
-                    <h1 className="h1">MVP: {MVPPlayer.name}, Score: {MVPPlayer.personalScore}</h1>
+                    <h1 className="h1">MVP: {MVPPlayer.name} Score: {MVPPlayer.personalScore}</h1>
 
 
                     <div style={{

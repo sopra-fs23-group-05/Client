@@ -171,10 +171,10 @@ const Settings = () => {
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <Button variant="contained" className='topicsButton' style={{
                         backgroundColor: '#e5e833',
-                        boxShadow: topic === "CITY_COUNTRY" ? "0 0 50px 0 #FFF" : "",
+                        boxShadow: topic === "CITY" ? "0 0 50px 0 #FFF" : "",
                         margin: '-30px 10px -30px 0px'
                     }}
-                            onClick={() => handleTopicsChange("CITY_COUNTRY")}
+                            onClick={() => handleTopicsChange("CITY")}
                     >
                         <h1>
                             Cities
@@ -198,10 +198,10 @@ const Settings = () => {
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <Button variant="contained" className='topicsButton' style={{
                         backgroundColor: '#4D7CF3',
-                        boxShadow: topic === "FAMOUS_PEOPLE" ? "0 0 50px 0 #FFF" : "",
+                        boxShadow: topic === "PEOPLE" ? "0 0 50px 0 #FFF" : "",
                         margin: '-30px 10px -30px 0px'
                     }}
-                            onClick={() => handleTopicsChange("FAMOUS_PEOPLE")}
+                            onClick={() => handleTopicsChange("PEOPLE")}
                     >
                         <h1>
                             Famous People
@@ -209,10 +209,10 @@ const Settings = () => {
                     </Button>
                     <Button variant="contained" className='topicsButton' style={{
                         backgroundColor: '#C660F6',
-                        boxShadow: topic === "HOME_GOODS" ? "0 0 50px 0 #FFF" : "",
+                        boxShadow: topic === "THINGS" ? "0 0 50px 0 #FFF" : "",
                         margin: '-30px 0 -30px 10px'
                     }}
-                            onClick={() => handleTopicsChange("HOME_GOODS")}
+                            onClick={() => handleTopicsChange("THINGS")}
                     >
                         <h1>
                             Home Goods

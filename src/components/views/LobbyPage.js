@@ -153,10 +153,14 @@ const Lobby = () => {
     }
     const startGame = async () => {
         try {
+            if(settings=="city"){
+                setSettings("city-country");
+            }
             //create Game
             await api.post(`/games/${accessCode}`);
 
             //get json file for the selected category
+        
             const categoryFile = await TabooData.getCategory(settings, 'en');
             console.log("taken settings", settings);
             const categoryJSONFile = JSON.stringify(categoryFile);
