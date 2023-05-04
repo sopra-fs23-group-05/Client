@@ -23,7 +23,7 @@ import {CardRequest} from "../../models/CardRequest";
 import {getWebSocketDomain} from 'helpers/getDomain';
 
 export default function Game() {
-    const accessCode = localStorage.getItem('lobbyAccessCode');
+    const accessCode = window.location.pathname.slice(-6);
     const userId = localStorage.getItem('token');
     const playerName = localStorage.getItem('userName')
     const [role, setRole] = useState("");
@@ -57,7 +57,7 @@ export default function Game() {
     // Activate the following line as soon as the actual user is obtained from the backend.
     // const [user, setUser] = useState('');
     const [message, setMessage] = useState('');
-    const [scoredPoints] = useState(4);
+    let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
     const messageType = role === "cluegiver" ? "description" : "guess";
@@ -188,8 +188,9 @@ export default function Game() {
                 taboo4: Card.taboo4,
                 taboo5: Card.taboo5
             });
+            setScoredPoints(Card.turnPoints);
         }
-    }, [displayedCard]);
+    }, [displayedCard], [scoredPoints]);
 
     // Websocket code
     const handleMessageChange = (event) => {
