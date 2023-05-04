@@ -65,8 +65,8 @@ const Endscreen = () => {
                     setWinner(2);
                 }
                 const responsePlayer = await api.get(`/games/${accessCode}/players/MVP`);
-                await new Promise(resolve => setTimeout(resolve, 100));
-                setMVPPlayer(responsePlayer.data.MVPPlayer.getName);
+                console.log(responsePlayer);
+                setMVPPlayer(responsePlayer.data);
 
 
             } catch (error) {
@@ -94,8 +94,8 @@ const Endscreen = () => {
 
                     <h1 className="h1">YOU PLAYED {roundsPlayed} ROUNDS</h1>
                     <h1 className="h1">SCORES</h1>
+                    <h1 className="h1">MVP: {MVPPlayer.name}, Score: {MVPPlayer.personalScore}</h1>
 
-                    <h1 className="h1">{MVPPlayer}</h1>
 
                     <div style={{
                         display: 'flex',
