@@ -23,9 +23,11 @@ import {CardRequest} from "../../models/CardRequest";
 import {getWebSocketDomain} from 'helpers/getDomain';
 
 export default function Game() {
-    const accessCode = localStorage.getItem('lobbyAccessCode');
+    const accessCode = window.location.pathname.slice(-6);
+    const userId = localStorage.getItem('token');
     const playerName = localStorage.getItem('userName')
     const [role, setRole] = useState("");
+    const [isLeader, setIsLeader] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -33,6 +35,9 @@ export default function Game() {
                 // response is "cluegiver", "guesser" or "buzzer"
                 const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
                 setRole(responseRole.data.toString().toLowerCase());
+                
+                const userResponse = await api.get(`/users/${userId}`);
+                setIsLeader(userResponse.data.leader);
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
                 console.error("Details:", error);
@@ -40,7 +45,7 @@ export default function Game() {
             }
         }
         fetchData();
-    }, [accessCode, playerName]);
+    }, [accessCode, playerName, userId]);
 
     const ENTER_KEY_CODE = 13;
 
@@ -52,11 +57,18 @@ export default function Game() {
     // Activate the following line as soon as the actual user is obtained from the backend.
     // const [user, setUser] = useState('');
     const [message, setMessage] = useState('');
-    const [scoredPoints] = useState(4);
+    let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
     const messageType = role === "cluegiver" ? "description" : "guess";
 
+    const doLeave = () => {
+        localStorage.removeItem('lobbyAccessCode');
+        localStorage.removeItem('token');
+        localStorage.removeItem('userName')
+        history.push('/homepage');
+        window.location.reload();
+    }
 
     let [displayedCard, setCard] = useState(new Card({
         word: "Loading...",
@@ -176,8 +188,9 @@ export default function Game() {
                 taboo4: Card.taboo4,
                 taboo5: Card.taboo5
             });
+            setScoredPoints(Card.turnPoints);
         }
-    }, [displayedCard]);
+    }, [displayedCard], [scoredPoints]);
 
     // Websocket code
     const handleMessageChange = (event) => {
@@ -416,6 +429,20 @@ export default function Game() {
         );
     }
 
+
+    let leaveButton=null;
+    //leave button is not visible for leader
+    if(!isLeader){
+        leaveButton = (
+            <Button variant="contained" className="leaveButton"
+                        onClick={() => doLeave()}
+                >
+                    Leave Game
+                </Button>
+
+        )
+    }
+
     return (
             <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
                 <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
@@ -468,6 +495,7 @@ export default function Game() {
                         {sendFields}
                     </Box>
                     {buzzerButton}
+                    {leaveButton}
                 </Box>
             </div>
     );
