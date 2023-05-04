@@ -15,7 +15,7 @@ const Lobby = () => {
     const [isLeader, setIsLeader] = useState(false);
     const [settings, setSettings] = useState(null);
 
-    const accessCode = localStorage.getItem('lobbyAccessCode');
+    const accessCode = window.location.pathname.slice(-6);
     const userId = localStorage.getItem('token');
 
     const teamWebSocket = useRef(null);
