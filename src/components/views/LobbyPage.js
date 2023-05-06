@@ -20,6 +20,7 @@ const Lobby = () => {
     const userId = localStorage.getItem('token');
 
     const teamWebSocket = useRef(null);
+    const pageWebSocket = useRef(null);
 
     const [team1Members, setTeam1Members] = useState([]);
     const [team2Members, setTeam2Members] = useState([]);
@@ -86,18 +87,23 @@ const Lobby = () => {
     useEffect(() => {
         console.log('Opening Team WebSocket');
         teamWebSocket.current = new WebSocket(getWebSocketDomain() + '/teams');
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
         const openWebSocket = () => {
             teamWebSocket.current.onopen = (event) => {
                 console.log('Open Team WebSocket:', event);
+                console.log('Open Page WebSocket:', event);
             }
             teamWebSocket.current.onclose = (event) => {
                 console.log('Close Team WebSocket:', event);
+                console.log('Open Page WebSocket:', event);
             }
         }
         openWebSocket();
         return () => {
             console.log('Closing Team WebSocket');
             teamWebSocket.current.close();
+            console.log('Closing Page WebSocket');
+            pageWebSocket.current.close();
         }
     }, []);
 
