@@ -83,7 +83,7 @@ const Lobby = () => {
         window.location.reload();
     };
 
-    // Team WebSocket code
+    // WebSocket code
     useEffect(() => {
         console.log('Opening Team WebSocket');
         teamWebSocket.current = new WebSocket(getWebSocketDomain() + '/teams');
@@ -95,7 +95,7 @@ const Lobby = () => {
             }
             teamWebSocket.current.onclose = (event) => {
                 console.log('Close Team WebSocket:', event);
-                console.log('Open Page WebSocket:', event);
+                console.log('Close Page WebSocket:', event);
             }
         }
         openWebSocket();
@@ -107,6 +107,7 @@ const Lobby = () => {
         }
     }, []);
 
+    // Team WebSocket code
     const changeTeam = (teamNr, type) => {
         console.log('Send Team Message!');
         teamWebSocket.current.send(
@@ -150,6 +151,24 @@ const Lobby = () => {
             }
         }
     }, [lobby, team1Members, team2Members]);
+
+    // Page WebSocket code
+    const changePage = () => {
+        console.log('Send Page Message!');
+        pageWebSocket.current.send(
+            JSON.stringify({url: `/games/${accessCode}/pregame`})
+        );
+    }
+
+    // Page WebSocket code
+    useEffect(() => {
+        pageWebSocket.current.onmessage = (event) => {
+            console.log(event.data);
+            const IncomingMessage = JSON.parse(event.data);
+            console.log('Received Page Message:', IncomingMessage);
+            history.push(IncomingMessage.url);
+        }
+    }, []);
 
     const goToInvitePage = () => {
         history.push(`/lobbies/${accessCode}/invite`)
@@ -207,7 +226,7 @@ const Lobby = () => {
                 await api.post(`/games/${accessCode}/cards`, slicedCard);
             }
 
-            history.push(`/games/${accessCode}/pregame`);
+            changePage();
         } catch (error) {
             alert(`Error: \n${handleError(error)}`);
         }
