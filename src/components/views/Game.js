@@ -53,6 +53,7 @@ export default function Game() {
     const scrollBottomRef = useRef(null);
     const webSocket = useRef(null);
     const cardWebSocket = useRef(null);
+    const pageWebSocket = useRef(null);
     const [chatMessages, setChatMessages] = useState([]);
     // Activate the following line as soon as the actual user is obtained from the backend.
     // const [user, setUser] = useState('');
@@ -111,19 +112,25 @@ export default function Game() {
     // Websocket code
     useEffect(() => {
         console.log('Opening Chat WebSocket');
+        console.log('Opening Page WebSocket');
         webSocket.current = new WebSocket(getWebSocketDomain() + '/chat');
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
                 console.log('Open Chat WebSocket:', event);
+                console.log('Open Page WebSocket:', event);
             }
             webSocket.current.onclose = (event) => {
                 console.log('Close Chat WebSocket:', event);
+                console.log('Close Page WebSocket:', event);
             }
         }
         openWebSocket();
         return () => {
             console.log('Closing Chat WebSocket');
             webSocket.current.close();
+            console.log('Closing Page WebSocket');
+            pageWebSocket.current.close();
         }
     }, []);
 
@@ -238,6 +245,24 @@ export default function Game() {
         }
     };
 
+    // Page WebSocket code
+    const changePage = (url) => {
+        console.log('Send Page Message!');
+        pageWebSocket.current.send(
+            JSON.stringify({url: url})
+        );
+    }
+
+    // Page WebSocket code
+    useEffect(() => {
+        pageWebSocket.current.onmessage = (event) => {
+            console.log(event.data);
+            const IncomingMessage = JSON.parse(event.data);
+            console.log('Received Page Message:', IncomingMessage);
+            history.push(IncomingMessage.url);
+        }
+    }, [history]);
+
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components
      */
@@ -276,11 +301,13 @@ export default function Game() {
                 updateTeamScore(scoredPoints);
                 clearInterval(downloadTimer);
                 history.push(`/games/${accessCode}/pregame`);
+                // TODO When the timer works, the leader should call the changePage function
             } else {
                 console.log(scoredPoints);
                 updateTeamScore(scoredPoints);
                 clearInterval(downloadTimer);
                 history.push(`/games/${accessCode}/endscreen`);
+                // TODO When the timer works, the leader should call the changePage function
             }
         } else {
             document.getElementById("countdown").innerHTML = timeLeft;
