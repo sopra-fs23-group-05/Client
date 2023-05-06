@@ -50,7 +50,7 @@ const PreGame = () => {
 
     // WebSocket code
     useEffect(() => {
-        console.log('Opening Team WebSocket');
+        console.log('Opening Page WebSocket');
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
         const openWebSocket = () => {
             pageWebSocket.current.onopen = (event) => {
