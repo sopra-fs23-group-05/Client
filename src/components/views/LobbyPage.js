@@ -6,6 +6,7 @@ import 'styles/views/AdminLogin.scss';
 import 'styles/views/LobbyPage.scss';
 import TabooData from "taboo-data";
 import {TeamRequest} from "../../models/TeamRequest";
+import {getWebSocketDomain} from "../../helpers/getDomain";
 
 const Lobby = () => {
 
@@ -84,8 +85,7 @@ const Lobby = () => {
     // Team WebSocket code
     useEffect(() => {
         console.log('Opening Team WebSocket');
-        // TODO get correct domain when as soon as the code is available on main2
-        teamWebSocket.current = new WebSocket('ws://localhost:8080/teams');
+        teamWebSocket.current = new WebSocket(getWebSocketDomain() + '/teams');
         const openWebSocket = () => {
             teamWebSocket.current.onopen = (event) => {
                 console.log('Open Team WebSocket:', event);
