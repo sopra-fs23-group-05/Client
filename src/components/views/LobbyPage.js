@@ -171,7 +171,7 @@ const Lobby = () => {
             console.log('Received Page Message:', IncomingMessage);
             history.push(IncomingMessage.url);
         }
-    }, []);
+    }, [history]);
 
     const goToInvitePage = () => {
         history.push(`/lobbies/${accessCode}/invite`)
@@ -181,7 +181,8 @@ const Lobby = () => {
     }
     const startGame = async () => {
         try {
-            if(settings=="city"){
+            if(settings==="city"){
+                console.log(settings);
                 setSettings("city-country");
             }
             //create Game
