@@ -121,17 +121,22 @@ const Lobby = () => {
                     setTeam1Members([...team1Members, {
                         username: IncomingMessage.username
                     }]);
-                    lobby.team1.push(IncomingMessage.username);
+                    lobby.team1.push({
+                        id: null,
+                        leader: null,
+                        username: IncomingMessage.username
+                    });
                 } else if (IncomingMessage.teamNr === 2) {
                     setTeam2Members([...team2Members, {
                         username: IncomingMessage.username
                     }]);
-                    lobby.team2.push(IncomingMessage.username);
+                    lobby.team2.push({
+                        id: null,
+                        leader: null,
+                        username: IncomingMessage.username
+                    });
                 }
             }else if (IncomingMessage.type === 'removal') {
-                // TODO This does not work properly.
-                // When removing a user, the element isn't deleted from team1Members. It just sets the username of the
-                // element to undefined.
                 if (IncomingMessage.teamNr === 1) {
                     lobby.team1 = lobby.team1.filter(user => user.username !== IncomingMessage.username);
                     const newTeam1Members = team1Members.filter(member => member.username !== IncomingMessage.username);
