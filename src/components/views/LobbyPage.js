@@ -26,6 +26,8 @@ const Lobby = () => {
     useEffect(() => {
         async function fetchData() {
             try {
+                console.log('The site was reloaded');
+
                 //get user
                 const userResponse = await api.get(`/users/${userId}`);
                 console.log('user info', userResponse.data);
@@ -44,6 +46,22 @@ const Lobby = () => {
                 setSettings(lobbyResponse.data.settings.topic.toString().toLowerCase());
                 console.log('lobby info:', lobbyResponse.data);
                 console.log('lobby settings', lobbyResponse.data.settings);
+
+                // Display the users in the teams
+                if(lobbyResponse.data.team1.length > 0) {
+                    for(let i = 0; i < lobbyResponse.data.team1.length; i++) {
+                        setTeam1Members([...team1Members, {
+                            username: lobbyResponse.data.team1[i].username
+                        }]);
+                    }
+                }
+                if(lobbyResponse.data.team2.length > 0) {
+                    for(let i = 0; i < lobbyResponse.data.team2.length; i++) {
+                        setTeam2Members([...team2Members, {
+                            username: lobbyResponse.data.team2[i].username
+                        }]);
+                    }
+                }
             } catch (error) {
                 console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
                 console.error("Details:", error);
@@ -53,26 +71,6 @@ const Lobby = () => {
 
         fetchData();
     }, [accessCode, userId]);
-
-    /* For displaying the teams to a client who reloaded the page.
-    * This is necessary i.e. when a user comes back from the invite page.
-     */
-    useEffect(() => {
-        if(lobby?.team1?.length > 0) {
-            for(let i = 0; i < lobby.team1.length; i++) {
-                setTeam1Members([...team1Members, {
-                    username:lobby.team1[i].username
-                }]);
-            }
-        }
-        if(lobby?.team2?.length > 0) {
-            for(let i = 0; i < lobby.team2.length; i++) {
-                setTeam2Members([...team2Members, {
-                    username:lobby.team2[i].username
-                }]);
-            }
-        }
-    }, [lobby?.team1, lobby?.team2]);
 
     const goBack = () => {
         localStorage.removeItem('token');
@@ -121,17 +119,22 @@ const Lobby = () => {
                     setTeam1Members([...team1Members, {
                         username: IncomingMessage.username
                     }]);
-                    lobby.team1.push(IncomingMessage.username);
+                    lobby.team1.push({
+                        id: null,
+                        leader: null,
+                        username: IncomingMessage.username
+                    });
                 } else if (IncomingMessage.teamNr === 2) {
                     setTeam2Members([...team2Members, {
                         username: IncomingMessage.username
                     }]);
-                    lobby.team2.push(IncomingMessage.username);
+                    lobby.team2.push({
+                        id: null,
+                        leader: null,
+                        username: IncomingMessage.username
+                    });
                 }
             }else if (IncomingMessage.type === 'removal') {
-                // TODO This does not work properly.
-                // When removing a user, the element isn't deleted from team1Members. It just sets the username of the
-                // element to undefined.
                 if (IncomingMessage.teamNr === 1) {
                     lobby.team1 = lobby.team1.filter(user => user.username !== IncomingMessage.username);
                     const newTeam1Members = team1Members.filter(member => member.username !== IncomingMessage.username);
