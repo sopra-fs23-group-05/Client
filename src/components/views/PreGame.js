@@ -2,8 +2,9 @@ import {Box} from "@mui/material";
 import 'styles/views/PreGame.scss';
 
 import {useHistory} from 'react-router-dom';
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {api} from "../../helpers/api";
+import {getWebSocketDomain} from "../../helpers/getDomain";
 
 
 const PreGame = () => {
@@ -14,11 +15,12 @@ const PreGame = () => {
     const [role, setRole] = useState(null);
     const [team1, setTeam1] = useState(null);
     const [team2, setTeam2] = useState(null);
-
+    const pageWebSocket = useRef(null);
 
     let timeLeft = 10;
     const downloadTimer = setInterval(function () {
         if (timeLeft <= 0) {
+            // TODO When the timer works, the leader should call the changePage function
             history.push(`/games/${accessCode}`);
             clearInterval(downloadTimer);
         } else {
@@ -26,7 +28,6 @@ const PreGame = () => {
         }
         timeLeft -= 1;
     }, 1000);
-
 
     useEffect(() => {
         async function fetchData() {
@@ -45,51 +46,88 @@ const PreGame = () => {
             }
         }
 
-
         fetchData();
     }, [accessCode, playerName]);
+
+    // WebSocket code
+    useEffect(() => {
+        console.log('Opening Page WebSocket');
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
+        const openWebSocket = () => {
+            pageWebSocket.current.onopen = (event) => {
+                console.log('Open Page WebSocket:', event);
+            }
+            pageWebSocket.current.onclose = (event) => {
+                console.log('Close Page WebSocket:', event);
+            }
+        }
+        openWebSocket();
+        return () => {
+            console.log('Closing Page WebSocket');
+            pageWebSocket.current.close();
+        }
+    }, []);
+
+    // Page WebSocket code
+    const changePage = () => {
+        console.log('Send Page Message!');
+        pageWebSocket.current.send(
+            JSON.stringify({url: `/games/${accessCode}`})
+        );
+    }
+
+    // Page WebSocket code
+    useEffect(() => {
+        pageWebSocket.current.onmessage = (event) => {
+            console.log(event.data);
+            const IncomingMessage = JSON.parse(event.data);
+            console.log('Received Page Message:', IncomingMessage);
+            history.push(IncomingMessage.url);
+        }
+    }, [history]);
+
     return (
-            <div className="homePageRoot"
-                 style={{
-                     display: 'flex',
-                     justifyContent: 'center',
-                     alignItems: 'center',
-                     width: '100%',
-                     height: "100%",
-                 }}>
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: "center",
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    width: '100%',
-                    height: "100%",
-                    backgroundColor: '#D1C4E9',
-                    borderRadius: '20px',
-                    border: '1px solid white'
-                }}
-                ><h2 className="h2"> round starts in:</h2>
-                    <div id="countdown" className="countdown"></div>
-                    <h2 className="h2"> your role:</h2>
-                    <h2 className="role"> {role}</h2>
-                </Box>
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    width: '100%',
-                    height: "100%",
-                    backgroundColor: '#D1C4E9',
-                    borderRadius: '20px',
-                    border: '1px solid white'
-                }}
-                >
-                    <h1 className="score">Score</h1>
-                    <h2 className="team">Team 1: {team1}</h2>
-                    <h2 className="team">Team 2: {team2}</h2>
-                </Box>
-            </div>
+        <div className="homePageRoot"
+             style={{
+                 display: 'flex',
+                 justifyContent: 'center',
+                 alignItems: 'center',
+                 width: '100%',
+                 height: "100%",
+             }}>
+            <Box sx={{
+                display: 'flex',
+                alignItems: "center",
+                justifyContent: 'center',
+                flexDirection: 'column',
+                width: '100%',
+                height: "100%",
+                backgroundColor: '#D1C4E9',
+                borderRadius: '20px',
+                border: '1px solid white'
+            }}
+            ><h2 className="h2"> round starts in:</h2>
+                <div id="countdown" className="countdown"></div>
+                <h2 className="h2"> your role:</h2>
+                <h2 className="role"> {role}</h2>
+            </Box>
+            <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                width: '100%',
+                height: "100%",
+                backgroundColor: '#D1C4E9',
+                borderRadius: '20px',
+                border: '1px solid white'
+            }}
+            >
+                <h1 className="score">Score</h1>
+                <h2 className="team">Team 1: {team1}</h2>
+                <h2 className="team">Team 2: {team2}</h2>
+            </Box>
+        </div>
     );
 
 };

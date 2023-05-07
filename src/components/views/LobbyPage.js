@@ -6,6 +6,7 @@ import 'styles/views/AdminLogin.scss';
 import 'styles/views/LobbyPage.scss';
 import TabooData from "taboo-data";
 import {TeamRequest} from "../../models/TeamRequest";
+import {getWebSocketDomain} from "../../helpers/getDomain";
 
 const Lobby = () => {
 
@@ -19,6 +20,7 @@ const Lobby = () => {
     const userId = localStorage.getItem('token');
 
     const teamWebSocket = useRef(null);
+    const pageWebSocket = useRef(null);
 
     const [team1Members, setTeam1Members] = useState([]);
     const [team2Members, setTeam2Members] = useState([]);
@@ -79,26 +81,31 @@ const Lobby = () => {
         window.location.reload();
     };
 
-    // Team WebSocket code
+    // WebSocket code
     useEffect(() => {
         console.log('Opening Team WebSocket');
-        // TODO get correct domain when as soon as the code is available on main2
-        teamWebSocket.current = new WebSocket('ws://localhost:8080/teams');
+        teamWebSocket.current = new WebSocket(getWebSocketDomain() + '/teams');
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
         const openWebSocket = () => {
             teamWebSocket.current.onopen = (event) => {
                 console.log('Open Team WebSocket:', event);
+                console.log('Open Page WebSocket:', event);
             }
             teamWebSocket.current.onclose = (event) => {
                 console.log('Close Team WebSocket:', event);
+                console.log('Close Page WebSocket:', event);
             }
         }
         openWebSocket();
         return () => {
             console.log('Closing Team WebSocket');
             teamWebSocket.current.close();
+            console.log('Closing Page WebSocket');
+            pageWebSocket.current.close();
         }
     }, []);
 
+    // Team WebSocket code
     const changeTeam = (teamNr, type) => {
         console.log('Send Team Message!');
         teamWebSocket.current.send(
@@ -147,6 +154,24 @@ const Lobby = () => {
             }
         }
     }, [lobby, team1Members, team2Members]);
+
+    // Page WebSocket code
+    const changePage = () => {
+        console.log('Send Page Message!');
+        pageWebSocket.current.send(
+            JSON.stringify({url: `/games/${accessCode}/pregame`})
+        );
+    }
+
+    // Page WebSocket code
+    useEffect(() => {
+        pageWebSocket.current.onmessage = (event) => {
+            console.log(event.data);
+            const IncomingMessage = JSON.parse(event.data);
+            console.log('Received Page Message:', IncomingMessage);
+            history.push(IncomingMessage.url);
+        }
+    }, []);
 
     const goToInvitePage = () => {
         history.push(`/lobbies/${accessCode}/invite`)
@@ -204,7 +229,7 @@ const Lobby = () => {
                 await api.post(`/games/${accessCode}/cards`, slicedCard);
             }
 
-            history.push(`/games/${accessCode}/pregame`);
+            changePage();
         } catch (error) {
             alert(`Error: \n${handleError(error)}`);
         }
