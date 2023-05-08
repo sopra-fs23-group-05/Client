@@ -53,7 +53,9 @@ const Lobby = () => {
 
     };
     const goBack = async () => {
-        await api.delete(`/lobbies/${accessCode}`);
+        if (isLeader) {
+            await api.delete(`/lobbies/${accessCode}`);
+        }
         localStorage.removeItem('token');
         localStorage.removeItem('lobbyAccessCode');
 
