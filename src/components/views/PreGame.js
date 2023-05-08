@@ -17,18 +17,6 @@ const PreGame = () => {
     const [team2, setTeam2] = useState(null);
     const pageWebSocket = useRef(null);
 
-    let timeLeft = 10;
-    const downloadTimer = setInterval(function () {
-        if (timeLeft <= 0) {
-            // TODO When the timer works, the leader should call the changePage function
-            history.push(`/games/${accessCode}`);
-            clearInterval(downloadTimer);
-        } else {
-            document.getElementById("countdown").innerHTML = timeLeft;
-        }
-        timeLeft -= 1;
-    }, 1000);
-
     useEffect(() => {
         async function fetchData() {
             try {
@@ -53,6 +41,27 @@ const PreGame = () => {
     useEffect(() => {
         console.log('Opening Page WebSocket');
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
+
+        pageWebSocket.current.addEventListener("open", () => {
+            let timeLeft = 10; // Set timer to 10 seconds
+            const timerElement = document.getElementById("timer");
+      
+            // Update timer every second
+            const timerInterval = setInterval(() => {
+              // Display time remaining
+              timerElement.innerText = timeLeft;
+      
+              // Decrease time remaining
+              timeLeft--;
+      
+              // If timer reaches 0, stop timer and close websocket
+              if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                changePage(`games/${accessCode}`);
+                }
+            }, 1000);
+          });
+
         const openWebSocket = () => {
             pageWebSocket.current.onopen = (event) => {
                 console.log('Open Page WebSocket:', event);
@@ -107,7 +116,9 @@ const PreGame = () => {
                 border: '1px solid white'
             }}
             ><h2 className="h2"> round starts in:</h2>
-                <div id="countdown" className="countdown"></div>
+                <p>
+                <span id="timer" style={{fontFamily: 'Inter, sans-serif', fontWeight: 'bold', fontSize: '50px'}}>10</span>
+                </p>
                 <h2 className="h2"> your role:</h2>
                 <h2 className="role"> {role}</h2>
             </Box>
