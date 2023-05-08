@@ -420,7 +420,7 @@ export default function Game() {
                 <div className="card-box">
                     <div className="side-box">
                         <Button variant="contained" sx={{
-                            width: '95%',
+                            width: 'fit-content',
                             bgcolor: 'green',
                             '&:hover': {bgcolor: 'darkgreen'},
                             '&:active': {bgcolor: 'darkgreen'}
