@@ -459,12 +459,24 @@ export default function Game() {
     //leave button is not visible for leader
     if(!isLeader){
         leaveButton = (
+            <div className="leave-box">
             <Button variant="contained" className="leaveButton"
-                        onClick={() => doLeave()}
+                        onClick={() => setOpen(true)}
                 >
-                    Leave Game
-                </Button>
+                Leave Game
+            </Button>
 
+            <Dialog open={open} onClose={() => setOpen(false)}>
+            <DialogTitle>Leave Game?</DialogTitle>
+            <DialogContent>
+                <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => setOpen(false)}>Close</Button>
+                <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
+            </DialogActions>
+            </Dialog>
+            </div>
         )
     }
 
