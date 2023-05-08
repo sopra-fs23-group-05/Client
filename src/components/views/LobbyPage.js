@@ -184,6 +184,7 @@ const Lobby = () => {
             if(settings==="city"){
                 console.log(settings);
                 setSettings("city-country");
+                console.log(settings);
             }
             //create Game
             await api.post(`/games/${accessCode}`);

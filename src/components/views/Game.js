@@ -70,6 +70,19 @@ export default function Game() {
         window.location.reload();
     }
 
+    const updateTeamScore = async (scoredPoints) => {
+        try {
+            const requestBody = JSON.stringify({accessCode, scoredPoints});
+            await api.put(
+                    `/games/${accessCode}/turns`,
+                    requestBody
+            );
+
+        } catch (error) {
+            alert(`Something went wrong during the join: \n${handleError(error)}`);
+        }
+    };
+
     let [displayedCard, setCard] = useState(new Card({
         word: "Loading...",
         taboo1: "Loading...",
@@ -108,6 +121,34 @@ export default function Game() {
         console.log('Opening Page WebSocket');
         webSocket.current = new WebSocket(getWebSocketDomain() + '/chat');
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
+
+        webSocket.current.addEventListener("open", () => {
+            let timeLeft = 60; // Set timer to 60 seconds
+            const timerElement = document.getElementById("timer");
+      
+            // Update timer every second
+            const timerInterval = setInterval(() => {
+              // Display time remaining
+              timerElement.innerText = timeLeft;
+      
+              // Decrease time remaining
+              timeLeft--;
+              // If timer reaches 0, stop timer and close websocket
+              if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                webSocket.current.close();
+                if (roundsPlayed <= rounds) {
+                  updateTeamScore(scoredPoints);
+                  changePage(`/games/${accessCode}/pregame`);
+                } else{
+                  updateTeamScore(scoredPoints);
+                  changePage(`/games/${accessCode}/endscreen`);
+                }
+              }
+            }, 1000);
+          });
+
+
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
                 console.log('Open Chat WebSocket:', event);
@@ -210,7 +251,7 @@ export default function Game() {
             console.log('Send Chat Message!');
             webSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                    JSON.stringify(new ChatMessage(window.location.href.slice(-6), user.id, message, messageType))
+                    JSON.stringify(new ChatMessage(window.location.href.slice(-6), parseInt(localStorage.getItem('token')), message, messageType))
             );
             setMessage('');
         }
@@ -285,42 +326,6 @@ export default function Game() {
 
     const [wordDefinition, setWordDefinition] = useState("");
     const [open, setOpen] = useState(false);
-
-    let timeLeft = 60;
-    const downloadTimer = setInterval(function () {
-        if (timeLeft <= 0) {
-            if (roundsPlayed <= rounds) {
-                console.log(scoredPoints);
-                updateTeamScore(scoredPoints);
-                clearInterval(downloadTimer);
-                history.push(`/games/${accessCode}/pregame`);
-                // TODO When the timer works, the leader should call the changePage function
-            } else {
-                console.log(scoredPoints);
-                updateTeamScore(scoredPoints);
-                clearInterval(downloadTimer);
-                history.push(`/games/${accessCode}/endscreen`);
-                // TODO When the timer works, the leader should call the changePage function
-            }
-        } else {
-            document.getElementById("countdown").innerHTML = timeLeft;
-        }
-        timeLeft -= 1;
-    }, 1000);
-
-
-    const updateTeamScore = async (scoredPoints) => {
-        try {
-            const requestBody = JSON.stringify({accessCode, scoredPoints});
-            await api.put(
-                    `/games/${accessCode}/turns`,
-                    requestBody
-            );
-
-        } catch (error) {
-            alert(`Something went wrong during the join: \n${handleError(error)}`);
-        }
-    };
 
     let cardContent = null;
 
@@ -470,7 +475,9 @@ export default function Game() {
                         {cardComponent}
                         <div className="timer-box">
                             <div>Timer</div>
-                            <div id="countdown" className="countdown" style={{fontSize: "25px"}}></div>
+                            <p>
+                            <span id="timer" style={{fontFamily: 'Inter, sans-serif', fontWeight: 'bold', fontSize: '20px'}}>60</span>
+                            </p>
                             <Divider sx={{
                                 color: 'white',
                                 border: '1px solid white',
