@@ -46,7 +46,7 @@ const Endscreen = () => {
         const json = await response.json();
         const imageUrl = json.data.link;
         const tweetText = `New Taboo Win! Final Score: ${team1} | ${team2}`;
-        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(window.location.href)}&hashtags=Taboo&media=${encodeURIComponent(imageUrl)}`;
+        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${`https://sopra-fs23-group-05-client.oa.r.appspot.com/homepage`}&hashtags=Taboo&media=${encodeURIComponent(imageUrl)}`;
 
         window.open(tweetUrl, '_blank');
     };
