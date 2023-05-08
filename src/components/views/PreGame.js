@@ -17,22 +17,6 @@ const PreGame = () => {
     const [team2, setTeam2] = useState(null);
     const pageWebSocket = useRef(null);
 
-
-    /*
-    let timeLeft = 10;
-    const downloadTimer = setInterval(function () {
-        if (timeLeft <= 0) {
-            // TODO When the timer works, the leader should call the changePage function
-            history.push(`/games/${accessCode}`);
-            clearInterval(downloadTimer);
-        } else {
-            document.getElementById("countdown").innerHTML = timeLeft;
-        }
-        timeLeft -= 1;
-    }, 1000);
-
-    */
-
     useEffect(() => {
         async function fetchData() {
             try {
