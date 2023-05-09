@@ -123,7 +123,7 @@ export default function Game() {
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
 
         webSocket.current.addEventListener("open", () => {
-            let timeLeft = 10; // Set timer to 60 seconds
+            let timeLeft = 60; // Set timer to 60 seconds
             const timerElement = document.getElementById("timer");
       
             // Update timer every second
