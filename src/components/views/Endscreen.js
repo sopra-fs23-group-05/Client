@@ -18,8 +18,12 @@ const Endscreen = () => {
     const [team2, setTeam2] = useState(null);
     const [roundsPlayed, setRoundsPlayed] = useState("");
     const [winner, setWinner] = useState("");
+    const [leader, setLeader] = useState(false);
 
-    const doHomepage = () => {
+    const doHomepage = async () => {
+        if (leader) {
+            await api.delete(`/games/${accessCode}`);
+        }
         localStorage.removeItem('token');
         history.push(`/homepage`);
         window.location.reload();
@@ -58,6 +62,9 @@ const Endscreen = () => {
                 setTeam1(responseGame.data.team1.points);
                 setTeam2(responseGame.data.team2.points);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
+                if (responseGame.data.leader===localStorage.getItem('userName')){
+                    setLeader(true);
+                }
                 if (team1 > team2) {
                     setWinner(1)
                 } else {

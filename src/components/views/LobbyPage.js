@@ -44,14 +44,7 @@ const Lobby = () => {
         fetchData();
     }, [accessCode, userId, setUser]);
 
-    window.onbeforeunload = async function () {
-        if (isLeader) {
-            await api.delete(`/lobbies/${accessCode}`);
-        }
-        localStorage.removeItem('token');
-        localStorage.removeItem('lobbyAccessCode');
 
-    };
     const goBack = async () => {
         if (isLeader) {
             await api.delete(`/lobbies/${accessCode}`);
