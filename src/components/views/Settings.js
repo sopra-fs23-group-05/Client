@@ -1,7 +1,7 @@
 import {api} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Settings.scss';
-import {Container, TextField, Button, Typography, Box} from "@mui/material";
+import {Container, Button, Typography, Box, MenuItem, Select, Slider} from "@mui/material";
 import {useEffect, useState} from "react";
 
 
@@ -78,15 +78,22 @@ const Settings = () => {
                             fontSize: '24px',
                             textShadow: '2px 2px 4px rgba(0,0,0,0.4)'
                         }}>Number of Rounds</Typography>
-                        <TextField
+                        <Select
                                 className='textField'
-                                id='outlined-basic'
+                                labelId="rounds-label"
+                                id="rounds"
                                 value={rounds}
                                 onChange={handleRoundsChange}
-                                variant='outlined'
-                                InputLabelProps={{className: 'input'}}
-                                InputProps={{className: 'input'}}
-                        />
+                                label="Number of Rounds"
+                                variant="outlined"
+                                renderValue={(value) => value}
+                        >
+                            <MenuItem value={3}>3</MenuItem>
+                            <MenuItem value={5}>5</MenuItem>
+                            <MenuItem value={7}>7</MenuItem>
+                            <MenuItem value={10}>10</MenuItem>
+                            <MenuItem value={12}>12</MenuItem>
+                        </Select>
 
                         <Box className="saveBox">
                             <div></div>
@@ -108,14 +115,18 @@ const Settings = () => {
                             fontSize: '24px',
                             textShadow: '2px 2px 4px rgba(0,0,0,0.4)'
                         }}>Time Per Round</Typography>
-                        <TextField
-                                className='textField'
-                                id='outlined-basic'
-                                value={roundTime}
+                        <Slider
+                                defaultValue={60}
+                                min={30}
+                                max={180}
+                                step={5}
+                                valueLabelDisplay="auto"
+                                aria-label="Small"
                                 onChange={handleTimeChange}
-                                variant='outlined'
-                                InputLabelProps={{className: 'input'}}
-                                InputProps={{className: 'input'}}
+                                sx={{
+                                    color: '#7f5dab'
+                                }}
+
                         />
                         <Box className="saveBox">
                             <div></div>
