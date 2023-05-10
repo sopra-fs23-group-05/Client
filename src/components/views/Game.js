@@ -325,7 +325,8 @@ export default function Game() {
     );
 
     const [wordDefinition, setWordDefinition] = useState("");
-    const [open, setOpen] = useState(false);
+    const [openDefinition, setOpenDefinition] = useState(false);
+    const [openLeave, setOpenLeave] = useState(false);
 
     let cardContent = null;
 
@@ -433,18 +434,18 @@ export default function Game() {
                                     } else {
                                         setWordDefinition("No definition found");
                                     }
-                                    setOpen(true);
+                                    setOpenDefinition(true);
                                 }}>
                             {displayedCard.word}
                         </Button>
 
-                        <Dialog open={open} onClose={() => setOpen(false)}>
+                        <Dialog open={openDefinition} onClose={() => setOpenDefinition(false)}>
                             <DialogTitle>{displayedCard.word}</DialogTitle>
                             <DialogContent>
                                 <DialogContentText>{wordDefinition}</DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={() => setOpen(false)}>Close</Button>
+                                <Button onClick={() => setOpenDefinition(false)}>Close</Button>
                             </DialogActions>
                         </Dialog>
                         {skipButton}
@@ -461,18 +462,18 @@ export default function Game() {
         leaveButton = (
             <div className="leave-box">
             <Button variant="contained" className="leaveButton"
-                        onClick={() => setOpen(true)}
+                        onClick={() => setOpenLeave(true)}
                 >
                 Leave Game
             </Button>
 
-            <Dialog open={open} onClose={() => setOpen(false)}>
+            <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
             <DialogTitle>Leave Game?</DialogTitle>
             <DialogContent>
                 <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => setOpen(false)}>Close</Button>
+                <Button onClick={() => setOpenLeave(false)}>Close</Button>
                 <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
             </DialogActions>
             </Dialog>
