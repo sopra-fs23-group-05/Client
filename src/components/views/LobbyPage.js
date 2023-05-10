@@ -74,9 +74,14 @@ const Lobby = () => {
         fetchData();
     }, [accessCode, userId]);
 
-    const goBack = () => {
+
+    const goBack = async () => {
+        if (isLeader) {
+            await api.delete(`/lobbies/${accessCode}`);
+        }
         localStorage.removeItem('token');
         localStorage.removeItem('lobbyAccessCode');
+
         history.push('/homepage');
         window.location.reload();
     };
