@@ -1,7 +1,7 @@
 import {api} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Settings.scss';
-import {Container, TextField, Button, Typography, Box} from "@mui/material";
+import {Container, Button, Typography, Box, Slider} from "@mui/material";
 import {useEffect, useState} from "react";
 
 
@@ -78,14 +78,17 @@ const Settings = () => {
                             fontSize: '24px',
                             textShadow: '2px 2px 4px rgba(0,0,0,0.4)'
                         }}>Number of Rounds</Typography>
-                        <TextField
-                                className='textField'
-                                id='outlined-basic'
-                                value={rounds}
+                        <Slider
+                                defaultValue={7}
+                                min={3}
+                                max={20}
+                                valueLabelDisplay="auto"
+                                aria-label="Small"
                                 onChange={handleRoundsChange}
-                                variant='outlined'
-                                InputLabelProps={{className: 'input'}}
-                                InputProps={{className: 'input'}}
+                                sx={{
+                                    color: '#7f5dab'
+                                }}
+
                         />
 
                         <Box className="saveBox">
@@ -108,14 +111,18 @@ const Settings = () => {
                             fontSize: '24px',
                             textShadow: '2px 2px 4px rgba(0,0,0,0.4)'
                         }}>Time Per Round</Typography>
-                        <TextField
-                                className='textField'
-                                id='outlined-basic'
-                                value={roundTime}
+                        <Slider
+                                defaultValue={60}
+                                min={30}
+                                max={180}
+                                step={5}
+                                valueLabelDisplay="auto"
+                                aria-label="Small"
                                 onChange={handleTimeChange}
-                                variant='outlined'
-                                InputLabelProps={{className: 'input'}}
-                                InputProps={{className: 'input'}}
+                                sx={{
+                                    color: '#7f5dab'
+                                }}
+
                         />
                         <Box className="saveBox">
                             <div></div>
