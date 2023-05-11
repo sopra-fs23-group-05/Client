@@ -4,7 +4,6 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    overflow: auto;
 }
 
 .card-box {
@@ -32,8 +31,8 @@
     justify-content: space-evenly;
     height: 150px;
     width: fit-content;
-    overflow: auto;
     color: white;
+    max-width: 390px;
 }
 .leave-box {
     display: flex;

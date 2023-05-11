@@ -495,8 +495,7 @@ export default function Game() {
                                 color: 'white',
                                 border: '1px solid white',
                                 width: '80%',
-                                marginBottom: '15px',
-                                marginTop: '15px'
+                                marginBottom: '5px'
                             }}/>
                             <div>Score</div>
                             <div>{scoredPoints}</div>
