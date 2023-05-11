@@ -17,32 +17,34 @@ import {useHistory} from 'react-router-dom';
 import {api, handleError} from 'helpers/api';
 import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
-import Team from "../../models/Team";
 import Card from "../../models/Card";
 import {CardRequest} from "../../models/CardRequest";
+import {getWebSocketDomain} from 'helpers/getDomain';
 
 export default function Game() {
-    const accessCode = localStorage.getItem('lobbyAccessCode');
+    const accessCode = window.location.pathname.slice(-6);
+    const userId = localStorage.getItem('token');
     const playerName = localStorage.getItem('userName')
-    const [role, setRole] = useState(null);
+    const [role, setRole] = useState("");
+    const [isLeader, setIsLeader] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
             try {
+                // response is "cluegiver", "guesser" or "buzzer"
                 const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
                 setRole(responseRole.data.toString().toLowerCase());
-
-
+                
+                const userResponse = await api.get(`/users/${userId}`);
+                setIsLeader(userResponse.data.leader);
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
                 console.error("Details:", error);
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
         }
-
-
         fetchData();
-    }, [accessCode, playerName]);
+    }, [accessCode, playerName, userId]);
 
     const ENTER_KEY_CODE = 13;
 
@@ -50,13 +52,36 @@ export default function Game() {
     const scrollBottomRef = useRef(null);
     const webSocket = useRef(null);
     const cardWebSocket = useRef(null);
+    const pageWebSocket = useRef(null);
     const [chatMessages, setChatMessages] = useState([]);
     // Activate the following line as soon as the actual user is obtained from the backend.
     // const [user, setUser] = useState('');
     const [message, setMessage] = useState('');
-    const [scoredPoints] = useState(4);
+    let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
+    // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
+    const messageType = role === "cluegiver" ? "description" : "guess";
 
+    const doLeave = () => {
+        localStorage.removeItem('lobbyAccessCode');
+        localStorage.removeItem('token');
+        localStorage.removeItem('userName')
+        history.push('/homepage');
+        window.location.reload();
+    }
+
+    const updateTeamScore = async (scoredPoints) => {
+        try {
+            const requestBody = JSON.stringify({accessCode, scoredPoints});
+            await api.put(
+                    `/games/${accessCode}/turns`,
+                    requestBody
+            );
+
+        } catch (error) {
+            alert(`Something went wrong during the join: \n${handleError(error)}`);
+        }
+    };
 
     let [displayedCard, setCard] = useState(new Card({
         word: "Loading...",
@@ -89,35 +114,59 @@ export default function Game() {
 
     // Get the actual user from the backend.
     const user = new User({username: "felix", id: 666});
-    // Get the actual team from the backend.
-    const team = new Team({
-        aRole: "clueGiver",
-        players: [user, new User({username: "lukas"}), new User({username: "lisa"}), new User({username: "laura"})],
-        idxClueGiver: 0
-    });
-
-    // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
-    const messageType = team.getClueGiver() === user ? "description" : "guess";
 
     // Websocket code
     useEffect(() => {
         console.log('Opening Chat WebSocket');
-        // Activate the following line for deployment.
-        //webSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/chat');
-        // Activate the following line for local testing.
-        webSocket.current = new WebSocket('ws://localhost:8080/chat');
+        console.log('Opening Page WebSocket');
+        webSocket.current = new WebSocket(getWebSocketDomain() + '/chat');
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
+
+        webSocket.current.addEventListener("open", () => {
+            let timeLeft = 60; // Set timer to 60 seconds
+            const timerElement = document.getElementById("timer");
+      
+            // Update timer every second
+            const timerInterval = setInterval(() => {
+              // Display time remaining
+              timerElement.innerText = timeLeft;
+      
+              // Decrease time remaining
+              timeLeft--;
+              // If timer reaches 0, stop timer and close websocket
+              if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                webSocket.current.close();
+                if (roundsPlayed <= rounds) {
+                  updateTeamScore(scoredPoints);
+                  //TODO: fix changePage
+                  changePage(`/games/${accessCode}/pregame`);
+                } else{
+                  updateTeamScore(scoredPoints);
+                  //TODO: fix changePage
+                  changePage(`/games/${accessCode}/endscreen`);
+                }
+              }
+            }, 1000);
+          });
+
+
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
                 console.log('Open Chat WebSocket:', event);
+                console.log('Open Page WebSocket:', event);
             }
             webSocket.current.onclose = (event) => {
                 console.log('Close Chat WebSocket:', event);
+                console.log('Close Page WebSocket:', event);
             }
         }
         openWebSocket();
         return () => {
             console.log('Closing Chat WebSocket');
             webSocket.current.close();
+            console.log('Closing Page WebSocket');
+            pageWebSocket.current.close();
         }
     }, []);
 
@@ -135,10 +184,7 @@ export default function Game() {
     // Card websocket code
     useEffect(() => {
         console.log('Opening Card WebSocket');
-        // Activate the following line for deployment.
-        //cardWebSocket.current = new WebSocket('wss://sopra-fs23-group-05-server.oa.r.appspot.com/cards');
-        // Activate the following line for local testing.
-        cardWebSocket.current = new WebSocket('ws://localhost:8080/cards');
+        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards');
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
@@ -185,8 +231,9 @@ export default function Game() {
                 taboo4: Card.taboo4,
                 taboo5: Card.taboo5
             });
+            setScoredPoints(Card.turnPoints);
         }
-    }, [displayedCard]);
+    }, [displayedCard], [scoredPoints]);
 
     // Websocket code
     const handleMessageChange = (event) => {
@@ -206,7 +253,7 @@ export default function Game() {
             console.log('Send Chat Message!');
             webSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                    JSON.stringify(new ChatMessage(window.location.href.slice(-6), user.id, message, messageType))
+                    JSON.stringify(new ChatMessage(window.location.href.slice(-6), parseInt(localStorage.getItem('token')), message, messageType))
             );
             setMessage('');
         }
@@ -234,10 +281,26 @@ export default function Game() {
         }
     };
 
+    // Page WebSocket code
+    const changePage = (url) => {
+        console.log('Send Page Message!');
+        pageWebSocket.current.send(
+            JSON.stringify({url: url})
+        );
+    }
+
+    // Page WebSocket code
+    useEffect(() => {
+        pageWebSocket.current.onmessage = (event) => {
+            console.log(event.data);
+            const IncomingMessage = JSON.parse(event.data);
+            console.log('Received Page Message:', IncomingMessage);
+            history.push(IncomingMessage.url);
+        }
+    }, [history]);
+
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components
-    *
-    *
      */
     const listChatMessages = chatMessages.map((ChatMessage, index) =>
             <Box key={index}
@@ -264,41 +327,8 @@ export default function Game() {
     );
 
     const [wordDefinition, setWordDefinition] = useState("");
-    const [open, setOpen] = useState(false);
-
-    let timeLeft = 60;
-    const downloadTimer = setInterval(function () {
-        if (timeLeft <= 0) {
-            if (roundsPlayed <= rounds) {
-                console.log(scoredPoints);
-                updateTeamScore(scoredPoints);
-                clearInterval(downloadTimer);
-                history.push(`/games/${accessCode}/pregame`);
-            } else {
-                console.log(scoredPoints);
-                updateTeamScore(scoredPoints);
-                clearInterval(downloadTimer);
-                history.push(`/games/${accessCode}/endscreen`);
-            }
-        } else {
-            document.getElementById("countdown").innerHTML = timeLeft;
-        }
-        timeLeft -= 1;
-    }, 1000);
-
-
-    const updateTeamScore = async (scoredPoints) => {
-        try {
-            const requestBody = JSON.stringify({accessCode, scoredPoints});
-            await api.put(
-                    `/games/${accessCode}/turns`,
-                    requestBody
-            );
-
-        } catch (error) {
-            alert(`Something went wrong during the join: \n${handleError(error)}`);
-        }
-    };
+    const [openDefinition, setOpenDefinition] = useState(false);
+    const [openLeave, setOpenLeave] = useState(false);
 
     let cardContent = null;
 
@@ -393,7 +423,7 @@ export default function Game() {
                 <div className="card-box">
                     <div className="side-box">
                         <Button variant="contained" sx={{
-                            width: '95%',
+                            width: 'fit-content',
                             bgcolor: 'green',
                             '&:hover': {bgcolor: 'darkgreen'},
                             '&:active': {bgcolor: 'darkgreen'}
@@ -406,18 +436,18 @@ export default function Game() {
                                     } else {
                                         setWordDefinition("No definition found");
                                     }
-                                    setOpen(true);
+                                    setOpenDefinition(true);
                                 }}>
                             {displayedCard.word}
                         </Button>
 
-                        <Dialog open={open} onClose={() => setOpen(false)}>
+                        <Dialog open={openDefinition} onClose={() => setOpenDefinition(false)}>
                             <DialogTitle>{displayedCard.word}</DialogTitle>
                             <DialogContent>
                                 <DialogContentText>{wordDefinition}</DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={() => setOpen(false)}>Close</Button>
+                                <Button onClick={() => setOpenDefinition(false)}>Close</Button>
                             </DialogActions>
                         </Dialog>
                         {skipButton}
@@ -427,6 +457,32 @@ export default function Game() {
         );
     }
 
+
+    let leaveButton=null;
+    //leave button is not visible for leader
+    if(!isLeader){
+        leaveButton = (
+            <div className="leave-box">
+            <Button variant="contained" className="leaveButton"
+                        onClick={() => setOpenLeave(true)}
+                >
+                Leave Game
+            </Button>
+
+            <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
+            <DialogTitle>Leave Game?</DialogTitle>
+            <DialogContent>
+                <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => setOpenLeave(false)}>Close</Button>
+                <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
+            </DialogActions>
+            </Dialog>
+            </div>
+        )
+    }
+
     return (
             <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
                 <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
@@ -434,7 +490,9 @@ export default function Game() {
                         {cardComponent}
                         <div className="timer-box">
                             <div>Timer</div>
-                            <div id="countdown" className="countdown" style={{fontSize: "25px"}}></div>
+                            <p>
+                            <span id="timer" style={{fontFamily: 'Inter, sans-serif', fontWeight: 'bold', fontSize: '20px'}}>60</span>
+                            </p>
                             <Divider sx={{
                                 color: 'white',
                                 border: '1px solid white',
@@ -479,6 +537,7 @@ export default function Game() {
                         {sendFields}
                     </Box>
                     {buzzerButton}
+                    {leaveButton}
                 </Box>
             </div>
     );

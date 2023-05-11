@@ -1,39 +1,69 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
-import {Button, Typography, Box,} from "@mui/material";
+import {Box, Button, Typography,} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import 'styles/views/LobbyPage.scss';
 import TabooData from "taboo-data";
+import {TeamRequest} from "../../models/TeamRequest";
+import {getWebSocketDomain} from "../../helpers/getDomain";
 
 const Lobby = () => {
 
     const history = useHistory();
 
     const [lobby, setLobby] = useState(null);
-    const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
     const [settings, setSettings] = useState(null);
 
-    const accessCode = localStorage.getItem('lobbyAccessCode');
+    const accessCode = window.location.pathname.slice(-6);
     const userId = localStorage.getItem('token');
+
+    const teamWebSocket = useRef(null);
+    const pageWebSocket = useRef(null);
+
+    const [team1Members, setTeam1Members] = useState([]);
+    const [team2Members, setTeam2Members] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
             try {
+                console.log('The site was reloaded');
+
                 //get user
                 const userResponse = await api.get(`/users/${userId}`);
-                setUser(userResponse.data);
                 console.log('user info', userResponse.data);
                 setIsLeader(userResponse.data.leader);
 
                 //get lobby
                 const lobbyResponse = await api.get(`/lobbies/${accessCode}`);
-                setLobby(lobbyResponse.data);
+                setLobby({
+                    accessCode: lobbyResponse.data.accessCode,
+                    lobbyLeader: lobbyResponse.data.lobbyLeader,
+                    aSettings: lobbyResponse.data.settings,
+                    lobbyUsers: lobbyResponse.data.lobbyUsers,
+                    team1: lobbyResponse.data.team1,
+                    team2: lobbyResponse.data.team2
+                });
                 setSettings(lobbyResponse.data.settings.topic.toString().toLowerCase());
                 console.log('lobby info:', lobbyResponse.data);
                 console.log('lobby settings', lobbyResponse.data.settings);
 
+                // Display the users in the teams
+                if(lobbyResponse.data.team1.length > 0) {
+                    for(let i = 0; i < lobbyResponse.data.team1.length; i++) {
+                        setTeam1Members([...team1Members, {
+                            username: lobbyResponse.data.team1[i].username
+                        }]);
+                    }
+                }
+                if(lobbyResponse.data.team2.length > 0) {
+                    for(let i = 0; i < lobbyResponse.data.team2.length; i++) {
+                        setTeam2Members([...team2Members, {
+                            username: lobbyResponse.data.team2[i].username
+                        }]);
+                    }
+                }
             } catch (error) {
                 console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
                 console.error("Details:", error);
@@ -42,7 +72,7 @@ const Lobby = () => {
         }
 
         fetchData();
-    }, [accessCode, userId, setUser]);
+    }, [accessCode, userId]);
 
 
     const goBack = async () => {
@@ -56,23 +86,97 @@ const Lobby = () => {
         window.location.reload();
     };
 
-    const joinTeam = async (teamNr) => {
-        try {
-            if (teamNr === 1) {
-                const requestBody = JSON.stringify({accessCode, teamNr, userId});
-                await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
-                lobby.team1.push(user);
-                window.location.reload();
-            } else if (teamNr === 2) {
-                const requestBody = JSON.stringify({accessCode, teamNr, userId});
-                await api.put(`/lobbies/${accessCode}/teams/${teamNr}/additions/users/${userId}`, requestBody);
-                lobby.team2.push(user);
-                window.location.reload();
+    // WebSocket code
+    useEffect(() => {
+        console.log('Opening Team WebSocket');
+        teamWebSocket.current = new WebSocket(getWebSocketDomain() + '/teams');
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
+        const openWebSocket = () => {
+            teamWebSocket.current.onopen = (event) => {
+                console.log('Open Team WebSocket:', event);
+                console.log('Open Page WebSocket:', event);
             }
-        } catch (error) {
-            alert(`Something went wrong during the join: \n${handleError(error)}`);
+            teamWebSocket.current.onclose = (event) => {
+                console.log('Close Team WebSocket:', event);
+                console.log('Close Page WebSocket:', event);
+            }
         }
-    };
+        openWebSocket();
+        return () => {
+            console.log('Closing Team WebSocket');
+            teamWebSocket.current.close();
+            console.log('Closing Page WebSocket');
+            pageWebSocket.current.close();
+        }
+    }, []);
+
+    // Team WebSocket code
+    const changeTeam = (teamNr, type) => {
+        console.log('Send Team Message!');
+        teamWebSocket.current.send(
+            JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), teamNr, parseInt(userId, 10), type))
+        );
+    }
+
+    // Team WebSocket code
+    useEffect(() => {
+        teamWebSocket.current.onmessage = (event) => {
+            console.log(event.data);
+            const IncomingMessage = JSON.parse(event.data);
+            console.log('Received Team Message:', IncomingMessage);
+
+
+            if (IncomingMessage.type === 'addition') {
+                if (IncomingMessage.teamNr === 1) {
+                    setTeam1Members([...team1Members, {
+                        username: IncomingMessage.username
+                    }]);
+                    lobby.team1.push({
+                        id: null,
+                        leader: null,
+                        username: IncomingMessage.username
+                    });
+                } else if (IncomingMessage.teamNr === 2) {
+                    setTeam2Members([...team2Members, {
+                        username: IncomingMessage.username
+                    }]);
+                    lobby.team2.push({
+                        id: null,
+                        leader: null,
+                        username: IncomingMessage.username
+                    });
+                }
+            }else if (IncomingMessage.type === 'removal') {
+                if (IncomingMessage.teamNr === 1) {
+                    lobby.team1 = lobby.team1.filter(user => user.username !== IncomingMessage.username);
+                    const newTeam1Members = team1Members.filter(member => member.username !== IncomingMessage.username);
+                    setTeam1Members(newTeam1Members);
+                } else if (IncomingMessage.teamNr === 2) {
+                    lobby.team2 = lobby.team2.filter(user => user.username !== IncomingMessage.username);
+                    const newTeam2Members = team2Members.filter(member => member.username !== IncomingMessage.username);
+                    setTeam2Members(newTeam2Members);
+                }
+            }
+        }
+    }, [lobby, team1Members, team2Members]);
+
+    // Page WebSocket code
+    const changePage = () => {
+        console.log('Send Page Message!');
+        pageWebSocket.current.send(
+            JSON.stringify({url: `/games/${accessCode}/pregame`})
+        );
+    }
+
+    // Page WebSocket code
+    useEffect(() => {
+        pageWebSocket.current.onmessage = (event) => {
+            console.log(event.data);
+            const IncomingMessage = JSON.parse(event.data);
+            console.log('Received Page Message:', IncomingMessage);
+            history.push(IncomingMessage.url);
+        }
+    }, [history]);
 
     const goToInvitePage = () => {
         history.push(`/lobbies/${accessCode}/invite`)
@@ -82,10 +186,16 @@ const Lobby = () => {
     }
     const startGame = async () => {
         try {
+            if(settings==="city"){
+                console.log(settings);
+                setSettings("city-country");
+                console.log(settings);
+            }
             //create Game
             await api.post(`/games/${accessCode}`);
 
             //get json file for the selected category
+        
             const categoryFile = await TabooData.getCategory(settings, 'en');
             console.log("taken settings", settings);
             const categoryJSONFile = JSON.stringify(categoryFile);
@@ -126,7 +236,7 @@ const Lobby = () => {
                 await api.post(`/games/${accessCode}/cards`, slicedCard);
             }
 
-            history.push(`/games/${accessCode}/pregame`);
+            changePage();
         } catch (error) {
             alert(`Error: \n${handleError(error)}`);
         }
@@ -136,79 +246,84 @@ const Lobby = () => {
 
     if (isLeader) {
         content = (
-                <div className="horizontal-box" style={{marginTop: '-80px', marginBottom: '-100px'}}>
-                    <Button variant="contained"
-                            className="buttonLogin"
-                            onClick={() => goToSettingsPage()}
-                    >
-                        Settings
-                    </Button>
-                    <Button variant="contained"
-                            className="buttonLogin"
-                            onClick={() => startGame()}
-                    >
-                        Start Game
-                    </Button>
-                </div>
+            <div className="horizontal-box" style={{marginTop: '-80px', marginBottom: '-100px'}}>
+                <Button variant="contained"
+                        className="buttonLogin"
+                        onClick={() => goToSettingsPage()}
+                >
+                    Settings
+                </Button>
+                <Button variant="contained"
+                        className="buttonLogin"
+                        onClick={() => startGame()}
+                        disabled={team1Members.length < 2 || team2Members.length < 2}
+                >
+                    Start Game
+                </Button>
+            </div>
         );
     }
 
+    const team1Content = team1Members.map((user, index) => (
+        <div key = {index} className="team-member">{user.username}</div>
+    ));
+
+    const team2Content = team2Members.map((user, index) => (
+        <div key = {index} className="team-member">{user.username}</div>
+    ));
+
     return (
-            <div className="homePageRoot">
-                <div className="horizontal-box">
-                    <Typography variant="h5" sx={{color: 'white', fontWeight: 700}}>Access Code:</Typography>
-                    <Typography variant="h5"
-                                sx={{color: 'white', fontWeight: 700, marginLeft: '10px'}}>{accessCode}</Typography>
-                </div>
-
-                <Box sx={{display: 'flex', flexDirection: 'column', marginBottom: '-80px'}}>
-                    <div className="buttonPanel">
-                        <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 1</Typography>
-                        <ul className="team-member-box">
-                            {lobby?.team1?.map(user => (
-                                    <div className="team-member" key={user.id}>{user.username}</div>
-                            ))}
-                        </ul>
-                        <Button variant="contained"
-                                className="buttonLogin"
-                                onClick={() => joinTeam(1)}
-                        >
-                            Join
-                        </Button>
-                    </div>
-
-                    <div className="buttonPanel" style={{marginTop: '20px'}}>
-                        <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 2</Typography>
-                        <ul className="team-member-box">
-                            {lobby?.team2?.map(user => (
-                                    <div className="team-member" key={user.id}>{user.username}</div>
-                            ))}
-                        </ul>
-                        <Button variant="contained"
-                                className="buttonLogin"
-                                onClick={() => joinTeam(2)}
-                        >
-                            Join
-                        </Button>
-                    </div>
-                </Box>
-
-                <div className="horizontal-box">
-                    <Button variant="contained"
-                            className="buttonLogin"
-                            onClick={() => goBack()}
-                    >
-                        Back
-                    </Button>
-                    <Button variant="contained"
-                            className="buttonLogin"
-                            onClick={() => goToInvitePage()}
-                    >
-                        Invite
-                    </Button>
-                </div>
-                {content}
+        <div className="homePageRoot">
+            <div className="horizontal-box">
+                <Typography variant="h5" sx={{color: 'white', fontWeight: 700}}>Access Code:</Typography>
+                <Typography variant="h5"
+                            sx={{color: 'white', fontWeight: 700, marginLeft: '10px'}}>{accessCode}</Typography>
             </div>
+
+            <Box sx={{display: 'flex', flexDirection: 'column', marginBottom: '-80px'}}>
+                <div className="buttonPanel">
+                    <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 1</Typography>
+                    <ul className="team-member-box">
+                        {team1Content}
+                    </ul>
+                    <Button variant="contained"
+                            className="buttonLogin"
+                            onClick={() => changeTeam(1, "addition")}
+                    >
+                        Join
+                    </Button>
+                </div>
+
+                <div className="buttonPanel" style={{marginTop: '20px'}}>
+                    <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 2</Typography>
+                    <ul className="team-member-box">
+                        {team2Content}
+                    </ul>
+                    <Button variant="contained"
+                            className="buttonLogin"
+                            onClick={() => changeTeam(2, "addition")}
+                    >
+                        Join
+                    </Button>
+                </div>
+            </Box>
+
+            <div className="horizontal-box">
+                <Button variant="contained"
+                        className="buttonLogin"
+                        onClick={() => goBack()}
+                >
+                    Back
+                </Button>
+                <Button variant="contained"
+                        className="buttonLogin"
+                        onClick={() => goToInvitePage()}
+                >
+                    Invite
+                </Button>
+            </div>
+            {content}
+        </div>
     );
 };
 export default Lobby;
