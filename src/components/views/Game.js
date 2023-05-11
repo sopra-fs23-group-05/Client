@@ -139,9 +139,11 @@ export default function Game() {
                 webSocket.current.close();
                 if (roundsPlayed <= rounds) {
                   updateTeamScore(scoredPoints);
+                  //TODO: fix changePage
                   changePage(`/games/${accessCode}/pregame`);
                 } else{
                   updateTeamScore(scoredPoints);
+                  //TODO: fix changePage
                   changePage(`/games/${accessCode}/endscreen`);
                 }
               }
