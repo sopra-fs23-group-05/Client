@@ -256,6 +256,7 @@ const Lobby = () => {
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => startGame()}
+                        disabled={team1Members.length < 2 || team2Members.length < 2}
                 >
                     Start Game
                 </Button>
