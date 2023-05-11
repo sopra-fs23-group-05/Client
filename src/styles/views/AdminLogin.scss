@@ -1,8 +1,8 @@
 .custom-outlined-text-field {
     width: 100%;
-    margin: 5px 0;
     box-sizing: border-box;
     background-color: lightgray;
+    margin-bottom: 20px;
 
     & fieldset {
         border-color: white;
@@ -32,6 +32,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+
 }
 
 .MuiButton-root.buttonLogin {

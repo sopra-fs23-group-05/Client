@@ -1,3 +1,8 @@
+.accessCodeTitle {
+    color: white;
+    padding: 0 10px;
+}
+
 .team-member-box {
     width: 80%;
     gap: 44px;
@@ -5,10 +10,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding-top: 28px;
-    padding-right: 34px;
-    padding-bottom: 29px;
-    padding-left: 34px;
+    padding: 28px 34px 29px;
     border-width: 0;
     border-radius: 15px;
     border-top-width: 1px;

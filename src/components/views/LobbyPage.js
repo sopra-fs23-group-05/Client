@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import {Box, Button, Typography,} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import 'styles/views/LobbyPage.scss';
+import 'styles/views/Homepage.scss';
 import TabooData from "taboo-data";
 import {TeamRequest} from "../../models/TeamRequest";
 import {getWebSocketDomain} from "../../helpers/getDomain";
@@ -274,9 +275,8 @@ const Lobby = () => {
     return (
         <div className="homePageRoot">
             <div className="horizontal-box">
-                <Typography variant="h5" sx={{color: 'white', fontWeight: 700}}>Access Code:</Typography>
-                <Typography variant="h5"
-                            sx={{color: 'white', fontWeight: 700, marginLeft: '10px'}}>{accessCode}</Typography>
+                <Typography variant="h5" className="accessCodeTitle">Access Code:</Typography>
+                <Typography variant="h5" className="accessCodeTitle">{accessCode}</Typography>
             </div>
 
             <Box sx={{display: 'flex', flexDirection: 'column', marginBottom: '-80px'}}>

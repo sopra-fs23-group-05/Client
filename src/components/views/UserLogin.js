@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import User from 'models/User';
 import {useHistory} from 'react-router-dom';
-import {TextField, Button, Typography, Box} from "@mui/material";
+import {TextField, Button, Typography} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import TabooLogo from "./TabooLogo.png";
 import Lobby from "../../models/Lobby";
@@ -71,20 +71,17 @@ const UserLogin = () => {
     return (
             <div className="homePageRoot">
                 <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                }}
-                >
                     <div className="buttonPanel">
-                        <Typography variant="h5" sx={{color: 'white'}}>Login</Typography>
+                        <Typography variant="h5" sx={{color: 'white', marginBottom: '20px'}}>Login</Typography>
                         <TextField className="custom-outlined-text-field"
+                                   sx={{marginBottom: '20px'}}
                                    label='Access Code'
                                    value={givenAccessCode}
                                    onChange={handleAccessCodeChange}
                         >
                         </TextField>
                         <TextField className="custom-outlined-text-field"
+                                   sx={{marginBottom: '20px'}}
                                    label='Username'
                                    value={username}
                                    onChange={handleUsernameChange}
@@ -105,7 +102,6 @@ const UserLogin = () => {
                             </Button>
                         </div>
                     </div>
-                </Box>
             </div>
     );
 };

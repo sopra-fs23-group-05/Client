@@ -80,8 +80,9 @@ const AdminLogin = () => {
                 }}
                 >
                     <div className="buttonPanel">
-                        <Typography variant="h5" sx={{color: 'white'}}>Login</Typography>
+                        <Typography variant="h5" sx={{color: 'white', marginBottom: '20px'}}>Login</Typography>
                         <TextField className="custom-outlined-text-field"
+                                   sx={{marginBottom: '20px'}}
                                    label='Username'
                                    value={username}
                                    onChange={handleUsernameChange}>
