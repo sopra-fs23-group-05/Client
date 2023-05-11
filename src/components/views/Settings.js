@@ -1,7 +1,7 @@
 import {api} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Settings.scss';
-import {Container, Button, Typography, Box, MenuItem, Select, Slider} from "@mui/material";
+import {Container, Button, Typography, Box, Slider} from "@mui/material";
 import {useEffect, useState} from "react";
 
 
@@ -78,22 +78,18 @@ const Settings = () => {
                             fontSize: '24px',
                             textShadow: '2px 2px 4px rgba(0,0,0,0.4)'
                         }}>Number of Rounds</Typography>
-                        <Select
-                                className='textField'
-                                labelId="rounds-label"
-                                id="rounds"
-                                value={rounds}
+                        <Slider
+                                defaultValue={7}
+                                min={3}
+                                max={20}
+                                valueLabelDisplay="auto"
+                                aria-label="Small"
                                 onChange={handleRoundsChange}
-                                label="Number of Rounds"
-                                variant="outlined"
-                                renderValue={(value) => value}
-                        >
-                            <MenuItem value={3}>3</MenuItem>
-                            <MenuItem value={5}>5</MenuItem>
-                            <MenuItem value={7}>7</MenuItem>
-                            <MenuItem value={10}>10</MenuItem>
-                            <MenuItem value={12}>12</MenuItem>
-                        </Select>
+                                sx={{
+                                    color: '#7f5dab'
+                                }}
+
+                        />
 
                         <Box className="saveBox">
                             <div></div>
