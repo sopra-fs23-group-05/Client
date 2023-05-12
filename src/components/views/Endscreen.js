@@ -3,7 +3,6 @@ import {useHistory} from 'react-router-dom';
 import 'styles/views/Endscreen.scss';
 import TabooLogo from './TabooLogo.png';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import {useEffect, useState} from "react";
@@ -96,134 +95,108 @@ const Endscreen = () => {
 
 
     return (
-            <div className="endScreenRoot">
-                <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
-                <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            marginTop: '-50px'
-                        }}
-                >
-                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px'}}>
-                        <StarIcon style={{color: '#EA854C', margin: '0 -20 0 75', fontSize: '50px'}}/>
-                        <h1 className="h1" style={{fontSize: '24px', width: '200px'}}>TEAM {winner} WINS!</h1>
-                        <StarIcon style={{color: '#EA854C', margin: '0 75 0 -20', fontSize: '50px'}}/>
+            <div className="homePageRoot">
+                <div className="flex-container">
+                <img src={TabooLogo} alt="Taboo logo" className="tabooLogo"/>
+                    <div className="horizontal-box">
+                        <StarIcon style={{color: '#EA854C', margin: '-10 0 0 0', fontSize: '50px'}}/>
+                        <h1 className="h1">TEAM {winner} WINS!</h1>
+                        <StarIcon style={{color: '#EA854C', margin: '-10 0 0 0', fontSize: '50px'}}/>
                     </div>
 
                     <h1 className="h1">YOU PLAYED {roundsPlayed} ROUNDS</h1>
-
                     <h1 className="h1">SCORES</h1>
 
-                    
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        marginTop: '50px',
-                        marginBottom: '50px'
-                    }}>
-                        <div className="textPanel" style={{margin: '-30px 20px -30px 80px', display: 'flex', flexDirection: 'column'}}>
-                            <h1 className="h1" style={{fontSize: '26px'}}>TEAM 1</h1>
-                            <h1 className="h1" style={{fontSize: '50px', marginTop: '-45px'}}>{team1Points}</h1>
+                    <div className="horizontal-box" style={{gap: '10px'}}>
+                        <div className="buttonPanel" style={{height: '80px'}}>
+                            <h1 className="h1">TEAM 1</h1>
+                            <h1 className="h1" style={{fontSize: '40px'}}>{team1Points}</h1>
                         </div>
-                        <div className="textPanel" style={{margin: '-30px 80px -30px 20px'}}>
-                            <h1 className="h1" style={{fontSize: '26px'}}>TEAM 2</h1>
-                            <h1 className="h1" style={{fontSize: '50px', marginTop: '-45px'}}>{team2Points}</h1>
+                        <div className="buttonPanel" style={{height: '80px'}}>
+                            <h1 className="h1">TEAM 2</h1>
+                            <h1 className="h1" style={{fontSize: '40px'}}>{team2Points}</h1>
                         </div>
                     </div>
 
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        marginTop: '50px',
-                        marginBottom: '50px'
-                    }}>
+                    <div className="horizontal-box" style={{gap: '10px'}}>
 
-                    <div className="textPanel" style={{margin: '-30px 20px -30px 80px', width: '200px', display: 'flex', flexDirection: 'column', height: 'auto'}}>
-                        {team1Players && (
-                            <>
-                                <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-                                    <thead>
-                                        <tr>
-                                        <th colSpan="2" style={{ textAlign: 'center', color: 'white' }}>Team 1 Players</th>
-                                        </tr>
-                                        <tr>
-                                            <th style={{ textAlign: 'left', borderBottom: '1px solid white', padding: '5px', color: 'white' }}>NAME</th>
-                                            <th style={{ textAlign: 'right', borderBottom: '1px solid white', padding: '5px', color: 'white' }}>SCORE</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {team1Players.map((player, index) => (
-                                            <tr key={player.name} style={{ borderBottom: (index !== team1Players.length - 1) ? '1px solid white' : 'none' }}>
-                                                <td style={{ textAlign: 'left', padding: '5px', color: 'white' }}>{player.name}</td>
-                                                <td style={{ textAlign: 'right', padding: '5px', color: 'white' }}>{player.personalScore}</td>
+                            <div className="buttonPanel" style={{height: 'auto', padding: '15px'}}>
+                                {team1Players && (
+                                    <>
+                                        <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+                                            <thead>
+                                                <tr>
+                                                <th colSpan="2" className="table-title">Team 1 Players</th>
+                                                </tr>
+                                                <br/>
+                                                <tr>
+                                                    <th className="table-row" style={{ textAlign: 'left' }}>NAME</th>
+                                                    <th className="table-row" style={{ textAlign: 'right' }}>SCORE</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {team1Players.map((player, index) => (
+                                                    <tr key={player.name} style={{ borderBottom: (index !== team1Players.length - 1) ? '1px solid white' : 'none' }}>
+                                                        <td className="table-row" style={{ textAlign: 'left' }}>{player.name}</td>
+                                                        <td className="table-row" style={{ textAlign: 'right' }}>{player.personalScore}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </>
+                                )}
+                            </div>
+
+
+                        <div className="buttonPanel" style={{height: 'auto', padding: '15px'}}>
+                            {team2Players && (
+                                <>
+                                    <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+                                        <thead>
+                                            <tr>
+                                            <th colSpan="2" className="table-title">Team 2 Players</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </>
-                        )}
-                    </div>
-
-
-                    <div className="textPanel" style={{margin: '-30px 80px -30px 20px', width: '200px', display: 'flex', flexDirection: 'column', height: 'auto'}}>
-                        {team2Players && (
-                            <>
-                                <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-                                    <thead>
-                                        <tr>
-                                        <th colSpan="2" style={{ textAlign: 'center', color: 'white' }}>Team 2 Players</th>
-                                        </tr>
-                                        <tr>
-                                            <th style={{ textAlign: 'left', borderBottom: '1px solid white', padding: '5px', color: 'white' }}>NAME</th>
-                                            <th style={{ textAlign: 'right', borderBottom: '1px solid white', padding: '5px', color: 'white' }}>SCORE</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {team2Players.map((player, index) => (
-                                            <tr key={player.name} style={{ borderBottom: (index !== team2Players.length - 1) ? '1px solid white' : 'none' }}>
-                                                <td style={{ textAlign: 'left', padding: '5px', color: 'white' }}>{player.name}</td>
-                                                <td style={{ textAlign: 'right', padding: '5px', color: 'white' }}>{player.personalScore}</td>
+                                            <br/>
+                                            <tr>
+                                                <th className="table-row" style={{ textAlign: 'left' }}>NAME</th>
+                                                <th className="table-row" style={{ textAlign: 'right' }}>SCORE</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </>
-                        )}
-                        </div>
+                                        </thead>
+                                        <tbody>
+                                            {team2Players.map((player, index) => (
+                                                <tr key={player.name} style={{ borderBottom: (index !== team2Players.length - 1) ? '1px solid white' : 'none' }}>
+                                                    <td className="table-row" style={{ textAlign: 'left' }}>{player.name}</td>
+                                                    <td className="table-row" style={{ textAlign: 'right' }}>{player.personalScore}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </>
+                            )}
+                            </div>
+
                     </div>
 
-                    <h1 className="h1" style={{fontSize: '32px', fontWeight: 'bold', color: 'white', marginTop: '50px', marginBottom: '10px'}}>Most Valuable Player</h1>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: '50px', marginBottom: '50px'}}>
+                    <h1 className="h1" style={{fontSize: '32px'}}>Most Valuable Player</h1>
+                    <div className="horizontal-box">
                         <EmojiEventsIcon style={{fontSize: '96px', color: '#EA854C'}}/>
                         <div style={{marginLeft: '50px'}}>
-                        <h1 className="h1" style={{fontSize: '24px', fontWeight: 'bold', color: '#EA854C', marginBottom: '10px', textAlign: 'left'}}>{MVPPlayer.name}</h1>
-                        <h1 className="h1" style={{fontSize: '18px', color: 'white', marginBottom: '10px', textAlign: 'left'}}>Score: {MVPPlayer.personalScore}</h1>
+                        <h1 className="h1" style={{color: '#EA854C', marginBottom: '10px'}}>{MVPPlayer.name}</h1>
+                        <h1 className="h1" style={{fontSize: '19px', textAlign: 'left'}}>Score: {MVPPlayer.personalScore}</h1>
                         </div>
                     </div>
 
-                    <div></div>
-
-
-                    <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '50px'}}>
-                        <Button variant="contained" style={{
-                            width: '150px',
-                            height: '60px',
-                            margin: '-0px 20px -30px 100px',
-                            fontSize: '20px'
-                        }}
+                    <div className="horizontal-box" style={{gap: '20px'}}>
+                        <Button variant="contained"
                                 className="button"
+                                style={{height: '60px'}}
                                 onClick={() => doShare()}
                         >
                             Share
                         </Button>
-                        <Button variant="contained" style={{
-                            width: '150px',
-                            height: '60px',
-                            margin: '-0px 100px -30px 20px',
-                            fontSize: '20px'
-                        }}
+                        <Button variant="contained"
                                 className="button"
+                                style={{height: '60px'}}
                                 onClick={() => doHomepage()}
                         >
                             Homepage
@@ -232,7 +205,7 @@ const Endscreen = () => {
                     <canvas ref={canvasRef} style={{display: 'none'}} width={window.innerWidth}
                             height={window.innerHeight}></canvas>
 
-                </Box>
+                </div>
             </div>
     );
 };
