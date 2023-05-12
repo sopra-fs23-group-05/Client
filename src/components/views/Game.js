@@ -301,14 +301,8 @@ export default function Game() {
     * a new array of ListItem components
      */
     const listChatMessages = chatMessages.map((ChatMessage, index) =>
-            <Box key={index}
-                 sx={{
-                     display: 'flex',
-                     flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse',
-                     width: '100%',
-                     alignItems: 'flex-start',
-                     marginTop: '5px',
-                 }}>
+            <div className="chat-message-line" key={index}
+                 style={{flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse'}}>
                 <Box
                         sx={{
                             backgroundColor: ChatMessage.type === "description" ? 'primary.main' : 'secondary.main',
@@ -317,11 +311,12 @@ export default function Game() {
                             paddingBottom: '2px',
                             paddingLeft: '5px',
                             paddingRight: '5px',
+                            maxWidth: '100%'
                         }}
                 >
                     {ChatMessage.type}: {ChatMessage.message}
                 </Box>
-            </Box>
+            </div>
     );
 
     const [wordDefinition, setWordDefinition] = useState("");
@@ -348,22 +343,14 @@ export default function Game() {
 
     let buzzerButton = null;
     let skipButton = (
-            <Button variant="contained" sx={{
-                width: '95%',
-                bgcolor: 'red',
-                '&:hover': {bgcolor: 'darkred'},
-                '&:active': {bgcolor: 'darkred'}
-            }}
+            <Button variant="contained" className="skip-button"
                     onClick={sendCardMessageSkip}
-            >Skip Card</Button>
+            >
+                Skip Card
+            </Button>
     );
     let sendFields = (
-            <Box sx={{
-                display: 'flex',
-                alignSelf: 'flex-end',
-                margin: '5px',
-                width: 'calc(100% - 10px)',
-            }}>
+            <div className="send-fields">
                 <TextField className={"textField-chat-input"}
                            onChange={handleMessageChange}
                            onKeyDown={handleEnterKey}
@@ -390,12 +377,11 @@ export default function Game() {
                         color="primary"
                         sx={{
                             borderRadius: '15px',
-                            height: '100%',
-                            flexGrow: '0',
+                            height: '100%'
                         }}>
                     <SendIcon/>
                 </Button>
-            </Box>
+            </div>
     );
 
 
@@ -420,12 +406,7 @@ export default function Game() {
         cardComponent = (
                 <div className="card-box">
                     <div className="side-box">
-                        <Button variant="contained" sx={{
-                            width: 'fit-content',
-                            bgcolor: 'green',
-                            '&:hover': {bgcolor: 'darkgreen'},
-                            '&:active': {bgcolor: 'darkgreen'}
-                        }}
+                        <Button variant="contained" className="word-button"
                                 onClick={async () => {
                                     const response = await fetch(`https://api.datamuse.com/words?sp=${displayedCard.word}&md=d`);
                                     const data = await response.json();
@@ -483,59 +464,29 @@ export default function Game() {
 
     return (
             <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
-                <Box sx={{display: 'flex', flexDirection: 'column', flex: '1'}}>
+                <div className="flex-container" style={{marginTop: '-20px'}}>
                     <div className="card-and-timer-box">
                         {cardComponent}
                         <div className="timer-box">
-                            <div>Timer</div>
-                            <p>
-                            <span id="timer" style={{fontFamily: 'Inter, sans-serif', fontWeight: 'bold', fontSize: '20px'}}>60</span>
-                            </p>
-                            <Divider sx={{
-                                color: 'white',
-                                border: '1px solid white',
-                                width: '80%',
-                                marginBottom: '5px'
-                            }}/>
-                            <div>Score</div>
-                            <div>{scoredPoints}</div>
+                            <div  className="title">Timer</div>
+                            <div className="title" id="timer">60</div>
+                            <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
+                            <div  className="title">Score</div>
+                            <div  className="title">{scoredPoints}</div>
                         </div>
                     </div>
-                    <Box
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexDirection: 'column',
-                                width: '100%',
-                                height: 300,
-                                backgroundColor: '#D1C4E9',
-                                borderRadius: '20px',
-                                border: '1px solid white',
-                                marginTop: '20px',
-                                marginBottom: '20px',
-                                flex: '1',
-                                position: 'relative',
-                            }}>
-                        <Box sx={{
-                            flex: '1',
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            justifyContent: 'flex-start',
-                            flexDirection: 'column',
-                            width: '100%',
-                            paddingTop: '3px',
-                            paddingLeft: '8px',
-                            paddingRight: '8px',
-                        }}>
+                    <div className="chat-components-box">
+                        <div className="chat-box-containing-messages"
+                             style={{height: role === "buzzer" ? '525px' : '539px'}}
+                        >
                             {listChatMessages}
                             <ListItem ref={scrollBottomRef}></ListItem>
-                        </Box>
+                        </div>
                         {sendFields}
-                    </Box>
+                    </div>
                     {buzzerButton}
                     {leaveButton}
-                </Box>
+                </div>
             </div>
     );
 }
