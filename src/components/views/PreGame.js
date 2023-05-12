@@ -43,7 +43,7 @@ const PreGame = () => {
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
 
         pageWebSocket.current.addEventListener("open", () => {
-            let timeLeft = 900; // Set timer to 10 seconds
+            let timeLeft = 10; // Set timer to 10 seconds
             const timerElement = document.getElementById("timer");
       
             // Update timer every second
