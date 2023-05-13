@@ -50,18 +50,20 @@ const Lobby = () => {
 
                 // Display the users in the teams
                 if(lobbyResponse.data.team1.length > 0) {
-                    for(let element of lobbyResponse.data.team1) {
-                        setTeam1Members([...team1Members, {
+                    setTeam1Members(prevState => {
+                        const updatedMembers = lobbyResponse.data.team1.map(element => ({
                             username: element.username
-                        }]);
-                    }
+                        }));
+                        return [...prevState, ...updatedMembers];
+                    });
                 }
                 if(lobbyResponse.data.team2.length > 0) {
-                    for(let element of lobbyResponse.data.team2) {
-                        setTeam2Members([...team2Members, {
+                    setTeam2Members(prevState => {
+                        const updatedMembers = lobbyResponse.data.team2.map(element => ({
                             username: element.username
-                        }]);
-                    }
+                        }));
+                        return [...prevState, ...updatedMembers];
+                    });
                 }
             } catch (error) {
                 console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
