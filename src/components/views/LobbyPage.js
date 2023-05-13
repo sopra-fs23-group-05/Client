@@ -51,16 +51,16 @@ const Lobby = () => {
 
                 // Display the users in the teams
                 if(lobbyResponse.data.team1.length > 0) {
-                    for(let i = 0; i < lobbyResponse.data.team1.length; i++) {
+                    for(let element of lobbyResponse.data.team1) {
                         setTeam1Members([...team1Members, {
-                            username: lobbyResponse.data.team1[i].username
+                            username: element.username
                         }]);
                     }
                 }
                 if(lobbyResponse.data.team2.length > 0) {
-                    for(let i = 0; i < lobbyResponse.data.team2.length; i++) {
+                    for(let element of lobbyResponse.data.team2) {
                         setTeam2Members([...team2Members, {
-                            username: lobbyResponse.data.team2[i].username
+                            username: element.username
                         }]);
                     }
                 }
