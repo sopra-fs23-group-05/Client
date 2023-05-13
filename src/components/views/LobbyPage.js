@@ -265,11 +265,11 @@ const Lobby = () => {
     }
 
     const team1Content = team1Members.map((user, index) => (
-        <div key = {index} className="team-member">{user.username}</div>
+        <div key = {user.username} className="team-member">{user.username}</div>
     ));
 
     const team2Content = team2Members.map((user, index) => (
-        <div key = {index} className="team-member">{user.username}</div>
+        <div key = {user.username} className="team-member">{user.username}</div>
     ));
 
     return (
