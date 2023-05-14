@@ -111,8 +111,8 @@ const PreGame = () => {
     }
 
     return (
-        <div className="homePageRoot">
-            <div className="flex-container">
+        <div className="homePageRoot" style={{justifyContent: 'center'}}>
+            <div className="flex-container" style={{gap: '50px'}}>
             <div className="buttonPanel">
                 <Typography variant="h5" className="title"> Next Round Starts</Typography>
                 <br/>

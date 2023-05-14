@@ -239,7 +239,7 @@ const Settings = () => {
 
                 <Button variant="contained"
                         className="backButton"
-                        style={{marginTop: '-80px'}}
+                        style={{marginTop: '-60px'}}
                         onClick={() => doBack()}
                 >
                     Back

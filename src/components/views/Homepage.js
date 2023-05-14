@@ -32,7 +32,7 @@ const Homepage = () => {
 
     return (
             <div className="homePageRoot">
-                <img className="tabooLogo" src={TabooLogo} alt="Taboo Logo"/>
+                <img className="tabooLogo" src={TabooLogo} style={{marginBottom: '-30px'}} alt="Taboo Logo"/>
                 <div className="buttonPanel">
                     <Button variant="contained"
                             className="button"
