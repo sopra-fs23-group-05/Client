@@ -47,22 +47,23 @@ const Lobby = () => {
                 });
                 setSettings(lobbyResponse.data.settings.topic.toString().toLowerCase());
                 console.log('lobby info:', lobbyResponse.data);
-                console.log('lobby settings', lobbyResponse.data.settings);
 
                 // Display the users in the teams
                 if(lobbyResponse.data.team1.length > 0) {
-                    for(let i = 0; i < lobbyResponse.data.team1.length; i++) {
-                        setTeam1Members([...team1Members, {
-                            username: lobbyResponse.data.team1[i].username
-                        }]);
-                    }
+                    setTeam1Members(prevState => {
+                        const updatedMembers = lobbyResponse.data.team1.map(element => ({
+                            username: element.username
+                        }));
+                        return [...prevState, ...updatedMembers];
+                    });
                 }
                 if(lobbyResponse.data.team2.length > 0) {
-                    for(let i = 0; i < lobbyResponse.data.team2.length; i++) {
-                        setTeam2Members([...team2Members, {
-                            username: lobbyResponse.data.team2[i].username
-                        }]);
-                    }
+                    setTeam2Members(prevState => {
+                        const updatedMembers = lobbyResponse.data.team2.map(element => ({
+                            username: element.username
+                        }));
+                        return [...prevState, ...updatedMembers];
+                    });
                 }
             } catch (error) {
                 console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
@@ -264,12 +265,12 @@ const Lobby = () => {
         );
     }
 
-    const team1Content = team1Members.map((user, index) => (
-        <div key = {index} className="team-member">{user.username}</div>
+    const team1Content = team1Members.map((user) => (
+        <div key = {user.username} className="team-member">{user.username}</div>
     ));
 
-    const team2Content = team2Members.map((user, index) => (
-        <div key = {index} className="team-member">{user.username}</div>
+    const team2Content = team2Members.map((user) => (
+        <div key = {user.username} className="team-member">{user.username}</div>
     ));
 
     return (
