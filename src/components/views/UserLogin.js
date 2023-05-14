@@ -9,6 +9,7 @@ import Lobby from "../../models/Lobby";
 
 const UserLogin = () => {
     const history = useHistory();
+    const ENTER_KEY_CODE = 13;
     const [username, setUsername] = useState(null);
     const leader = false;
     const url = window.location.href;
@@ -32,6 +33,12 @@ const UserLogin = () => {
         localStorage.removeItem('lobbyAccessCode');
         history.push('/homepage');
         window.location.reload();
+    }
+
+    const handleEnterKey = (event) => {
+        if (event.keyCode === ENTER_KEY_CODE) {
+            doLogin();
+        }
     }
 
     const doLogin = async () => {
@@ -87,6 +94,7 @@ const UserLogin = () => {
                         <TextField className="custom-outlined-text-field"
                                    label='Username'
                                    value={username}
+                                   onKeyDown={handleEnterKey}
                                    onChange={handleUsernameChange}
                         >
                         </TextField>

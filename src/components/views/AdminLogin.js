@@ -12,6 +12,7 @@ const AdminLogin = () => {
     const history = useHistory();
     const [username, setUsername] = useState("");
     const leader = true;
+    const ENTER_KEY_CODE = 13;
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value)
@@ -24,6 +25,11 @@ const AdminLogin = () => {
         window.location.reload();
     }
 
+    const handleEnterKey = (event) => {
+        if (event.keyCode === ENTER_KEY_CODE) {
+            doLogin();
+        }
+    }
     const doLogin = async () => {
         try {
             //create user
@@ -84,6 +90,7 @@ const AdminLogin = () => {
                         <TextField className="custom-outlined-text-field"
                                    label='Username'
                                    value={username}
+                                   onKeyDown={handleEnterKey}
                                    onChange={handleUsernameChange}>
                         </TextField>
                         <div className="horizontal-box">
