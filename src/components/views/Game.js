@@ -9,8 +9,9 @@ import {
     Dialog,
     DialogContent,
     DialogContentText,
-    DialogActions
+    DialogActions,
 } from "@mui/material";
+import LogoutIcon from '@mui/icons-material/Logout';
 import SendIcon from '@mui/icons-material/Send';
 import {useEffect, useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
@@ -26,7 +27,7 @@ export default function Game() {
     const userId = localStorage.getItem('token');
     const playerName = localStorage.getItem('userName')
     const [role, setRole] = useState("");
-    const [isLeader, setIsLeader] = useState(false);
+    const [isLeader, setIsLeader] = useState(false); //TODO maybe remove?
 
     useEffect(() => {
         async function fetchData() {
@@ -123,7 +124,7 @@ export default function Game() {
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
 
         webSocket.current.addEventListener("open", () => {
-            let timeLeft = 60; // Set timer to 60 seconds
+            let timeLeft = 900; // Set timer to 60 seconds
             const timerElement = document.getElementById("timer");
       
             // Update timer every second
@@ -438,44 +439,73 @@ export default function Game() {
         );
     }
 
+    let clickOnLeave = (
+            <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
+                <DialogTitle>Leave Game?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenLeave(false)}>Close</Button>
+                    <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
+                </DialogActions>
+            </Dialog>
+    )
 
-    let leaveButton=null;
-    //leave button is not visible for leader
-    if(!isLeader){
-        leaveButton = (
-            <div className="leave-box">
-            <Button variant="contained" className="leaveButton"
+    let timerBox = (
+            <div className="flex-container" style={{gap: '0'}}>
+
+                <div>
+                <Button
                         onClick={() => setOpenLeave(true)}
                 >
-                Leave Game
-            </Button>
+                    <LogoutIcon sx={{color: 'white'}} />
+                </Button>
+                {clickOnLeave}
+                </div>
 
-            <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
-            <DialogTitle>Leave Game?</DialogTitle>
-            <DialogContent>
-                <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={() => setOpenLeave(false)}>Close</Button>
-                <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
-            </DialogActions>
-            </Dialog>
+                <div className="timer-box">
+                    <div  className="title">Timer</div>
+                    <div className="title" id="timer">60</div>
+                    <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
+                    <div  className="title">Score</div>
+                    <div  className="title">{scoredPoints}</div>
+                </div>
+
             </div>
-        )
+    );
+
+    if (role === "guesser") {
+        timerBox =
+                <div className="horizontal-box" style={{justifyContent: 'space-between'}}>
+
+                    <div className="timer-box">
+                        <div  className="title">Timer</div>
+                        <div className="title" id="timer">60</div>
+                        <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
+                        <div  className="title">Score</div>
+                        <div  className="title">{scoredPoints}</div>
+                    </div>
+
+                    <div>
+                    <Button style={{marginTop: '-80px'}}
+                        onClick={() => setOpenLeave(true)}
+                    >
+                        <LogoutIcon sx={{color: 'white'}}/>
+                    </Button>
+                    {clickOnLeave}
+                    </div>
+
+                </div>
     }
+
 
     return (
             <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
                 <div className="flex-container" style={{marginTop: '-20px'}}>
                     <div className="card-and-timer-box">
                         {cardComponent}
-                        <div className="timer-box">
-                            <div  className="title">Timer</div>
-                            <div className="title" id="timer">60</div>
-                            <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
-                            <div  className="title">Score</div>
-                            <div  className="title">{scoredPoints}</div>
-                        </div>
+                        {timerBox}
                     </div>
                     <div className="chat-components-box">
                         <div className="chat-box-containing-messages"
@@ -487,7 +517,6 @@ export default function Game() {
                         {sendFields}
                     </div>
                     {buzzerButton}
-                    {leaveButton}
                 </div>
             </div>
     );
