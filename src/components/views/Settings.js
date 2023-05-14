@@ -60,24 +60,10 @@ const Settings = () => {
     return (
             <div className="settingsRoot" style={{overflowY: 'scroll'}}>
 
-                <h1 style={{
-                    color: 'white',
-                    marginTop: '1500px',
-                    marginRight: '150px',
-                    fontFamily: 'Inter, sans-serif',
-                    fontWeight: '600',
-                    fontSize: '40px'
-                }}>Settings</h1>
-                <Container sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                    <Box className="inputBox" sx={{marginTop: '-120px'}}>
-                        <Typography variant="h6" sx={{
-                            color: 'white',
-                            mb: 1,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: '600',
-                            fontSize: '24px',
-                            textShadow: '2px 2px 4px rgba(0,0,0,0.4)'
-                        }}>Number of Rounds</Typography>
+                <h1 className="settings-title">Settings</h1>
+                <Container className="settings-container">
+                    <Box className="inputBox" sx={{marginTop: '-115px'}}>
+                        <Typography variant="h6" className="typography">Number of Rounds</Typography>
                         <TextField
                                 className='textField'
                                 id='outlined-basic'
@@ -90,7 +76,8 @@ const Settings = () => {
 
                         <Box className="saveBox">
                             <div></div>
-                            <Button variant="contained" className="saveButton"
+                            <Button variant="contained"
+                                    className="saveButton"
                                     onClick={() => doSave()}
                             >
                                 Save
@@ -98,16 +85,9 @@ const Settings = () => {
                         </Box>
                     </Box>
                 </Container>
-                <Container sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                    <Box className="inputBox" sx={{marginTop: '-50px'}}>
-                        <Typography variant="h6" sx={{
-                            color: 'white',
-                            mb: 1,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: '600',
-                            fontSize: '24px',
-                            textShadow: '2px 2px 4px rgba(0,0,0,0.4)'
-                        }}>Time Per Round</Typography>
+                <Container className="settings-container">
+                    <Box className="inputBox" sx={{marginTop: '-85px'}}>
+                        <Typography variant="h6" className="typography">Time Per Round</Typography>
                         <TextField
                                 className='textField'
                                 id='outlined-basic'
@@ -127,28 +107,21 @@ const Settings = () => {
                         </Box>
                     </Box>
                 </Container>
-                <Button variant="contained" className="backButton"
+                <Button variant="contained"
+                        className="backButton"
+                        style={{marginTop: '-80px'}}
                         onClick={() => doBack()}
                 >
                     Back
                 </Button>
 
-                <h1 style={{
-                    color: 'white',
-                    marginTop: '-50px',
-                    marginBottom: '-20px',
-                    fontFamily: 'Inter, sans-serif',
-                    fontWeight: '600',
-                    fontSize: '40px'
-                }}>Topic of Words</h1>
+                <h1 className="settings-title" style={{fontSize: '38px', marginTop: '-50px', marginRight: '0px'}}>Topic of Words</h1>
 
 
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <Button variant="contained" className="topicsButton" style={{
-                        backgroundColor: '#d68042',
-                        boxShadow: topic === "ANIMALS" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 10px -30px 0px'
-                    }}
+                <div className="topic-row" style={{marginTop: '-70px'}}>
+                    <Button variant="contained"
+                            className="left-topicsButton"
+                            style={{backgroundColor: '#d68042', boxShadow: topic === "ANIMALS" ? "0 0 50px 0 #FFF" : ""}}
                             onClick={() => handleTopicsChange("ANIMALS")}
                     >
                         <h1>
@@ -156,11 +129,9 @@ const Settings = () => {
                         </h1>
                     </Button>
 
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#EA4848',
-                        boxShadow: topic === "CARS" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 0 -30px 10px'
-                    }}
+                    <Button variant="contained"
+                            className='right-topicsButton'
+                            style={{backgroundColor: '#EA4848', boxShadow: topic === "CARS" ? "0 0 50px 0 #FFF" : "",}}
                             onClick={() => handleTopicsChange("CARS")}
                     >
                         <h1>
@@ -168,12 +139,11 @@ const Settings = () => {
                         </h1>
                     </Button>
                 </div>
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#e5e833',
-                        boxShadow: topic === "CITY" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 10px -30px 0px'
-                    }}
+
+                <div className="topic-row">
+                    <Button variant="contained"
+                            className='left-topicsButton'
+                            style={{backgroundColor: '#e5e833', boxShadow: topic === "CITY" ? "0 0 50px 0 #FFF" : ""}}
                             onClick={() => handleTopicsChange("CITY")}
                     >
                         <h1>
@@ -182,11 +152,9 @@ const Settings = () => {
                         </h1>
                     </Button>
 
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#ff8b26',
-                        boxShadow: topic === "FOOD" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 0 -30px 10px'
-                    }}
+                    <Button variant="contained"
+                            className='right-topicsButton'
+                            style={{backgroundColor: '#ff8b26', boxShadow: topic === "FOOD" ? "0 0 50px 0 #FFF" : ""}}
                             onClick={() => handleTopicsChange("FOOD")}
                     >
                         <h1>
@@ -195,23 +163,19 @@ const Settings = () => {
                     </Button>
                 </div>
 
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#4D7CF3',
-                        boxShadow: topic === "PEOPLE" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 10px -30px 0px'
-                    }}
+                <div className="topic-row">
+                    <Button variant="contained"
+                            className='left-topicsButton'
+                            style={{backgroundColor: '#4D7CF3', boxShadow: topic === "PEOPLE" ? "0 0 50px 0 #FFF" : ""}}
                             onClick={() => handleTopicsChange("PEOPLE")}
                     >
                         <h1>
                             Famous People
                         </h1>
                     </Button>
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#C660F6',
-                        boxShadow: topic === "THINGS" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 0 -30px 10px'
-                    }}
+                    <Button variant="contained"
+                            className='right-topicsButton'
+                            style={{backgroundColor: '#C660F6', boxShadow: topic === "THINGS" ? "0 0 50px 0 #FFF" : ""}}
                             onClick={() => handleTopicsChange("THINGS")}
                     >
                         <h1>
@@ -220,13 +184,10 @@ const Settings = () => {
                     </Button>
                 </div>
 
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#a32a49',
-                        boxShadow: topic === "LITERATURE" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 10px -30px 0px'
-                    }}
+                <div className="topic-row">
+                    <Button variant="contained"
+                            className='left-topicsButton'
+                            style={{backgroundColor: '#a32a49', boxShadow: topic === "LITERATURE" ? "0 0 50px 0 #FFF" : ""}}
                             onClick={() => handleTopicsChange("LITERATURE")}
                     >
                         <h1>
@@ -234,11 +195,9 @@ const Settings = () => {
                         </h1>
                     </Button>
 
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#69db4d',
-                        boxShadow: topic === "SPORTS" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 0 -30px 10px'
-                    }}
+                    <Button variant="contained"
+                            className='right-topicsButton'
+                            style={{backgroundColor: '#69db4d', boxShadow: topic === "SPORTS" ? "0 0 50px 0 #FFF" : ""}}
                             onClick={() => handleTopicsChange("SPORTS")}
                     >
                         <h1>
@@ -247,13 +206,10 @@ const Settings = () => {
                     </Button>
                 </div>
 
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#C1BACB',
-                        boxShadow: topic === "TV" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 10px -30px 0px'
-                    }}
+                <div className="topic-row">
+                    <Button variant="contained"
+                            className='left-topicsButton'
+                            style={{backgroundColor: '#C1BACB', boxShadow: topic === "TV" ? "0 0 50px 0 #FFF" : ""}}
                             onClick={() => handleTopicsChange("TV")}
                     >
                         <h1>
@@ -262,11 +218,9 @@ const Settings = () => {
                     </Button>
 
 
-                    <Button variant="contained" className='topicsButton' style={{
-                        backgroundColor: '#42dbdb',
-                        boxShadow: topic === "WEB" ? "0 0 50px 0 #FFF" : "",
-                        margin: '-30px 0 -30px 10px'
-                    }}
+                    <Button variant="contained"
+                            className='right-topicsButton'
+                            style={{backgroundColor: '#42dbdb', boxShadow: topic === "WEB" ? "0 0 50px 0 #FFF" : ""}}
                             onClick={() => handleTopicsChange("WEB")}
                     >
                         <h1>
@@ -274,12 +228,18 @@ const Settings = () => {
                         </h1>
                     </Button>
                 </div>
-                <Button variant="contained" className="backButton"
+
+                <Button variant="contained"
+                        className="backButton"
+                        style={{marginTop: '-40px'}}
                         onClick={() => doSave()}
                 >
                     Save
                 </Button>
-                <Button variant="contained" className="backButton"
+
+                <Button variant="contained"
+                        className="backButton"
+                        style={{marginTop: '-80px'}}
                         onClick={() => doBack()}
                 >
                     Back
