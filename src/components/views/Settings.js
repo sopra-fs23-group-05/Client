@@ -1,7 +1,7 @@
 import {api} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Settings.scss';
-import {Container, TextField, Button, Typography, Box} from "@mui/material";
+import {Container, Button, Typography, Box, Slider} from "@mui/material";
 import {useEffect, useState} from "react";
 
 
@@ -61,17 +61,20 @@ const Settings = () => {
             <div className="settingsRoot" style={{overflowY: 'scroll'}}>
 
                 <h1 className="settings-title">Settings</h1>
+
                 <Container className="settings-container">
                     <Box className="inputBox" sx={{marginTop: '-115px'}}>
                         <Typography variant="h6" className="typography">Number of Rounds</Typography>
-                        <TextField
-                                className='textField'
-                                id='outlined-basic'
-                                value={rounds}
+                        <Slider
+                                defaultValue={7}
+                                min={3}
+                                max={20}
+                                valueLabelDisplay="auto"
+                                aria-label="Small"
                                 onChange={handleRoundsChange}
-                                variant='outlined'
-                                InputLabelProps={{className: 'input'}}
-                                InputProps={{className: 'input'}}
+                                sx={{
+                                    color: '#7f5dab'
+                                }}
                         />
 
                         <Box className="saveBox">
@@ -85,6 +88,7 @@ const Settings = () => {
                         </Box>
                     </Box>
                 </Container>
+
                 <Container className="settings-container">
                     <Box className="inputBox" sx={{marginTop: '-85px'}}>
                         <Typography variant="h6" className="typography">Time Per Round</Typography>
@@ -92,11 +96,20 @@ const Settings = () => {
                                 className='textField'
                                 id='outlined-basic'
                                 value={roundTime}
+
+                        <Slider
+                                defaultValue={60}
+                                min={30}
+                                max={180}
+                                step={5}
+                                valueLabelDisplay="auto"
+                                aria-label="Small"
                                 onChange={handleTimeChange}
-                                variant='outlined'
-                                InputLabelProps={{className: 'input'}}
-                                InputProps={{className: 'input'}}
+                                sx={{
+                                    color: '#7f5dab'
+                                }}
                         />
+
                         <Box className="saveBox">
                             <div></div>
                             <Button variant="contained" className="saveButton"
@@ -107,6 +120,7 @@ const Settings = () => {
                         </Box>
                     </Box>
                 </Container>
+
                 <Button variant="contained"
                         className="backButton"
                         style={{marginTop: '-80px'}}
@@ -116,7 +130,6 @@ const Settings = () => {
                 </Button>
 
                 <h1 className="settings-title" style={{fontSize: '38px', marginTop: '-50px', marginRight: '0px'}}>Topic of Words</h1>
-
 
                 <div className="topic-row" style={{marginTop: '-70px'}}>
                     <Button variant="contained"
