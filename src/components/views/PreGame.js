@@ -1,10 +1,10 @@
-import {Box} from "@mui/material";
+import {Typography} from "@mui/material";
 import 'styles/views/PreGame.scss';
-
 import {useHistory} from 'react-router-dom';
 import {useEffect, useRef, useState} from "react";
 import {api} from "../../helpers/api";
 import {getWebSocketDomain} from "../../helpers/getDomain";
+import Button from "@mui/material/Button";
 
 
 const PreGame = () => {
@@ -95,56 +95,53 @@ const PreGame = () => {
         }
     }, [history]);
 
+    const [definition, setDefinition] = useState("");
+
+    const showDefinition = () => {
+        if (definition === "") {
+            if (role.toString().toLowerCase() === "cluegiver") {
+                setDefinition("Describe the word without using the word itself or any of the listed taboo words.");
+            } else if (role.toString().toLowerCase() === "buzzer") {
+                setDefinition("Click the buzzer button if the Clue-Giver does not follow the rules of the game")
+            } else if (role.toString().toLowerCase() === "guesser") {
+                setDefinition("Guess the word the Clue-Giver is trying to describe")
+            }
+        }
+        else {setDefinition("")}
+    }
+
     return (
-        <div className="homePageRoot"
-             style={{
-                 display: 'flex',
-                 justifyContent: 'center',
-                 alignItems: 'center',
-                 width: '100%',
-                 height: "100%",
-             }}>
-            <Box sx={{
-                display: 'flex',
-                alignItems: "center",
-                justifyContent: 'center',
-                flexDirection: 'column',
-                width: '100%',
-                height: "100%",
-                backgroundColor: '#D1C4E9',
-                borderRadius: '20px',
-                border: '1px solid white'
-            }}
-            ><h2 className="h2"> round starts in:</h2>
-                <p>
-                <span id="timer" style={{fontFamily: 'Inter, sans-serif', fontWeight: 'bold', fontSize: '50px'}}>10</span>
-                </p>
-                <h2 className="h2"> your role:</h2>
-                <h2 className="role"> {role}</h2>
-            </Box>
-            <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                width: '100%',
-                height: "100%",
-                backgroundColor: '#D1C4E9',
-                borderRadius: '20px',
-                border: '1px solid white'
-            }}
-            >
-                <h1 className="score">Score</h1>
-                <h2 className="team">Team 1: {team1}</h2>
-                <h2 className="team">Team 2: {team2}</h2>
-            </Box>
+        <div className="homePageRoot" style={{justifyContent: 'center'}}>
+            <div className="flex-container" style={{gap: '50px'}}>
+            <div className="buttonPanel">
+                <Typography variant="h5" className="title"> Next Round Starts</Typography>
+                <br/>
+                <Typography variant="h4" id="timer" className="title">10</Typography>
+            </div>
+            <div className="buttonPanel">
+                <Typography variant="h5" className="title"> Your Next Role</Typography>
+                <br/>
+                <Typography variant="h5" className="title">{role}</Typography>
+                <br/>
+                <Button variant="contained"
+                        className="buttonLogin"
+                        onClick={showDefinition}
+                >
+                    What Do I Do?
+                </Button>
+                <br/>
+                <Typography variant="h8" className="title" style={{fontStyle: 'italic'}}>{definition}</Typography>
+            </div>
+            <div className="buttonPanel">
+                <Typography variant="h5" className="title">Team Scores</Typography>
+                <br/>
+                <Typography variant="h5" className="title" style={{alignSelf: "flex-start"}}>Team 1:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{team1}</Typography>
+                <Typography variant="h5" className="title" style={{alignSelf: "flex-start"}}>Team 2:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{team2}</Typography>
+            </div>
+            </div>
         </div>
     );
 
 };
 
-/**
- * You can get access to the history object's properties via the withRouter.
- * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
- */
 export default PreGame;
