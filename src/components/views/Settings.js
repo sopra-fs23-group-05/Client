@@ -92,10 +92,6 @@ const Settings = () => {
                 <Container className="settings-container">
                     <Box className="inputBox" sx={{marginTop: '-85px'}}>
                         <Typography variant="h6" className="typography">Time Per Round</Typography>
-                        <TextField
-                                className='textField'
-                                id='outlined-basic'
-                                value={roundTime}
 
                         <Slider
                                 defaultValue={60}
