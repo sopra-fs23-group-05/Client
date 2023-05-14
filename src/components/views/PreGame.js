@@ -16,6 +16,8 @@ const PreGame = () => {
     const [team1, setTeam1] = useState(null);
     const [team2, setTeam2] = useState(null);
     const pageWebSocket = useRef(null);
+    const preGameWebSocket = useRef(null);
+    const [timer, setTimer] = useState(10);
 
     useEffect(() => {
         async function fetchData() {
@@ -40,40 +42,27 @@ const PreGame = () => {
     // WebSocket code
     useEffect(() => {
         console.log('Opening Page WebSocket');
-        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
+        console.log('Opening PreGame WebSocket');
+        preGameWebSocket.current = new WebSocket(getWebSocketDomain() + '/pregame/' + accessCode);
 
-        pageWebSocket.current.addEventListener("open", () => {
-            let timeLeft = 10; // Set timer to 10 seconds
-            const timerElement = document.getElementById("timer");
-      
-            // Update timer every second
-            const timerInterval = setInterval(() => {
-              // Display time remaining
-              timerElement.innerText = timeLeft;
-      
-              // Decrease time remaining
-              timeLeft--;
-      
-              // If timer reaches 0, stop timer and close websocket
-              if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                changePage(`games/${accessCode}`);
-                }
-            }, 1000);
-          });
 
         const openWebSocket = () => {
             pageWebSocket.current.onopen = (event) => {
                 console.log('Open Page WebSocket:', event);
+                console.log('Open PreGame WebSocket:', event);
             }
             pageWebSocket.current.onclose = (event) => {
                 console.log('Close Page WebSocket:', event);
+                console.log('Close PreGame WebSocket:', event);
             }
         }
         openWebSocket();
         return () => {
             console.log('Closing Page WebSocket');
             pageWebSocket.current.close();
+            console.log('Closing PreGame WebSocket');
+            preGameWebSocket.current.close();
         }
     }, []);
 
@@ -94,6 +83,17 @@ const PreGame = () => {
             history.push(IncomingMessage.url);
         }
     }, [history]);
+
+    useEffect(() => {
+        preGameWebSocket.current.onmessage = (event) => {
+            const TimerMessage = JSON.parse(event.data);
+            console.log('Received Timer Message:', TimerMessage);
+            setTimer(TimerMessage);
+            if (TimerMessage === 0) {
+                changePage(`games/${accessCode}`);
+            }
+        }
+    },[timer]);
 
     return (
         <div className="homePageRoot"
@@ -117,7 +117,7 @@ const PreGame = () => {
             }}
             ><h2 className="h2"> round starts in:</h2>
                 <p>
-                <span id="timer" style={{fontFamily: 'Inter, sans-serif', fontWeight: 'bold', fontSize: '50px'}}>10</span>
+                <span style={{fontFamily: 'Inter, sans-serif', fontWeight: 'bold', fontSize: '50px'}}>{timer}</span>
                 </p>
                 <h2 className="h2"> your role:</h2>
                 <h2 className="role"> {role}</h2>
