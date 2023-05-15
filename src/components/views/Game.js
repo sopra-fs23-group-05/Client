@@ -59,16 +59,26 @@ export default function Game() {
     const [message, setMessage] = useState('');
     let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
+    const [team1Players, setTeam1Players] = useState([]);
+    const [team2Players, setTeam2Players] = useState([]);
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
     const messageType = role === "cluegiver" ? "description" : "guess";
 
     const doLeave = async () => {
-        await api.delete(`/games/${accessCode}/${playerName}`);
+        const responseGame = await api.get(`/games/${accessCode}`);
+        setTeam1Players(responseGame.data.team1.players);
+        setTeam2Players(responseGame.data.team2.players);
         localStorage.removeItem('lobbyAccessCode');
         localStorage.removeItem('token');
         localStorage.removeItem('userName')
-        history.push('/homepage');
-        window.location.reload();
+        if(team1Players.length < 2 || team2Players.length < 2){
+            changePage(`/homepage`);
+            await api.delete(`/games/${accessCode}/${playerName}`);
+        }
+        else{
+            history.push('/homepage');
+            window.location.reload();
+        }
     }
 
     const updateTeamScore = async (scoredPoints) => {
