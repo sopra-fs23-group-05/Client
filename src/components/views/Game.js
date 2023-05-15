@@ -125,7 +125,7 @@ export default function Game() {
         console.log('Opening Page WebSocket');
         webSocket.current = new WebSocket(getWebSocketDomain() + '/chat/' + accessCode);
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
-        timerWebSocket.current = new WebSocket(getWebSocketDomain() + '/timer/' + accessCode);
+        timerWebSocket.current = new WebSocket(getWebSocketDomain() + '/timers/' + accessCode);
 
 
         const openWebSocket = () => {

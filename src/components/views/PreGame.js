@@ -16,7 +16,7 @@ const PreGame = () => {
     const [team1, setTeam1] = useState(null);
     const [team2, setTeam2] = useState(null);
     const pageWebSocket = useRef(null);
-    const preGameWebSocket = useRef(null);
+    const preGameTimerWebSocket = useRef(null);
     const [timer, setTimer] = useState(10);
 
     useEffect(() => {
@@ -44,8 +44,7 @@ const PreGame = () => {
         console.log('Opening Page WebSocket');
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
         console.log('Opening PreGame WebSocket');
-        preGameWebSocket.current = new WebSocket(getWebSocketDomain() + '/pregame/' + accessCode);
-
+        preGameTimerWebSocket.current = new WebSocket(getWebSocketDomain() + '/pregameTimers/' + accessCode);
 
         const openWebSocket = () => {
             pageWebSocket.current.onopen = (event) => {
@@ -62,7 +61,7 @@ const PreGame = () => {
             console.log('Closing Page WebSocket');
             pageWebSocket.current.close();
             console.log('Closing PreGame WebSocket');
-            preGameWebSocket.current.close();
+            preGameTimerWebSocket.current.close();
         }
     }, []);
 
@@ -85,7 +84,7 @@ const PreGame = () => {
     }, [history]);
 
     useEffect(() => {
-        preGameWebSocket.current.onmessage = (event) => {
+        preGameTimerWebSocket.current.onmessage = (event) => {
             const TimerMessage = JSON.parse(event.data);
             console.log('Received Timer Message:', TimerMessage);
             setTimer(TimerMessage);
