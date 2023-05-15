@@ -62,7 +62,8 @@ export default function Game() {
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
     const messageType = role === "cluegiver" ? "description" : "guess";
 
-    const doLeave = () => {
+    const doLeave = async () => {
+        await api.delete(`/games/${accessCode}/${playerName}`);
         localStorage.removeItem('lobbyAccessCode');
         localStorage.removeItem('token');
         localStorage.removeItem('userName')
