@@ -73,8 +73,16 @@ const Endscreen = () => {
                 setLeader(userResponse.data.leader);
                 if (team1Points > team2Points) {
                     setWinner(1)
-                } else {
+                } else if(team1Points < team2Points){
                     setWinner(2);
+                }
+                else{
+                    if(team1Players.length < 2){
+                        setWinner(2);
+                    }
+                    else if(team2Players.length < 2){
+                        setWinner(1);
+                    }
                 }
                 const responsePlayer = await api.get(`/games/${accessCode}/players/MVP`);
                 console.log(responsePlayer);
