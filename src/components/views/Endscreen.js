@@ -69,9 +69,9 @@ const Endscreen = () => {
                 setTeam1Players(responseGame.data.team1.players);
                 setTeam2Players(responseGame.data.team2.players);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
-                if (responseGame.data.leader===localStorage.getItem('userName')){
-                    setLeader(true);
-                }
+                const userId = localStorage.getItem('token');
+                const userResponse = await api.get(`/users/${userId}`);
+                setLeader(userResponse.data.leader);
                 if (team1Points > team2Points) {
                     setWinner(1)
                 } else {
