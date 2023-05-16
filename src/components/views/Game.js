@@ -53,6 +53,7 @@ export default function Game() {
     const webSocket = useRef(null);
     const cardWebSocket = useRef(null);
     const pageWebSocket = useRef(null);
+    const timerWebSocket = useRef(null);
     const [chatMessages, setChatMessages] = useState([]);
     // Activate the following line as soon as the actual user is obtained from the backend.
     // const [user, setUser] = useState('');
@@ -60,7 +61,10 @@ export default function Game() {
     let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
+
+    const [timer, setTimer] = useState(null);
     const messageType = role === "cluegiver" ? "description" : "guess";
+
 
     const doLeave = () => {
         localStorage.removeItem('lobbyAccessCode');
@@ -119,46 +123,21 @@ export default function Game() {
     useEffect(() => {
         console.log('Opening Chat WebSocket');
         console.log('Opening Page WebSocket');
-        webSocket.current = new WebSocket(getWebSocketDomain() + '/chat');
-        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
-
-        webSocket.current.addEventListener("open", () => {
-            let timeLeft = 60; // Set timer to 60 seconds
-            const timerElement = document.getElementById("timer");
-      
-            // Update timer every second
-            const timerInterval = setInterval(() => {
-              // Display time remaining
-              timerElement.innerText = timeLeft;
-      
-              // Decrease time remaining
-              timeLeft--;
-              // If timer reaches 0, stop timer and close websocket
-              if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                webSocket.current.close();
-                if (roundsPlayed <= rounds) {
-                  updateTeamScore(scoredPoints);
-                  //TODO: fix changePage
-                  changePage(`/games/${accessCode}/pregame`);
-                } else{
-                  updateTeamScore(scoredPoints);
-                  //TODO: fix changePage
-                  changePage(`/games/${accessCode}/endscreen`);
-                }
-              }
-            }, 1000);
-          });
+        webSocket.current = new WebSocket(getWebSocketDomain() + '/chat/' + accessCode);
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
+        timerWebSocket.current = new WebSocket(getWebSocketDomain() + '/timers/' + accessCode);
 
 
         const openWebSocket = () => {
             webSocket.current.onopen = (event) => {
                 console.log('Open Chat WebSocket:', event);
                 console.log('Open Page WebSocket:', event);
+                console.log('Open Timer WebSocket:', event);
             }
             webSocket.current.onclose = (event) => {
                 console.log('Close Chat WebSocket:', event);
                 console.log('Close Page WebSocket:', event);
+                console.log('Close Timer WebSocket:', event);
             }
         }
         openWebSocket();
@@ -167,8 +146,10 @@ export default function Game() {
             webSocket.current.close();
             console.log('Closing Page WebSocket');
             pageWebSocket.current.close();
+            console.log('Closing Timer WebSocket');
+            timerWebSocket.current.close();
         }
-    }, []);
+    }, [accessCode]);
 
     // Card websocket code
     const sendCardMessage = () => {
@@ -184,7 +165,7 @@ export default function Game() {
     // Card websocket code
     useEffect(() => {
         console.log('Opening Card WebSocket');
-        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards');
+        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards/' + accessCode);
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
@@ -199,7 +180,7 @@ export default function Game() {
             console.log('Closing Card WebSocket');
             cardWebSocket.current.close();
         }
-    }, []);
+    }, [accessCode]);
 
     // Websocket code
     useEffect(() => {
@@ -298,6 +279,27 @@ export default function Game() {
             history.push(IncomingMessage.url);
         }
     }, [history]);
+
+    // Timer WebSocket code
+    useEffect(() => {
+        timerWebSocket.current.onmessage = (event) => {
+            const TimerMessage = JSON.parse(event.data);
+            console.log('Received Timer Message:', TimerMessage);
+            setTimer(TimerMessage);
+            if (TimerMessage === 0) {
+                webSocket.current.close();
+                if (roundsPlayed <= rounds) {
+                    updateTeamScore(scoredPoints);
+                    //TODO: fix changePage
+                    changePage(`/games/${accessCode}/pregame`);
+                } else {
+                    updateTeamScore(scoredPoints);
+                    //TODO: fix changePage
+                    changePage(`/games/${accessCode}/endscreen`);
+                }
+            }
+        }
+    }, [timer,accessCode,roundsPlayed,rounds,updateTeamScore,changePage, scoredPoints]);
 
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components
@@ -471,7 +473,7 @@ export default function Game() {
                         {cardComponent}
                         <div className="timer-box">
                             <div  className="title">Timer</div>
-                            <div className="title" id="timer">60</div>
+                            <div className="title">{timer}</div>
                             <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
                             <div  className="title">Score</div>
                             <div  className="title">{scoredPoints}</div>
