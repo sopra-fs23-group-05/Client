@@ -137,9 +137,9 @@ export default function Game() {
     useEffect(() => {
         console.log('Opening Chat WebSocket');
         console.log('Opening Page WebSocket');
-        webSocket.current = new WebSocket(getWebSocketDomain() + '/chat/' + accessCode);
-        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
-        timerWebSocket.current = new WebSocket(getWebSocketDomain() + '/timers/' + accessCode);
+        webSocket.current = new WebSocket(getWebSocketDomain() + '/chat' );
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages' );
+        timerWebSocket.current = new WebSocket(getWebSocketDomain() + '/timers' );
 
 
         const openWebSocket = () => {
@@ -179,7 +179,7 @@ export default function Game() {
     // Card websocket code
     useEffect(() => {
         console.log('Opening Card WebSocket');
-        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards/' + accessCode);
+        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards' );
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
@@ -194,7 +194,7 @@ export default function Game() {
             console.log('Closing Card WebSocket');
             cardWebSocket.current.close();
         }
-    }, [accessCode]);
+    }, []);
 
     // Websocket code
     useEffect(() => {

@@ -91,9 +91,9 @@ const Lobby = () => {
     // WebSocket code
     useEffect(() => {
         console.log('Opening Team WebSocket');
-        teamWebSocket.current = new WebSocket(getWebSocketDomain() + '/teams/' + accessCode);
+        teamWebSocket.current = new WebSocket(getWebSocketDomain() + '/teams');
         console.log('Opening Page WebSocket');
-        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
         const openWebSocket = () => {
             teamWebSocket.current.onopen = (event) => {
                 console.log('Open Team WebSocket:', event);
