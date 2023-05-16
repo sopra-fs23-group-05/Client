@@ -4,7 +4,6 @@ import {useHistory} from 'react-router-dom';
 import 'styles/views/Homepage.scss';
 import TabooLogo from './TabooLogo.png';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
 
 
 const Homepage = () => {
@@ -33,34 +32,27 @@ const Homepage = () => {
 
     return (
             <div className="homePageRoot">
-                <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
-                <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}
-                >
-                    <div className="buttonPanel">
-                        <Button variant="contained"
-                                className="button"
-                                onClick={() => doCreate()}
-                        >
-                            Create Lobby
-                        </Button>
-                        <Button variant="contained"
-                                className="button"
-                                onClick={() => doJoin()}
-                        >
-                            Join Lobby
-                        </Button>
-                        <Button variant="contained"
-                                className="button"
-                                onClick={() => doRules()}
-                        >
-                            Rules
-                        </Button>
-                    </div>
-                </Box>
+                <img className="tabooLogo" src={TabooLogo} style={{marginBottom: '-30px'}} alt="Taboo Logo"/>
+                <div className="buttonPanel">
+                    <Button variant="contained"
+                            className="button"
+                            onClick={() => doCreate()}
+                    >
+                        Create Lobby
+                    </Button>
+                    <Button variant="contained"
+                            className="button"
+                            onClick={() => doJoin()}
+                    >
+                        Join Lobby
+                    </Button>
+                    <Button variant="contained"
+                            className="button"
+                            onClick={() => doRules()}
+                    >
+                        Rules
+                    </Button>
+                </div>
             </div>
     );
 };

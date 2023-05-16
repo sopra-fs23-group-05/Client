@@ -2,9 +2,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    overflow: auto;
+    justify-content: space-between;
+    width: 370px;
 }
 
 .card-box {
@@ -15,14 +14,9 @@
     background-color: #b699db;
     border-radius: 20px;
     border: 1px solid white;
-    max-width: 100%;
-    max-height: 100%;
-    margin-right: 20px;
-}
-
-.card-box > * {
-    flex: 1 1 auto;
-    margin: 0 10px;
+    width: 278px;
+    max-width: 278px;
+    height: 100%;
 }
 
 .side-box {
@@ -32,8 +26,10 @@
     justify-content: space-evenly;
     height: 150px;
     width: fit-content;
-    overflow: auto;
     color: white;
+    max-width: 139px;
+    flex: 1 1 auto;
+    margin: 0 10px;
 }
 .leave-box {
     display: flex;
@@ -52,11 +48,11 @@
     justify-content: center;
     flex-direction: column;
     width: 75px;
-    height: 150px;
+    height: 120px;
+    margin-top: auto;
     background-color: #b699db;
     border-radius: 20px;
     border: 1px solid white;
-
     color: white;
 }
 
@@ -80,3 +76,78 @@
     border-radius: 15px;
     flex: 1;
 }
+
+.chat-components-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 370px;
+    max-width: 379px;
+    height: 300px;
+    background-color: #D1C4E9;
+    border-radius: 20px;
+    border: 1px solid white;
+    flex: 1;
+    position: relative;
+}
+
+.chat-box-containing-messages {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 100%;
+    padding: 3px 8px 0 8px;
+    height: 450px;
+    overflow-y: auto;
+}
+
+.chat-message-line {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    margin-top: 5px;
+}
+
+.send-fields {
+    display: flex;
+    align-self: flex-end;
+    margin: 5px;
+    width: 98%;
+}
+
+.MuiButton-root.skip-button {
+    width: fit-content;
+    height: 30px;
+    margin-inline: 3px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background-color: red;
+    color: white;
+    font-weight: 400;
+    font-family: Inter, sans-serif;
+}
+.MuiButton-root.skip-button:active {
+    background-color: darkred;
+}
+.MuiButton-root.skip-button:hover {
+    background-color: darkred;
+}
+
+.MuiButton-root.word-button {
+    width: fit-content;
+    height: fit-content;
+    margin-inline: 3px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background-color: green;
+    color: white;
+    font-weight: 400;
+    font-family: Inter, sans-serif;
+}
+.MuiButton-root.word-button:active {
+    background-color: darkgreen;
+}
+.MuiButton-root.word-button:hover {
+    background-color: darkgreen;
+}
+

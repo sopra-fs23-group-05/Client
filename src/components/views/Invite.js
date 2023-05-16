@@ -21,31 +21,11 @@ const Invite = () => {
     return (
             <div className="inviteRoot" style={{overflowY: 'scroll'}}>
 
-                <h1 style={{
-                    color: 'white',
-                    fontFamily: 'Inter, sans-serif',
-                    fontWeight: '600',
-                    fontSize: '40px',
-                    marginTop: '100px'
-                }}>Invite To Lobby</h1>
-                <h1 style={{
-                    color: 'white',
-                    fontFamily: 'Inter, sans-serif',
-                    fontWeight: '600',
-                    fontSize: '30px',
-                    marginTop: '-100px',
-                    marginBottom: '20px'
-                }}>Access Code: {accessCode}</h1>
-                <Container sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                    <Box className="qrCodeBox" sx={{marginTop: '-120px'}}>
-                        <Typography variant="h6" sx={{
-                            color: 'black',
-                            mb: 1,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: '600',
-                            fontSize: '24px',
-                            textAlign: 'center'
-                        }}>Send this invite link to your friends</Typography>
+                <h1 className="title" style={{marginTop: '-50px'}}>Invite To Lobby</h1>
+                <h1 className="title" style={{fontSize: '30px', marginTop: '-100px'}}>Access Code: {accessCode}</h1>
+                <Container className="flex-container">
+                    <Box className="qrCodeBox" sx={{marginTop: '-110px'}}>
+                        <Typography variant="h6" className="qr-typography">Send this invite link to your friends</Typography>
                         <Button
                                 variant="contained"
                                 className="saveButton"
@@ -53,22 +33,10 @@ const Invite = () => {
                         >
                             Copy Invite Link
                         </Button>
-                        <Typography variant="h6" sx={{
-                            color: 'black',
-                            mb: 1,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: '600',
-                            fontSize: '24px'
-                        }}>
+                        <Typography variant="h6" className="qr-typography">
                             <hr style={{borderTop: '1px solid black', width: '150px', marginTop: '30px'}}/>
                         </Typography>
-                        <Typography variant="h6" sx={{
-                            color: 'black',
-                            mb: 1,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: '600',
-                            fontSize: '24px'
-                        }}>Scan QR Code to join</Typography>
+                        <Typography variant="h6" className="qr-typography">Scan QR Code to join</Typography>
 
                         <div style={{height: "auto", margin: "0 auto", maxWidth: 200, width: "100%"}}>
                             <QRCode
@@ -81,7 +49,9 @@ const Invite = () => {
 
                     </Box>
                 </Container>
-                <Button variant="contained" className="backButton"
+                <Button variant="contained"
+                        className="backButton"
+                        style={{marginTop: '-60px'}}
                         onClick={() => doBack()}
                 >
                     Back

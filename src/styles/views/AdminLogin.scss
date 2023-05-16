@@ -1,8 +1,8 @@
 .custom-outlined-text-field {
     width: 100%;
-    margin: 5px 0;
     box-sizing: border-box;
     background-color: lightgray;
+    margin-bottom: 20px;
 
     & fieldset {
         border-color: white;
@@ -46,8 +46,4 @@
     font-size: 16px;
     font-weight: 600;
     font-family: Inter, sans-serif;
-}
-
-.MuiButton-root.buttonLogin:hover {
-    background-color: #48007e;
 }

@@ -1,9 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
-import {Box, Button, Typography,} from "@mui/material";
+import {Button, Typography} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import 'styles/views/LobbyPage.scss';
+import 'styles/views/Homepage.scss';
 import TabooData from "taboo-data";
 import {TeamRequest} from "../../models/TeamRequest";
 import {getWebSocketDomain} from "../../helpers/getDomain";
@@ -248,7 +249,7 @@ const Lobby = () => {
 
     if (isLeader) {
         content = (
-            <div className="horizontal-box" style={{marginTop: '-80px', marginBottom: '-100px'}}>
+            <div className="horizontal-box">
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => goToSettingsPage()}
@@ -276,15 +277,15 @@ const Lobby = () => {
 
     return (
         <div className="homePageRoot">
+            <div className="flex-container">
             <div className="horizontal-box">
-                <Typography variant="h5" sx={{color: 'white', fontWeight: 700}}>Access Code:</Typography>
-                <Typography variant="h5"
-                            sx={{color: 'white', fontWeight: 700, marginLeft: '10px'}}>{accessCode}</Typography>
+                <Typography variant="h5" className="title">Access Code:</Typography>
+                <Typography variant="h5" className="title">{accessCode}</Typography>
             </div>
 
-            <Box sx={{display: 'flex', flexDirection: 'column', marginBottom: '-80px'}}>
+            <div className="flex-container">
                 <div className="buttonPanel">
-                    <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 1</Typography>
+                    <Typography variant="h5" className="title">Team 1</Typography>
                     <ul className="team-member-box">
                         {team1Content}
                     </ul>
@@ -296,8 +297,8 @@ const Lobby = () => {
                     </Button>
                 </div>
 
-                <div className="buttonPanel" style={{marginTop: '20px'}}>
-                    <Typography variant="h5" sx={{color: 'white', marginBottom: '-50px'}}>Team 2</Typography>
+                <div className="buttonPanel">
+                    <Typography variant="h5" className="title">Team 2</Typography>
                     <ul className="team-member-box">
                         {team2Content}
                     </ul>
@@ -308,7 +309,7 @@ const Lobby = () => {
                         Join
                     </Button>
                 </div>
-            </Box>
+            </div>
 
             <div className="horizontal-box">
                 <Button variant="contained"
@@ -325,6 +326,7 @@ const Lobby = () => {
                 </Button>
             </div>
             {content}
+            </div>
         </div>
     );
 };
