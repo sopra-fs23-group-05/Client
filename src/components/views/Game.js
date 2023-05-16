@@ -69,15 +69,18 @@ export default function Game() {
 
 
     const doLeave = async () => {
-        const responseGame = await api.get(`/games/${accessCode}`);
-        setTeam1Players(responseGame.data.team1.players);
-        setTeam2Players(responseGame.data.team2.players);
+        await api.delete(`/games/${accessCode}/${playerName}`);
         localStorage.removeItem('lobbyAccessCode');
         localStorage.removeItem('token');
         localStorage.removeItem('userName')
+
+        const responseGame = await api.get(`/games/${accessCode}`);
+        setTeam1Players(responseGame.data.team1.players);
+        setTeam2Players(responseGame.data.team2.players);
         if(team1Players.length < 2 || team2Players.length < 2){
-            changePage(`/homepage`);
-            await api.delete(`/games/${accessCode}/${playerName}`);
+            changePage(`/games/${accessCode}/endscreen`);
+            history.push('/homepage');
+            window.location.reload();
         }
         else{
             history.push('/homepage');
