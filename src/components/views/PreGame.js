@@ -28,7 +28,7 @@ const PreGame = () => {
                 setRole(responseRole.data);
                 setTeam1(responseGame.data.team1.points);
                 setTeam2(responseGame.data.team2.points);
-
+                startTimer();
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
                 console.error("Details:", error);
@@ -72,7 +72,12 @@ const PreGame = () => {
             JSON.stringify({url: `/games/${accessCode}`})
         );
     }
-
+    const startTimer = () => {
+        console.log('Send Timer Message!');
+        preGameTimerWebSocket.current.send(
+            JSON.stringify({timer: 0})
+        );
+    }
     // Page WebSocket code
     useEffect(() => {
         pageWebSocket.current.onmessage = (event) => {

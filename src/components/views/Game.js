@@ -104,7 +104,7 @@ export default function Game() {
                 await new Promise(resolve => setTimeout(resolve, 100));
                 setRounds(responseGame.data.settings.rounds);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
-
+                startTimer();
             } catch (error) {
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
@@ -279,7 +279,12 @@ export default function Game() {
             history.push(IncomingMessage.url);
         }
     }, [history]);
-
+    const startTimer = () => {
+        console.log('Send Timer Message!');
+        timerWebSocket.current.send(
+            JSON.stringify({timer: 0})
+        );
+    }
     // Timer WebSocket code
     useEffect(() => {
         timerWebSocket.current.onmessage = (event) => {
