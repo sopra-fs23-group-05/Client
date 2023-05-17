@@ -27,7 +27,7 @@ export default function Game() {
     const userId = localStorage.getItem('token');
     const playerName = localStorage.getItem('userName')
     const [role, setRole] = useState("");
-    const [isLeader, setIsLeader] = useState(false); //TODO maybe remove?
+    const [isLeader, setIsLeader] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -124,7 +124,7 @@ export default function Game() {
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
 
         webSocket.current.addEventListener("open", () => {
-            let timeLeft = 900; // Set timer to 60 seconds
+            let timeLeft = 60; // Set timer to 60 seconds
             const timerElement = document.getElementById("timer");
       
             // Update timer every second
@@ -450,17 +450,25 @@ export default function Game() {
                     <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
                 </DialogActions>
             </Dialog>
-    )
+    );
+
+    let leaveButton = null;
+
+    if (!isLeader) {
+        leaveButton = (
+                <Button
+                        onClick={() => setOpenLeave(true)}
+                >
+                    <LogoutIcon sx={{color: 'white'}}/>
+                </Button>
+        )
+    }
 
     let timerBox = (
             <div className="flex-container" style={{gap: '0'}}>
 
                 <div>
-                <Button
-                        onClick={() => setOpenLeave(true)}
-                >
-                    <LogoutIcon sx={{color: 'white'}} />
-                </Button>
+                {leaveButton}
                 {clickOnLeave}
                 </div>
 
