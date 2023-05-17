@@ -19,6 +19,10 @@ import {api, handleError} from 'helpers/api';
 import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
 import Card from "../../models/Card";
+import Button_Click from "./sounds/Button_Click.mp3";
+import Send_Sound from "./sounds/Send_Sound.mp3";
+import Receive_Sound from "./sounds/Receive_Sound.mp3";
+import Buzzer_Sound from "./sounds/Buzzer_Sound.mp3";
 import {CardRequest} from "../../models/CardRequest";
 import {getWebSocketDomain} from 'helpers/getDomain';
 
@@ -68,8 +72,14 @@ export default function Game() {
     const [timer, setTimer] = useState(null);
     const messageType = role === "cluegiver" ? "description" : "guess";
 
+    const playSound = (soundFile) => {
+        const audio = new Audio(soundFile);
+        audio.play();
+      };
+
 
     const doLeave = async () => {
+        playSound(Button_Click);
         await api.delete(`/games/${accessCode}/${playerName}`);
         localStorage.removeItem('lobbyAccessCode');
         localStorage.removeItem('token');
@@ -202,6 +212,7 @@ export default function Game() {
         webSocket.current.onmessage = (event) => {
             const ChatMessage = JSON.parse(event.data);
             console.log('Received Chat Message:', ChatMessage);
+            playSound(Receive_Sound);
             setChatMessages([...chatMessages, {
                 accessCode: ChatMessage.accessCode,
                 userId: ChatMessage.userId,
@@ -246,6 +257,7 @@ export default function Game() {
     // Websocket code
     const sendChatMessage = () => {
         if (user && message && messageType) {
+            playSound(Send_Sound);
             console.log('Send Chat Message!');
             webSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456
@@ -257,6 +269,7 @@ export default function Game() {
 
     // Card websocket code
     const sendCardMessageBuzz = () => {
+        playSound(Buzzer_Sound);
         if (cardWebSocket) {
             console.log('Send Buzz Request!');
             cardWebSocket.current.send(
@@ -268,6 +281,7 @@ export default function Game() {
 
     // Card websocket code
     const sendCardMessageSkip = () => {
+        playSound(Button_Click);
         if (cardWebSocket) {
             console.log('Send Skip Request!');
             cardWebSocket.current.send(
@@ -341,6 +355,16 @@ export default function Game() {
     const [wordDefinition, setWordDefinition] = useState("");
     const [openDefinition, setOpenDefinition] = useState(false);
     const [openLeave, setOpenLeave] = useState(false);
+
+    const handleOpenLeave = async (open) => {
+        playSound(Button_Click);
+        setOpenLeave(open);
+    }
+
+    const handleOpenDefinitionChange = async (open) => {
+        playSound(Button_Click);
+        setOpenDefinition(open);
+    }
 
     let cardContent = null;
 
@@ -434,7 +458,7 @@ export default function Game() {
                                     } else {
                                         setWordDefinition("No definition found");
                                     }
-                                    setOpenDefinition(true);
+                                    handleOpenDefinitionChange(true);
                                 }}>
                             {displayedCard.word}
                         </Button>
@@ -445,7 +469,7 @@ export default function Game() {
                                 <DialogContentText>{wordDefinition}</DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={() => setOpenDefinition(false)}>Close</Button>
+                                <Button onClick={() => handleOpenDefinitionChange(false)}>Close</Button>
                             </DialogActions>
                         </Dialog>
                         {skipButton}
@@ -472,8 +496,9 @@ export default function Game() {
 
     if (!isLeader) {
         leaveButton = (
-                <Button
-                        onClick={() => setOpenLeave(true)}
+            <div className="leave-box">
+            <Button variant="contained" className="leaveButton"
+                        onClick={() => handleOpenLeave(true)}
                 >
                     <LogoutIcon sx={{color: 'white'}}/>
                 </Button>
@@ -496,6 +521,17 @@ export default function Game() {
                     <div  className="title">{scoredPoints}</div>
                 </div>
 
+
+            <Dialog open={openLeave} onClose={() => handleOpenLeave(false)}>
+            <DialogTitle>Leave Game?</DialogTitle>
+            <DialogContent>
+                <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => handleOpenLeave(false)}>Close</Button>
+                <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
+            </DialogActions>
+            </Dialog>
             </div>
     );
 

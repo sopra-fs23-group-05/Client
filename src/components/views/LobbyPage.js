@@ -6,6 +6,7 @@ import 'styles/views/AdminLogin.scss';
 import 'styles/views/LobbyPage.scss';
 import 'styles/views/Homepage.scss';
 import TabooData from "taboo-data";
+import Button_Click from "./sounds/Button_Click.mp3";
 import {TeamRequest} from "../../models/TeamRequest";
 import {getWebSocketDomain} from "../../helpers/getDomain";
 
@@ -25,6 +26,12 @@ const Lobby = () => {
 
     const [team1Members, setTeam1Members] = useState([]);
     const [team2Members, setTeam2Members] = useState([]);
+
+    const playSound = (soundFile) => {
+        const audio = new Audio(soundFile);
+        audio.play();
+      };
+
 
     useEffect(() => {
         async function fetchData() {
@@ -78,6 +85,7 @@ const Lobby = () => {
 
 
     const goBack = async () => {
+        playSound(Button_Click);
         if (isLeader) {
             await api.delete(`/lobbies/${accessCode}`);
         }
@@ -115,6 +123,7 @@ const Lobby = () => {
 
     // Team WebSocket code
     const changeTeam = (teamNr, type) => {
+        playSound(Button_Click);
         console.log('Send Team Message!');
         teamWebSocket.current.send(
             JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), teamNr, parseInt(userId, 10), type))
@@ -182,12 +191,15 @@ const Lobby = () => {
     }, [history]);
 
     const goToInvitePage = () => {
+        playSound(Button_Click);
         history.push(`/lobbies/${accessCode}/invite`)
     }
     const goToSettingsPage = () => {
+        playSound(Button_Click);
         history.push(`/lobbies/${accessCode}/settings`)
     }
     const startGame = async () => {
+        playSound(Button_Click);
         try {
             if(settings==="city"){
                 console.log(settings);
