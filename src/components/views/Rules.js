@@ -51,8 +51,6 @@ const Rules = () => {
                     <img className="tabooLogo" src={TabooLogo} alt="Taboo Logo"/>
                     <div className="rulesRectangle">
                         <div className="rulesText">
-                            QUICK!
-                            <br/><br/>
                             How do you get your team to say APPLE?
                             <br/><br/>
                             You can not say RED, FRUIT, PIE, CIDER, or CORE. They are TABOO - utterly
