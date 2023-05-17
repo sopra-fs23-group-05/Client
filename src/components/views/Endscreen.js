@@ -68,13 +68,21 @@ const Endscreen = () => {
                 setTeam1Players(responseGame.data.team1.players);
                 setTeam2Players(responseGame.data.team2.players);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
-                if (responseGame.data.leader===localStorage.getItem('userName')){
-                    setLeader(true);
-                }
+                const userId = localStorage.getItem('token');
+                const userResponse = await api.get(`/users/${userId}`);
+                setLeader(userResponse.data.leader);
                 if (team1Points > team2Points) {
                     setWinner(1)
-                } else {
+                } else if(team1Points < team2Points){
                     setWinner(2);
+                }
+                else{
+                    if(team1Players.length < 2){
+                        setWinner(2);
+                    }
+                    else if(team2Players.length < 2){
+                        setWinner(1);
+                    }
                 }
                 const responsePlayer = await api.get(`/games/${accessCode}/players/MVP`);
                 console.log(responsePlayer);
