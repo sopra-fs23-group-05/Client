@@ -9,8 +9,9 @@ import {
     Dialog,
     DialogContent,
     DialogContentText,
-    DialogActions
+    DialogActions,
 } from "@mui/material";
+import LogoutIcon from '@mui/icons-material/Logout';
 import SendIcon from '@mui/icons-material/Send';
 import {useEffect, useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
@@ -454,44 +455,81 @@ export default function Game() {
         );
     }
 
+    let clickOnLeave = (
+            <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
+                <DialogTitle>Leave Game?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenLeave(false)}>Close</Button>
+                    <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
+                </DialogActions>
+            </Dialog>
+    );
 
-    let leaveButton=null;
-    //leave button is not visible for leader
-    if(!isLeader){
+    let leaveButton = null;
+
+    if (!isLeader) {
         leaveButton = (
-            <div className="leave-box">
-            <Button variant="contained" className="leaveButton"
+                <Button
                         onClick={() => setOpenLeave(true)}
                 >
-                Leave Game
-            </Button>
-
-            <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
-            <DialogTitle>Leave Game?</DialogTitle>
-            <DialogContent>
-                <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={() => setOpenLeave(false)}>Close</Button>
-                <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
-            </DialogActions>
-            </Dialog>
-            </div>
+                    <LogoutIcon sx={{color: 'white'}}/>
+                </Button>
         )
     }
+
+    let timerBox = (
+            <div className="flex-container" style={{gap: '0'}}>
+
+                <div>
+                {leaveButton}
+                {clickOnLeave}
+                </div>
+
+                <div className="timer-box">
+                    <div  className="title">Timer</div>
+                    <div className="title" id="timer">60</div>
+                    <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
+                    <div  className="title">Score</div>
+                    <div  className="title">{scoredPoints}</div>
+                </div>
+
+            </div>
+    );
+
+    if (role === "guesser") {
+        timerBox =
+                <div className="horizontal-box" style={{justifyContent: 'space-between'}}>
+
+                    <div className="timer-box">
+                        <div  className="title">Timer</div>
+                        <div className="title" id="timer">60</div>
+                        <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
+                        <div  className="title">Score</div>
+                        <div  className="title">{scoredPoints}</div>
+                    </div>
+
+                    <div>
+                    <Button style={{marginTop: '-80px'}}
+                        onClick={() => setOpenLeave(true)}
+                    >
+                        <LogoutIcon sx={{color: 'white'}}/>
+                    </Button>
+                    {clickOnLeave}
+                    </div>
+
+                </div>
+    }
+
 
     return (
             <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
                 <div className="flex-container" style={{marginTop: '-20px'}}>
                     <div className="card-and-timer-box">
                         {cardComponent}
-                        <div className="timer-box">
-                            <div  className="title">Timer</div>
-                            <div className="title">{timer}</div>
-                            <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
-                            <div  className="title">Score</div>
-                            <div  className="title">{scoredPoints}</div>
-                        </div>
+                        {timerBox}
                     </div>
                     <div className="chat-components-box">
                         <div className="chat-box-containing-messages"
@@ -503,7 +541,6 @@ export default function Game() {
                         {sendFields}
                     </div>
                     {buzzerButton}
-                    {leaveButton}
                 </div>
             </div>
     );
