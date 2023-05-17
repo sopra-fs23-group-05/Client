@@ -3,6 +3,7 @@ import {useHistory} from 'react-router-dom';
 import 'styles/views/Settings.scss';
 import {Container, Button, Typography, Box, Slider} from "@mui/material";
 import {useEffect, useState} from "react";
+import Button_Click from "./sounds/Button_Click.mp3";
 
 
 const Settings = () => {
@@ -20,8 +21,14 @@ const Settings = () => {
         setTime(event.target.value)
     }
     const handleTopicsChange = async (topics) => {
+        playSound(Button_Click);
         setTopic(topics);
     }
+
+    const playSound = (soundFile) => {
+        const audio = new Audio(soundFile);
+        audio.play();
+      };
 
     useEffect(() => {
         async function fetchData() {
@@ -43,6 +50,7 @@ const Settings = () => {
 
 
     const doSave = async () => {
+        playSound(Button_Click);
         console.log(accessCode);
         const requestBody = JSON.stringify({rounds, topic, roundTime});
         console.log(requestBody);
@@ -53,8 +61,8 @@ const Settings = () => {
 
 
     const doBack = () => {
+        playSound(Button_Click);
         history.push(`/lobbies/${accessCode}`);
-        window.location.reload();
     }
 
     return (

@@ -5,6 +5,7 @@ import {useHistory} from 'react-router-dom';
 import {TextField, Button, Typography} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import TabooLogo from "./TabooLogo.png";
+import Button_Click from "./sounds/Button_Click.mp3";
 import Lobby from "../../models/Lobby";
 
 const UserLogin = () => {
@@ -28,11 +29,16 @@ const UserLogin = () => {
         setGivenAccessCode(event.target.value)
     }
 
+    const playSound = (soundFile) => {
+        const audio = new Audio(soundFile);
+        audio.play();
+      };
+
     const goBack = () => {
+        playSound(Button_Click);
         localStorage.removeItem('token');
         localStorage.removeItem('lobbyAccessCode');
         history.push('/homepage');
-        window.location.reload();
     }
 
     const handleEnterKey = (event) => {
@@ -44,6 +50,7 @@ const UserLogin = () => {
     const doLogin = async () => {
         try {
             //find Lobby; if not found, error thrown
+            playSound(Button_Click);
             const requestLobby = await api.get(`/lobbies/${givenAccessCode}`);
             const lobby = new Lobby(requestLobby.data);
             localStorage.setItem('lobbyAccessCode', lobby.accessCode);

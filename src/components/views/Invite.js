@@ -2,6 +2,7 @@ import React from 'react';
 import QRCode from "react-qr-code";
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Invite.scss';
+import Button_Click from "./sounds/Button_Click.mp3";
 import {Container, Button, Typography, Box} from "@mui/material";
 
 
@@ -10,11 +11,17 @@ const Invite = () => {
     const accessCode = localStorage.getItem('lobbyAccessCode');
 
     const doBack = () => {
+        playSound(Button_Click);
         history.push(`/lobbies/${accessCode}`)
-        window.location.reload();
     }
 
+    const playSound = (soundFile) => {
+        const audio = new Audio(soundFile);
+        audio.play();
+      };
+
     const copyToClipboard = () => {
+        playSound(Button_Click);
         navigator.clipboard.writeText(`https://sopra-fs23-group-05-client.oa.r.appspot.com/user-login/${accessCode}`);
     };
 
