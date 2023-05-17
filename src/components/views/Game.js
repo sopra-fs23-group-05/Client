@@ -502,6 +502,7 @@ export default function Game() {
                 >
                     <LogoutIcon sx={{color: 'white'}}/>
                 </Button>
+            </div>
         )
     }
 
