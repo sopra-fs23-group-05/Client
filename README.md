@@ -81,13 +81,13 @@ We used React with HTML/CSS and JS for this client code of the application. Furt
 TODO 
 
 * [MUI](https://mui.com) for UI elements.
-* [QR-Code API]() to invite people.
+* [QR-Code API](https://www.npmjs.com/package/react-qr-code) to invite people.
 * [Dictionary API](https://www.datamuse.com/api/) to get definitions of a word.
 * [Twitter API](https://developer.twitter.com/en/docs/twitter-api) to share the result.
 * [Taboo API](https://github.com/Kovah/Taboo-Data) to get the card data.
-* [Axios API]() to make API calls to our server.
+* Axios API to make API calls to our server.
 
-<span style="color:purple">## Illustrations</span>
+## Illustrations
 TODO
 
 ## Roadmap
