@@ -151,7 +151,7 @@ const Lobby = () => {
                         username: IncomingMessage.username
                     });
                 }
-            }else if (IncomingMessage.type === 'removal') {
+            } else if (IncomingMessage.type === 'removal') {
                 if (IncomingMessage.teamNr === 1) {
                     lobby.team1 = lobby.team1.filter(user => user.username !== IncomingMessage.username);
                     const newTeam1Members = team1Members.filter(member => member.username !== IncomingMessage.username);
