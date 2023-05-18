@@ -1,4 +1,6 @@
 # Taboo
+![Image](./TabooLogo.png)
+
 Unleash your word-guessing skills and experience the excitement of Taboo with this online version!
 
 ## Introduction
