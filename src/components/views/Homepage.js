@@ -44,8 +44,8 @@ const Homepage = () => {
 
   return (
     <div className="homePageRoot">
-      <div className="overlay"></div>
-      <video className="backgroundVideo" src={BackgroundVideo} autoPlay loop muted />
+      <div className="overlayHomepageVideo"></div>
+      <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
       <img
         className="tabooLogo"
         src={TabooLogo}

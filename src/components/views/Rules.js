@@ -2,10 +2,10 @@ import React, {useState} from "react";
 import {handleError} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Rules.scss';
-import 'styles/views/Homepage.scss';
 import Button from '@mui/material/Button';
 import TabooLogo from './TabooLogo.png';
 import Button_Click from "./sounds/Button_Click.mp3";
+import BackgroundVideo from "./BackgroundVideo.mp4";
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 const Rules = () => {
@@ -55,7 +55,9 @@ const Rules = () => {
     };
 
     return (
-            <div className="homePageRoot">
+            <div className="rulesPageRoot">
+                <div className="overlaySettingsVideo"></div>
+                <video className="settingsVideo" src={BackgroundVideo} autoPlay loop muted />
                 <div className="flex-container">
                     <img className="tabooLogo" src={TabooLogo} alt="Taboo Logo"/>
                     <div className="rulesRectangle">
@@ -95,6 +97,8 @@ const Rules = () => {
                             </div>
 
                             <br/>
+                            <br/><br/>
+                            <br/><br/>
                             As you call out the clues, your teammates guess the answers.
                             <br/><br/>
                             Before playing, please read the rules that follow. Not to do so
