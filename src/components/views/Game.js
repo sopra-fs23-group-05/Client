@@ -27,6 +27,8 @@ export default function Game() {
     const playerName = localStorage.getItem('userName')
     const [role, setRole] = useState("");
     const [isLeader, setIsLeader] = useState(false);
+    const [hasBuzzed, setHasBuzzed] = useState(false);
+
 
     useEffect(() => {
         async function fetchData() {
@@ -34,7 +36,7 @@ export default function Game() {
                 // response is "cluegiver", "guesser" or "buzzer"
                 const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
                 setRole(responseRole.data.toString().toLowerCase());
-                
+
                 const userResponse = await api.get(`/users/${userId}`);
                 setIsLeader(userResponse.data.leader);
             } catch (error) {
@@ -104,7 +106,11 @@ export default function Game() {
                 await new Promise(resolve => setTimeout(resolve, 100));
                 setRounds(responseGame.data.settings.rounds);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
-                startTimer();
+                const timerStarted = localStorage.getItem('timerStarted');
+                if (!timerStarted) {
+                    startTimer();
+                    localStorage.setItem('timerStarted', 'true');
+                }
             } catch (error) {
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
@@ -213,6 +219,7 @@ export default function Game() {
                 taboo5: Card.taboo5
             });
             setScoredPoints(Card.turnPoints);
+
         }
     }, [displayedCard], [scoredPoints]);
 
@@ -242,18 +249,19 @@ export default function Game() {
 
     // Card websocket code
     const sendCardMessageBuzz = () => {
-        if (cardWebSocket) {
+        if (cardWebSocket && !hasBuzzed) {
             console.log('Send Buzz Request!');
             cardWebSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456
                     JSON.stringify(new CardRequest(window.location.href.slice(-6), "buzz"))
             );
+            setHasBuzzed(true);
         }
     };
 
     // Card websocket code
     const sendCardMessageSkip = () => {
-        if (cardWebSocket) {
+        if (cardWebSocket ) {
             console.log('Send Skip Request!');
             cardWebSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456
@@ -293,6 +301,7 @@ export default function Game() {
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
                 webSocket.current.close();
+                localStorage.removeItem('timerStarted');
                 if (roundsPlayed <= rounds) {
                     updateTeamScore(scoredPoints);
                     //TODO: fix changePage
@@ -394,7 +403,7 @@ export default function Game() {
     );
 
 
-    if (role === "buzzer") {
+    if (role === "buzzer" && !hasBuzzed) {
         buzzerButton = (
                 <Button variant="contained"
                         className="Buzzer"

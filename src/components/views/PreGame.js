@@ -28,7 +28,11 @@ const PreGame = () => {
                 setRole(responseRole.data);
                 setTeam1(responseGame.data.team1.points);
                 setTeam2(responseGame.data.team2.points);
-                startTimer();
+                const timerStarted = localStorage.getItem('timerStarted');
+                if (!timerStarted) {
+                    startTimer();
+                    localStorage.setItem('timerStarted', 'true');
+                }
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
                 console.error("Details:", error);
@@ -37,7 +41,7 @@ const PreGame = () => {
         }
 
         fetchData();
-    }, [accessCode, playerName]);
+    }, []);
 
     // WebSocket code
     useEffect(() => {
@@ -96,6 +100,7 @@ const PreGame = () => {
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
                 changePage(`games/${accessCode}`);
+                localStorage.removeItem('timerStarted');
             }
         }
     },[timer]);
