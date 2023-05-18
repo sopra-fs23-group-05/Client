@@ -492,22 +492,18 @@ export default function Game() {
             </Dialog>
     );
 
-    let leaveButton = null;
+    let leaveButton = (
+        <div className="leave-box">
+        <Button onClick={() => handleOpenLeave(true)}
+            >
+                <LogoutIcon sx={{color: 'white'}}/>
+            </Button>
+        </div>
+    )
 
-    if (!isLeader) {
-        leaveButton = (
-            <div className="leave-box">
-            <Button variant="contained" className="leaveButton"
-                        onClick={() => handleOpenLeave(true)}
-                >
-                    <LogoutIcon sx={{color: 'white'}}/>
-                </Button>
-            </div>
-        )
-    }
 
     let timerBox = (
-            <div className="flex-container" style={{gap: '0'}}>
+            <div className="flex-container" style={{gap: '0', height: '100%'}}>
 
                 <div>
                 {leaveButton}
