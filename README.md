@@ -38,16 +38,17 @@ Follow these steps to install the client code on your local machine:
 npm install
 ```
 
-4. Once the dependencies are installed successfully, you can run the application locally using:
+Once the dependencies are installed successfully, you can run the application locally using:
 
 ``` 
 npm run dev 
 ```
+
 Now you can open [http://localhost:3000](http://localhost:3000) to view the application in your browser. Make sure you have the [server](https://github.com/sopra-fs23-group-05/Server) running as well.
 
 Notice that the page will reload if you make any edits. You will also see any lint errors in the console (use Google Chrome).
 
-<span style="color:purple">### Deployment
+### Deployment
 To deploy the application, you need to build the project first. To do so, run the following command:
 
 ``` 
@@ -88,7 +89,74 @@ TODO
 * Axios API to make API calls to our server.
 
 ## Illustrations
-TODO
+
+### Homepage
+
+<div style="display: flex; align-items: center; gap: 10px;">
+    <img src="./src/styles/Images/homePicture.png" alt="Image" width="150" height="300">
+    <p style="max-width: 400px">
+        Upon launching the game, you will be greeted by the homepage. Here, you have two options: to join an existing 
+        lobby using a given access code or to create a new lobby. The lobby serves as a virtual room where players gather to play the game.
+    </p>
+</div>
+
+### Joining a Team
+<div style="display: flex; align-items: center; gap: 10px;">
+    TODO insert lobby screen shot
+    <p style="max-width: 400px">
+        When you joined the lobby, you will be able to select one of the two teams available.
+    </p>
+</div>
+
+
+### Invite Friends
+<div style="display: flex; align-items: center; gap: 10px;">
+    <img src="./src/styles/Images/invitePicture.png" alt="Image" width="150" height="300"> 
+    <p style="max-width: 400px">
+        To ensure a fun multiplayer experience, every user can navigate to the invite page.
+        Here, you have the option to send an invite link or a QR code to your friends,
+        allowing them to join the same lobby and participate in the game together.
+    </p>
+</div>
+
+
+### Settings
+<div style="display: flex; align-items: center; gap: 10px;">
+    <img src="./src/styles/Images/settingsRoundsPicture.png" alt="Image" width="150" height="300"> 
+    <img src="./src/styles/Images/settingsTopicsPicture.png" alt="Image" width="150" height="300"> 
+    <p style="max-width: 400px">
+        As the lobby leader, you hold the power to customize the game settings according to your preferences on the settings page.
+        By utilizing the settings page, you can effortlessly personalize the game experience to suit your preferences.
+        Experiment with different round counts, time limits, and topics to create an experience that aligns perfectly with your gaming style.
+    </p>
+</div>
+
+### Game-Play
+<div style="display: flex; align-items: center; gap: 10px;">
+    TODO import picture of game pages
+    <p style="max-width: 400px">
+        Once the game begins, each player will have access to a chat interface.
+        This interface enables communication between team members and enhances collaboration during gameplay.
+        Additionally, if you are the clue giver or a buzzer, you will also be able to see the word that needs to be guessed.
+    </p>
+</div>
+
+### End-Screen
+<div style="display: flex; align-items: center; gap: 10px;">
+    TODO import picture of end screen
+    <p style="max-width: 400px">
+        At the end of the game, the end screen displays the team with the highest score, indicating their victory.
+        Furthermore, the end screen showcases the individual player who successfully guessed the most words throughout the game.
+    </p>
+</div>
+
+### Share
+<div style="display: flex; align-items: center; gap: 10px;">
+    TODO import picture of share screen
+    <p style="max-width: 400px">
+        After the game, you can share your achievements on Twitter.
+    </p>
+</div>
 
 ## Roadmap
 Possible features that new developers can add:
