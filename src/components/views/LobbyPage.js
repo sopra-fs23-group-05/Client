@@ -15,6 +15,7 @@ const Lobby = () => {
     const history = useHistory();
 
     const [lobby, setLobby] = useState(null);
+    const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
     const [settings, setSettings] = useState(null);
 
@@ -41,6 +42,7 @@ const Lobby = () => {
                 //get user
                 const userResponse = await api.get(`/users/${userId}`);
                 console.log('user info', userResponse.data);
+                setUser(userResponse.data);
                 setIsLeader(userResponse.data.leader);
 
                 //get lobby
@@ -158,7 +160,7 @@ const Lobby = () => {
                         username: IncomingMessage.username
                     });
                 }
-            }else if (IncomingMessage.type === 'removal') {
+            } else if (IncomingMessage.type === 'removal') {
                 if (IncomingMessage.teamNr === 1) {
                     lobby.team1 = lobby.team1.filter(user => user.username !== IncomingMessage.username);
                     const newTeam1Members = team1Members.filter(member => member.username !== IncomingMessage.username);
@@ -167,6 +169,10 @@ const Lobby = () => {
                     lobby.team2 = lobby.team2.filter(user => user.username !== IncomingMessage.username);
                     const newTeam2Members = team2Members.filter(member => member.username !== IncomingMessage.username);
                     setTeam2Members(newTeam2Members);
+                }
+            } else if (IncomingMessage.type === 'error') {
+                if (IncomingMessage.username === user.username) {
+                    alert("Joining this team would lead to an unfair game. Therefore, wait until more users have joined the lobby or join the other team!")
                 }
             }
         }
