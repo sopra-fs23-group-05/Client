@@ -28,11 +28,7 @@ Before getting started, download the following:
 ### Installing
 Follow these steps to install the client code on your local machine:
 
-1. In your IDE, locate the option to import a project or open an existing project.
-
-```
-e.g. in IntelliJ go to “File” > “New” > “Project from Existing Sources”
-```
+1. In your IDE, locate the option to import a project or open an existing project. ```E.g., in IntelliJ go to “File” > “New” > “Project from Existing Sources”```
 
 2. Select the downloaded file of the client code.
 
