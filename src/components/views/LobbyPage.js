@@ -162,8 +162,6 @@ const Lobby = () => {
                     setTeam2Members(newTeam2Members);
                 }
             } else if (IncomingMessage.type === 'error') {
-                setTeam1Members(team1Members);
-                setTeam2Members(team2Members);
                 if (IncomingMessage.username === user.username) {
                     alert("Joining this team would lead to an unfair game. Therefore, wait until more users have joined the lobby or join the other team!")
                 }
