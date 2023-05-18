@@ -1,7 +1,7 @@
-<span style="color:purple"># Taboo</span>
+# Taboo
 Unleash your word-guessing skills and experience the excitement of Taboo with this online version!
 
-<span style="color:purple">## Introduction</span>
+## Introduction
 This project is an online version of the game Taboo. The objective of the game is for a designated "Clue-Giver" to describe a word without using five specified "taboo words",
 while his team members attempt to correctly guess the word. The game consists of multiple rounds, which users can determine the number of. 
 Each round consists of two turns. In one turn, a team acts as the guessing team, while in the other turn, they become the Buzzer Team. 
@@ -16,16 +16,16 @@ Additionally, user-friendly features, such as a dictionary API for word lookup a
 
 Let’s play Taboo!
 
-<span style="color:purple">## Getting Started</span>
+<h2 style="color:purple;">Getting Started</h2>
 This guide helps you to install this client code on your local machine.
 
-<span style="color:purple">### Prerequisites</span>
+### Prerequisites
 Before getting started, download the following:
 
 1. For your local development environment, you will need to install [Node.js](https://nodejs.org/en).
 2. Download the code of [this repository](https://github.com/sopra-fs23-group-05/Client).
 
-<span style="color:purple">### Installing</span>
+### Installing
 Follow these steps to install the client code on your local machine:
 
 1. In your IDE, locate the option to import a project or open an existing project.
@@ -74,13 +74,13 @@ git commit -m "commit message"
 git push origin main
 ```
 
-<span style="color:purple">### Testing</span>
+### Testing
 Testing is optional, and you can run the tests with `npm run test`.
 This launches the test runner in an interactive watch mode. See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 > For macOS user running into a 'fsevents' error: https://github.com/jest-community/vscode-jest/issues/423
 
-<span style="color:purple">## Technologies</span>
+## Technologies
 We used React with HTML/CSS and JS for this client code of the application. Further we used:
 TODO 
 
@@ -94,24 +94,24 @@ TODO
 <span style="color:purple">## Illustrations</span>
 TODO
 
-<span style="color:purple">## Roadmap</span>
+## Roadmap
 Possible features that new developers can add:
 * A canvas to also draw the word instead of describing it. 
 * Feedback that shows if you are close to the word (if there is a spelling mistake etc.)
 
 We are open for more ideas!
 
-<span style="color:purple">## Authors</span>
+## Authors
 * Daniel Maksimovic
 * Felix Merz
 * Melea Köhler
 * Tom Meier
 
-<span style="color:purple">## License</span>
+## License
 TODO
 This project is licensed under the MIT License - see the ___ file for details
 
-<span style="color:purple">## Acknowledgments</span>
+## Acknowledgments
 TODO
 * Hat tip to anyone whose code was used
 * Inspiration
