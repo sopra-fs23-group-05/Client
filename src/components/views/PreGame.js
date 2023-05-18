@@ -74,8 +74,7 @@ const PreGame = () => {
     }
     const startTimer = () => {
         console.log('Send Timer Message!');
-        preGameTimerWebSocket.current.send(
-            JSON.stringify({timer: 0})
+        preGameTimerWebSocket.current.send(""
         );
     }
     // Page WebSocket code
