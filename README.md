@@ -91,14 +91,9 @@ TODO
 ## Illustrations
 
 ### Homepage
-
-<div style="display: flex; align-items: center; gap: 10px;">
-    <img src="./src/styles/Images/homePicture.png" alt="Image" width="150" height="300">
-    <p style="max-width: 400px">
-        Upon launching the game, you will be greeted by the homepage. Here, you have two options: to join an existing 
-        lobby using a given access code or to create a new lobby. The lobby serves as a virtual room where players gather to play the game.
-    </p>
-</div>
+| Screenshot | Description |
+| ---------- | ----------- |
+ | <img src="./src/styles/Images/homePicture.png" alt="Image" width="150" height="300">| Upon launching the game, you will be greeted by the homepage.Here, you have two options: to join an existing |
 
 ### Joining a Team
 <div style="display: flex; align-items: center; gap: 10px;">
