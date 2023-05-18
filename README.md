@@ -1,6 +1,4 @@
 # Taboo
-![Image](./src/components/views/TabooLogo.png)
-
 Unleash your word-guessing skills and experience the excitement of Taboo with this online version!
 
 ## Introduction
