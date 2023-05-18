@@ -48,22 +48,31 @@ npm install
 npm run dev 
 ```
 Now you can open [http://localhost:3000](http://localhost:3000) to view the application in your browser. Make sure you have the [server](https://github.com/sopra-fs23-group-05/Server) running as well.
+
 Notice that the page will reload if you make any edits. You will also see any lint errors in the console (use Google Chrome).
 
-## Deployment
+### Deployment
 To deploy the application, you need to build the project first. To do so, run the following command:
 
-``` npm run build ```   
+``` 
+npm run build 
+```   
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 Then, you can push your changed code to this GitHub repository. The application will be automatically deployed to Heroku. To do so, run the following commands:
 
-```git add .```
+```
+git add .
+```
 
-```git commit -m "commit message"```
+```
+git commit -m "commit message"
+```
 
-```git push origin main```
+```
+git push origin main
+```
 
 ### Testing
 Testing is optional, and you can run the tests with `npm run test`.
@@ -93,10 +102,10 @@ Possible features that new developers can add:
 We are open for more ideas!
 
 ## Authors
-* **Daniel Maksimovic** 
-* **Felix Merz**
-* **Melea Köhler**
-* **Tom Meier**
+* Daniel Maksimovic
+* Felix Merz
+* Melea Köhler
+* Tom Meier
 
 ## License
 TODO
