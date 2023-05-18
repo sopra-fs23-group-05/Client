@@ -3,13 +3,14 @@ import {useHistory} from 'react-router-dom';
 import 'styles/views/Settings.scss';
 import {Container, Button, Typography, Box, Slider} from "@mui/material";
 import {useEffect, useState} from "react";
+import Button_Click from "./sounds/Button_Click.mp3";
 
 
 const Settings = () => {
     const history = useHistory();
 
-    const [rounds, setRounds] = useState("");
-    const [roundTime, setTime] = useState("");
+    const [rounds, setRounds] = useState(null);
+    const [roundTime, setTime] = useState(null);
     const [topic, setTopic] = useState("");
 
     const accessCode = localStorage.getItem('lobbyAccessCode');
@@ -20,8 +21,14 @@ const Settings = () => {
         setTime(event.target.value)
     }
     const handleTopicsChange = async (topics) => {
+        playSound(Button_Click);
         setTopic(topics);
     }
+
+    const playSound = (soundFile) => {
+        const audio = new Audio(soundFile);
+        audio.play();
+      };
 
     useEffect(() => {
         async function fetchData() {
@@ -31,6 +38,7 @@ const Settings = () => {
                 setRounds(responseGame.data.settings.rounds);
                 setTopic(responseGame.data.settings.topic);
                 setTime(responseGame.data.settings.roundTime);
+                console.log(responseGame.data.settings.rounds);
 
             } catch (error) {
                 alert("Something went wrong while fetching the users! See the console for details.");
@@ -43,6 +51,7 @@ const Settings = () => {
 
 
     const doSave = async () => {
+        playSound(Button_Click);
         console.log(accessCode);
         const requestBody = JSON.stringify({rounds, topic, roundTime});
         console.log(requestBody);
@@ -53,8 +62,8 @@ const Settings = () => {
 
 
     const doBack = () => {
+        playSound(Button_Click);
         history.push(`/lobbies/${accessCode}`);
-        window.location.reload();
     }
 
     return (
@@ -66,7 +75,7 @@ const Settings = () => {
                     <Box className="inputBox" sx={{marginTop: '-115px'}}>
                         <Typography variant="h6" className="typography">Number of Rounds</Typography>
                         <Slider
-                                defaultValue={7}
+                                value={rounds}
                                 min={3}
                                 max={20}
                                 valueLabelDisplay="auto"
@@ -94,7 +103,7 @@ const Settings = () => {
                         <Typography variant="h6" className="typography">Time Per Round</Typography>
 
                         <Slider
-                                defaultValue={60}
+                                value={roundTime}
                                 min={30}
                                 max={180}
                                 step={5}

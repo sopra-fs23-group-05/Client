@@ -9,8 +9,9 @@ import {
     Dialog,
     DialogContent,
     DialogContentText,
-    DialogActions
+    DialogActions,
 } from "@mui/material";
+import LogoutIcon from '@mui/icons-material/Logout';
 import SendIcon from '@mui/icons-material/Send';
 import {useEffect, useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
@@ -18,6 +19,10 @@ import {api, handleError} from 'helpers/api';
 import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
 import Card from "../../models/Card";
+import Button_Click from "./sounds/Button_Click.mp3";
+import Send_Sound from "./sounds/Send_Sound.mp3";
+import Receive_Sound from "./sounds/Receive_Sound.mp3";
+import Buzzer_Sound from "./sounds/Buzzer_Sound.mp3";
 import {CardRequest} from "../../models/CardRequest";
 import {getWebSocketDomain} from 'helpers/getDomain';
 
@@ -27,7 +32,6 @@ export default function Game() {
     const playerName = localStorage.getItem('userName')
     const [role, setRole] = useState("");
     const [isLeader, setIsLeader] = useState(false);
-    const [hasBuzzed, setHasBuzzed] = useState(false);
 
 
     useEffect(() => {
@@ -62,18 +66,38 @@ export default function Game() {
     const [message, setMessage] = useState('');
     let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
+    const [team1Players, setTeam1Players] = useState([]);
+    const [team2Players, setTeam2Players] = useState([]);
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
 
     const [timer, setTimer] = useState(null);
     const messageType = role === "cluegiver" ? "description" : "guess";
 
+    const playSound = (soundFile) => {
+        const audio = new Audio(soundFile);
+        audio.play();
+      };
 
-    const doLeave = () => {
+
+    const doLeave = async () => {
+        playSound(Button_Click);
+        await api.delete(`/games/${accessCode}/${playerName}`);
         localStorage.removeItem('lobbyAccessCode');
         localStorage.removeItem('token');
         localStorage.removeItem('userName')
-        history.push('/homepage');
-        window.location.reload();
+
+        const responseGame = await api.get(`/games/${accessCode}`);
+        setTeam1Players(responseGame.data.team1.players);
+        setTeam2Players(responseGame.data.team2.players);
+        if(team1Players.length < 2 || team2Players.length < 2){
+            changePage(`/games/${accessCode}/endscreen`);
+            history.push('/homepage');
+            window.location.reload();
+        }
+        else{
+            history.push('/homepage');
+            window.location.reload();
+        }
     }
 
     const updateTeamScore = async (scoredPoints) => {
@@ -129,9 +153,9 @@ export default function Game() {
     useEffect(() => {
         console.log('Opening Chat WebSocket');
         console.log('Opening Page WebSocket');
-        webSocket.current = new WebSocket(getWebSocketDomain() + '/chat/' + accessCode);
-        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
-        timerWebSocket.current = new WebSocket(getWebSocketDomain() + '/timers/' + accessCode);
+        webSocket.current = new WebSocket(getWebSocketDomain() + '/chat' );
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages' );
+        timerWebSocket.current = new WebSocket(getWebSocketDomain() + '/timers' );
 
 
         const openWebSocket = () => {
@@ -171,7 +195,7 @@ export default function Game() {
     // Card websocket code
     useEffect(() => {
         console.log('Opening Card WebSocket');
-        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards/' + accessCode);
+        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards' );
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
@@ -186,13 +210,14 @@ export default function Game() {
             console.log('Closing Card WebSocket');
             cardWebSocket.current.close();
         }
-    }, [accessCode]);
+    }, []);
 
     // Websocket code
     useEffect(() => {
         webSocket.current.onmessage = (event) => {
             const ChatMessage = JSON.parse(event.data);
             console.log('Received Chat Message:', ChatMessage);
+            playSound(Receive_Sound);
             setChatMessages([...chatMessages, {
                 accessCode: ChatMessage.accessCode,
                 userId: ChatMessage.userId,
@@ -238,6 +263,7 @@ export default function Game() {
     // Websocket code
     const sendChatMessage = () => {
         if (user && message && messageType) {
+            playSound(Send_Sound);
             console.log('Send Chat Message!');
             webSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456
@@ -249,19 +275,22 @@ export default function Game() {
 
     // Card websocket code
     const sendCardMessageBuzz = () => {
-        if (cardWebSocket && !hasBuzzed) {
+
+        playSound(Buzzer_Sound);
+        if (cardWebSocket) {
             console.log('Send Buzz Request!');
             cardWebSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456
                     JSON.stringify(new CardRequest(window.location.href.slice(-6), "buzz"))
             );
-            setHasBuzzed(true);
+        
         }
     };
 
     // Card websocket code
     const sendCardMessageSkip = () => {
-        if (cardWebSocket ) {
+        playSound(Button_Click);
+        if (cardWebSocket) {
             console.log('Send Skip Request!');
             cardWebSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456
@@ -341,6 +370,16 @@ export default function Game() {
     const [openDefinition, setOpenDefinition] = useState(false);
     const [openLeave, setOpenLeave] = useState(false);
 
+    const handleOpenLeave = async (open) => {
+        playSound(Button_Click);
+        setOpenLeave(open);
+    }
+
+    const handleOpenDefinitionChange = async (open) => {
+        playSound(Button_Click);
+        setOpenDefinition(open);
+    }
+
     let cardContent = null;
 
     if (displayedCard) {
@@ -403,7 +442,7 @@ export default function Game() {
     );
 
 
-    if (role === "buzzer" && !hasBuzzed) {
+    if (role === "buzzer") {
         buzzerButton = (
                 <Button variant="contained"
                         className="Buzzer"
@@ -433,7 +472,7 @@ export default function Game() {
                                     } else {
                                         setWordDefinition("No definition found");
                                     }
-                                    setOpenDefinition(true);
+                                    handleOpenDefinitionChange(true);
                                 }}>
                             {displayedCard.word}
                         </Button>
@@ -444,7 +483,7 @@ export default function Game() {
                                 <DialogContentText>{wordDefinition}</DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={() => setOpenDefinition(false)}>Close</Button>
+                                <Button onClick={() => handleOpenDefinitionChange(false)}>Close</Button>
                             </DialogActions>
                         </Dialog>
                         {skipButton}
@@ -454,44 +493,94 @@ export default function Game() {
         );
     }
 
+    let clickOnLeave = (
+            <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
+                <DialogTitle>Leave Game?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenLeave(false)}>Close</Button>
+                    <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
+                </DialogActions>
+            </Dialog>
+    );
 
-    let leaveButton=null;
-    //leave button is not visible for leader
-    if(!isLeader){
+    let leaveButton = null;
+
+    if (!isLeader) {
         leaveButton = (
             <div className="leave-box">
             <Button variant="contained" className="leaveButton"
-                        onClick={() => setOpenLeave(true)}
+                        onClick={() => handleOpenLeave(true)}
                 >
-                Leave Game
-            </Button>
+                    <LogoutIcon sx={{color: 'white'}}/>
+                </Button>
+            </div>
+        )
+    }
 
-            <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
+    let timerBox = (
+            <div className="flex-container" style={{gap: '0'}}>
+
+                <div>
+                {leaveButton}
+                {clickOnLeave}
+                </div>
+
+                <div className="timer-box">
+                    <div  className="title">Timer</div>
+                    <div className="title" id="timer">60</div>
+                    <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
+                    <div  className="title">Score</div>
+                    <div  className="title">{scoredPoints}</div>
+                </div>
+
+
+            <Dialog open={openLeave} onClose={() => handleOpenLeave(false)}>
             <DialogTitle>Leave Game?</DialogTitle>
             <DialogContent>
                 <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => setOpenLeave(false)}>Close</Button>
+                <Button onClick={() => handleOpenLeave(false)}>Close</Button>
                 <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
             </DialogActions>
             </Dialog>
             </div>
-        )
+    );
+
+    if (role === "guesser") {
+        timerBox =
+                <div className="horizontal-box" style={{justifyContent: 'space-between'}}>
+
+                    <div className="timer-box">
+                        <div  className="title">Timer</div>
+                        <div className="title" id="timer">60</div>
+                        <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
+                        <div  className="title">Score</div>
+                        <div  className="title">{scoredPoints}</div>
+                    </div>
+
+                    <div>
+                    <Button style={{marginTop: '-80px'}}
+                        onClick={() => setOpenLeave(true)}
+                    >
+                        <LogoutIcon sx={{color: 'white'}}/>
+                    </Button>
+                    {clickOnLeave}
+                    </div>
+
+                </div>
     }
+
 
     return (
             <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
                 <div className="flex-container" style={{marginTop: '-20px'}}>
                     <div className="card-and-timer-box">
                         {cardComponent}
-                        <div className="timer-box">
-                            <div  className="title">Timer</div>
-                            <div className="title">{timer}</div>
-                            <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
-                            <div  className="title">Score</div>
-                            <div  className="title">{scoredPoints}</div>
-                        </div>
+                        {timerBox}
                     </div>
                     <div className="chat-components-box">
                         <div className="chat-box-containing-messages"
@@ -503,7 +592,6 @@ export default function Game() {
                         {sendFields}
                     </div>
                     {buzzerButton}
-                    {leaveButton}
                 </div>
             </div>
     );

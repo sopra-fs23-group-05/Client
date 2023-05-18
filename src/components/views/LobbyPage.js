@@ -6,6 +6,7 @@ import 'styles/views/AdminLogin.scss';
 import 'styles/views/LobbyPage.scss';
 import 'styles/views/Homepage.scss';
 import TabooData from "taboo-data";
+import Button_Click from "./sounds/Button_Click.mp3";
 import {TeamRequest} from "../../models/TeamRequest";
 import {getWebSocketDomain} from "../../helpers/getDomain";
 
@@ -14,6 +15,7 @@ const Lobby = () => {
     const history = useHistory();
 
     const [lobby, setLobby] = useState(null);
+    const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
     const [settings, setSettings] = useState(null);
 
@@ -26,6 +28,12 @@ const Lobby = () => {
     const [team1Members, setTeam1Members] = useState([]);
     const [team2Members, setTeam2Members] = useState([]);
 
+    const playSound = (soundFile) => {
+        const audio = new Audio(soundFile);
+        audio.play();
+      };
+
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -34,6 +42,7 @@ const Lobby = () => {
                 //get user
                 const userResponse = await api.get(`/users/${userId}`);
                 console.log('user info', userResponse.data);
+                setUser(userResponse.data);
                 setIsLeader(userResponse.data.leader);
 
                 //get lobby
@@ -78,6 +87,7 @@ const Lobby = () => {
 
 
     const goBack = async () => {
+        playSound(Button_Click);
         if (isLeader) {
             await api.delete(`/lobbies/${accessCode}`);
         }
@@ -91,9 +101,9 @@ const Lobby = () => {
     // WebSocket code
     useEffect(() => {
         console.log('Opening Team WebSocket');
-        teamWebSocket.current = new WebSocket(getWebSocketDomain() + '/teams/' + accessCode);
+        teamWebSocket.current = new WebSocket(getWebSocketDomain() + '/teams');
         console.log('Opening Page WebSocket');
-        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
         const openWebSocket = () => {
             teamWebSocket.current.onopen = (event) => {
                 console.log('Open Team WebSocket:', event);
@@ -115,6 +125,7 @@ const Lobby = () => {
 
     // Team WebSocket code
     const changeTeam = (teamNr, type) => {
+        playSound(Button_Click);
         console.log('Send Team Message!');
         teamWebSocket.current.send(
             JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), teamNr, parseInt(userId, 10), type))
@@ -149,7 +160,7 @@ const Lobby = () => {
                         username: IncomingMessage.username
                     });
                 }
-            }else if (IncomingMessage.type === 'removal') {
+            } else if (IncomingMessage.type === 'removal') {
                 if (IncomingMessage.teamNr === 1) {
                     lobby.team1 = lobby.team1.filter(user => user.username !== IncomingMessage.username);
                     const newTeam1Members = team1Members.filter(member => member.username !== IncomingMessage.username);
@@ -158,6 +169,10 @@ const Lobby = () => {
                     lobby.team2 = lobby.team2.filter(user => user.username !== IncomingMessage.username);
                     const newTeam2Members = team2Members.filter(member => member.username !== IncomingMessage.username);
                     setTeam2Members(newTeam2Members);
+                }
+            } else if (IncomingMessage.type === 'error') {
+                if (IncomingMessage.username === user.username) {
+                    alert("Joining this team would lead to an unfair game. Therefore, wait until more users have joined the lobby or join the other team!")
                 }
             }
         }
@@ -182,12 +197,15 @@ const Lobby = () => {
     }, [history]);
 
     const goToInvitePage = () => {
+        playSound(Button_Click);
         history.push(`/lobbies/${accessCode}/invite`)
     }
     const goToSettingsPage = () => {
+        playSound(Button_Click);
         history.push(`/lobbies/${accessCode}/settings`)
     }
     const startGame = async () => {
+        playSound(Button_Click);
         try {
             if(settings==="city"){
                 console.log(settings);

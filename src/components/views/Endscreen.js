@@ -5,11 +5,20 @@ import TabooLogo from './TabooLogo.png';
 import Button from '@mui/material/Button';
 import StarIcon from '@mui/icons-material/Star';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import Button_Click from "./sounds/Button_Click.mp3";
+import Winner_Sound from "./sounds/Winner_Sound.mp3";
 import {useEffect, useState} from "react";
 import {api} from "../../helpers/api";
 
 
 const Endscreen = () => {
+
+    const playSound = (soundFile) => {
+        const audio = new Audio(soundFile);
+        audio.play();
+      };
+
+    playSound(Winner_Sound);
     const history = useHistory();
     const canvasRef = useRef(null);
 
@@ -25,6 +34,7 @@ const Endscreen = () => {
 
 
     const doHomepage = async () => {
+        playSound(Button_Click);
         if (leader) {
             await api.delete(`/games/${accessCode}`);
         }
@@ -33,7 +43,9 @@ const Endscreen = () => {
         window.location.reload();
     };
 
+
     const doShare = async () => {
+        playSound(Button_Click);
         const canvas = canvasRef.current;
         if (!canvas) {
             alert('Could not create screenshot.');
@@ -73,8 +85,16 @@ const Endscreen = () => {
                 setLeader(userResponse.data.leader);
                 if (team1Points > team2Points) {
                     setWinner(1)
-                } else {
+                } else if(team1Points < team2Points){
                     setWinner(2);
+                }
+                else{
+                    if(team1Players.length < 2){
+                        setWinner(2);
+                    }
+                    else if(team2Players.length < 2){
+                        setWinner(1);
+                    }
                 }
                 const responsePlayer = await api.get(`/games/${accessCode}/players/MVP`);
                 console.log(responsePlayer);

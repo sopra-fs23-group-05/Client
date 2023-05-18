@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import {useEffect, useRef, useState} from "react";
 import {api} from "../../helpers/api";
 import {getWebSocketDomain} from "../../helpers/getDomain";
+import Button_Click from "./sounds/Button_Click.mp3";
 import Button from "@mui/material/Button";
 
 
@@ -18,6 +19,11 @@ const PreGame = () => {
     const pageWebSocket = useRef(null);
     const preGameTimerWebSocket = useRef(null);
     const [timer, setTimer] = useState(10);
+
+    const playSound = (soundFile) => {
+        const audio = new Audio(soundFile);
+        audio.play();
+      };
 
     useEffect(() => {
         async function fetchData() {
@@ -46,9 +52,9 @@ const PreGame = () => {
     // WebSocket code
     useEffect(() => {
         console.log('Opening Page WebSocket');
-        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages' );
         console.log('Opening PreGame WebSocket');
-        preGameTimerWebSocket.current = new WebSocket(getWebSocketDomain() + '/pregameTimers/' + accessCode);
+        preGameTimerWebSocket.current = new WebSocket(getWebSocketDomain() + '/pregameTimers' );
 
         const openWebSocket = () => {
             pageWebSocket.current.onopen = (event) => {
@@ -106,6 +112,7 @@ const PreGame = () => {
     },[timer]);
 
     const showDefinition = () => {
+        playSound(Button_Click);
         if (definition === "") {
             if (role.toString().toLowerCase() === "cluegiver") {
                 setDefinition("Describe the word without using the word itself or any of the listed taboo words.");

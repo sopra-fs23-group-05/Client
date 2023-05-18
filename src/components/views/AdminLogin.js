@@ -6,6 +6,7 @@ import {TextField, Button, Typography, Box} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import Lobby from "../../models/Lobby";
 import TabooLogo from "./TabooLogo.png";
+import Button_Click from "./sounds/Button_Click.mp3";
 
 
 const AdminLogin = () => {
@@ -18,11 +19,16 @@ const AdminLogin = () => {
         setUsername(event.target.value)
     }
 
+    const playSound = (soundFile) => {
+        const audio = new Audio(soundFile);
+        audio.play();
+      };
+
     const goBack = () => {
+        playSound(Button_Click);
         localStorage.removeItem('token');
         localStorage.removeItem('lobbyAccessCode');
         history.push('/homepage');
-        window.location.reload();
     }
 
     const handleEnterKey = (event) => {
@@ -33,6 +39,7 @@ const AdminLogin = () => {
     const doLogin = async () => {
         try {
             //create user
+            playSound(Button_Click);
             const userRequestBody = JSON.stringify({username, leader});
             const response = await api.post('/users', userRequestBody);
 

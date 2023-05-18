@@ -5,21 +5,29 @@ import 'styles/views/Rules.scss';
 import 'styles/views/Homepage.scss';
 import Button from '@mui/material/Button';
 import TabooLogo from './TabooLogo.png';
+import Button_Click from "./sounds/Button_Click.mp3";
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 const Rules = () => {
     const history = useHistory();
     const doBack = () => {
         try {
+            playSound(Button_Click);
             history.push(`/homepage`);
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
         }
     };
 
+    const playSound = (soundFile) => {
+        const audio = new Audio(soundFile);
+        audio.play();
+      };
+
     const [currentPointExample, setCurrentPointExample] = useState(1);
     const [currentPointRules, setCurrentPointRules] = useState(1);
     const handlePrevClick = (pointType) => {
+        playSound(Button_Click);
         if (pointType === "example") {
             if (currentPointExample > 1) {
                 setCurrentPointExample(currentPointExample - 1);
@@ -33,6 +41,7 @@ const Rules = () => {
     };
 
     const handleNextClick = (pointType) => {
+        playSound(Button_Click);
         if (pointType === "example") {
             if (currentPointExample < 3) {
                 setCurrentPointExample(currentPointExample + 1);
@@ -51,8 +60,6 @@ const Rules = () => {
                     <img className="tabooLogo" src={TabooLogo} alt="Taboo Logo"/>
                     <div className="rulesRectangle">
                         <div className="rulesText">
-                            QUICK!
-                            <br/><br/>
                             How do you get your team to say APPLE?
                             <br/><br/>
                             You can not say RED, FRUIT, PIE, CIDER, or CORE. They are TABOO - utterly
