@@ -16,7 +16,7 @@ Additionally, user-friendly features, such as a dictionary API for word lookup a
 
 Let’s play Taboo!
 
-<h2 style="color:purple;">Getting Started</h2>
+## Getting Started
 This guide helps you to install this client code on your local machine.
 
 ### Prerequisites
