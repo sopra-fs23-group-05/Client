@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import "styles/views/Homepage.scss";
 import TabooLogo from "./TabooLogo.png";
 import Button_Click from "./sounds/Button_Click.mp3";
+import BackgroundVideo from "./BackgroundVideo.mp4";
 import Button from "@mui/material/Button";
 
 const Homepage = () => {
@@ -43,10 +44,12 @@ const Homepage = () => {
 
   return (
     <div className="homePageRoot">
+      <div className="overlay"></div>
+      <video className="backgroundVideo" src={BackgroundVideo} autoPlay loop muted />
       <img
         className="tabooLogo"
         src={TabooLogo}
-        style={{ marginBottom: "-30px" }}
+        style={{ marginBottom: "-30px", marginTop: "30px"}}
         alt="Taboo Logo"
       />
       <div className="buttonPanel">

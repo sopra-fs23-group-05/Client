@@ -1,23 +1,21 @@
 .homePageRoot {
     gap: 114px;
     display: flex;
-    flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 40px 20px 35px 20px;
     box-sizing: border-box;
     background-position: 50% 50%;
     background-size: cover;
     background-blend-mode: normal, normal;
-    background: radial-gradient(ellipse closest-side at 50% 50%, #b219fe 5%, #48007e);
+    background: transparent;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     overflow: auto;
     position: center;
-    margin: 0 auto;
     width: 390px;
     max-width: 390px;
     height: 844px;
     max-height: 844px;
+    position: absolute;
 
 
     .leaveButton {
@@ -45,23 +43,41 @@
     box-sizing: border-box;
     display: block;
     margin: 0 auto;
+    margin-top: 40px;
+    position: absolute;
 }
 
 .buttonPanel {
+    margin-top: 70px;
+    margin-left: 47.5px;
     width: 225px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 35px 34px 35px 34px;
-    border-radius: 15px;
+    border-radius: 9px;
     border-width: 1px;
     border-style: solid;
     border-color: #ffffff;
     box-sizing: content-box;
-    background-color: #b699db;
+    background-color: transparent;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     cursor: pointer;
+    position: absolute;
+    backdrop-filter: blur(150px);
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(150px); /* Adjust the blur intensity (8px) to your desired level */
+        background-color: rgba(0,0,0,0.1);
+        z-index: -1;
+      }
 }
 
 .MuiButton-root.button {
@@ -77,12 +93,38 @@
     border-style: solid;
     border-color: #ffffff;
     box-sizing: border-box;
-    background-color: #7f5dab;
+    background-color: transparent;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    color: #EA854C;
+    color: #ff6c43;
     font-size: 23px;
     font-weight: 600;
     font-family: Inter, sans-serif;
+    
+    
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.2);
+        z-index: -1;
+      }
+}
+
+
+.overlay {
+    position: absolute;
+    width: 390px;
+    height: 844px;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+ video {
+    width: 390px;
+    height: 844px;
+    object-fit: cover;
 }
 
   
