@@ -71,7 +71,6 @@ export default function Game() {
 
     const [timer, setTimer] = useState(null);
     const messageType = role === "cluegiver" ? "description" : "guess";
-
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
         audio.play();
@@ -148,7 +147,7 @@ export default function Game() {
     useEffect(() => {
         console.log('Opening Chat WebSocket');
         console.log('Opening Page WebSocket');
-        webSocket.current = new WebSocket(getWebSocketDomain() + '/chat/' + accessCode);
+        webSocket.current = new WebSocket(getWebSocketDomain() + '/chats/' + accessCode);
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
         timerWebSocket.current = new WebSocket(getWebSocketDomain() + '/timers/' + accessCode);
 
@@ -190,7 +189,7 @@ export default function Game() {
     // Card websocket code
     useEffect(() => {
         console.log('Opening Card WebSocket');
-        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards' );
+        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards/' + accessCode);
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
@@ -519,7 +518,7 @@ export default function Game() {
 
                 <div className="timer-box">
                     <div  className="title">Timer</div>
-                    <div className="title" id="timer">60</div>
+                    <div className="title" >{timer}</div>
                     <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
                     <div  className="title">Score</div>
                     <div  className="title">{scoredPoints}</div>
@@ -545,7 +544,7 @@ export default function Game() {
 
                     <div className="timer-box">
                         <div  className="title">Timer</div>
-                        <div className="title" id="timer">60</div>
+                        <div className="title">{timer}</div>
                         <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
                         <div  className="title">Score</div>
                         <div  className="title">{scoredPoints}</div>
