@@ -48,9 +48,9 @@ const PreGame = () => {
     // WebSocket code
     useEffect(() => {
         console.log('Opening Page WebSocket');
-        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages' );
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
         console.log('Opening PreGame WebSocket');
-        preGameTimerWebSocket.current = new WebSocket(getWebSocketDomain() + '/pregameTimers' );
+        preGameTimerWebSocket.current = new WebSocket(getWebSocketDomain() + '/pregameTimers/' + accessCode);
 
         const openWebSocket = () => {
             pageWebSocket.current.onopen = (event) => {

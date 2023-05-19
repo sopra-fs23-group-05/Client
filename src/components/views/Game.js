@@ -148,9 +148,9 @@ export default function Game() {
     useEffect(() => {
         console.log('Opening Chat WebSocket');
         console.log('Opening Page WebSocket');
-        webSocket.current = new WebSocket(getWebSocketDomain() + '/chat' );
-        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages' );
-        timerWebSocket.current = new WebSocket(getWebSocketDomain() + '/timers' );
+        webSocket.current = new WebSocket(getWebSocketDomain() + '/chat/' + accessCode);
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
+        timerWebSocket.current = new WebSocket(getWebSocketDomain() + '/timers/' + accessCode);
 
 
         const openWebSocket = () => {
