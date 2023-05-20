@@ -82,7 +82,9 @@ const PreGame = () => {
     }
     const startTimer = () => {
         console.log('Send Timer Message!');
-        preGameTimerWebSocket.current.send();
+        preGameTimerWebSocket.current.send(
+            JSON.stringify({emptyString: ''})
+        );
         console.log("Line 88 reached.");
     }
 
