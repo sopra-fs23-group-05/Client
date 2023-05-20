@@ -56,14 +56,9 @@ const PreGame = () => {
             try {
                 const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
                 const responseGame = await api.get(`/games/${accessCode}`);
-                await new Promise(resolve => setTimeout(resolve, 100));
                 setRole(responseRole.data);
                 setTeam1(responseGame.data.team1.points);
                 setTeam2(responseGame.data.team2.points);
-                console.log("Line 37 reached.");
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                startTimer();
-                console.log("Line 39 reached.");
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
                 console.error("Details:", error);
@@ -81,13 +76,6 @@ const PreGame = () => {
             JSON.stringify({url: `/games/${accessCode}`})
         );
     }
-    const startTimer = () => {
-        console.log('Send Timer Message!');
-        preGameTimerWebSocket.current.send(
-            JSON.stringify({emptyString: ''})
-        );
-        console.log("Line 88 reached.");
-    }
 
     // Page WebSocket code
     useEffect(() => {
@@ -100,6 +88,8 @@ const PreGame = () => {
     }, [history]);
 
     const [definition, setDefinition] = useState("");
+
+    // Timer WebSocket code
     useEffect(() => {
         preGameTimerWebSocket.current.onmessage = (event) => {
             const TimerMessage = JSON.parse(event.data);
