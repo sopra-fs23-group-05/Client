@@ -130,7 +130,7 @@ export default function Game() {
             } catch (error) {
                 console.log("It reaches line 135");
                 console.error("Details:", error);
-                alert("Something went wrong while fetching the users! See the console for details.");
+                alert("Something went wrong while fetching the game!");
             }
         }
 
