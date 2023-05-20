@@ -91,9 +91,14 @@ TODO
 ## Illustrations
 
 ### Homepage
-| Screenshot | Description |
-| ---------- | ----------- |
- | <img src="./src/styles/Images/homePicture.png" alt="Image" width="150" height="300">| Upon launching the game, you will be greeted by the homepage.Here, you have two options: to join an existing |
+<div style="display: flex; align-items: center; gap: 10px;">
+    <img src="./src/styles/Images/homePicture.png" alt="Image" width="150" height="300"> 
+    <p style="max-width: 400px">
+        Upon launching the game, you will be greeted by the homepage.Here, you have two options: to join an existing 
+        lobby using a given access code or to create a new lobby. The lobby serves as a virtual room where players 
+        gather to play the game.
+    </p>
+</div>
 
 ### Joining a Team
 <div style="display: flex; align-items: center; gap: 10px;">
@@ -167,8 +172,7 @@ We are open for more ideas!
 * Tom Meier
 
 ## License
-TODO
-This project is licensed under the MIT License - see the ___ file for details
+This project is licensed under Apache 2.0 - see [this](https://github.com/sopra-fs23-group-05/Client/blob/main/LICENSE) file for details
 
 ## Acknowledgments
 TODO
