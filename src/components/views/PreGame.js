@@ -28,21 +28,14 @@ const PreGame = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                console.log("It gets to line 31");
                 const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
-                console.log("It gets to line 33");
                 const responseGame = await api.get(`/games/${accessCode}`);
-                console.log("It gets to line 35");
                 await new Promise(resolve => setTimeout(resolve, 100));
-                console.log("It gets to line 37");
                 setRole(responseRole.data);
-                console.log("It gets to line 39");
                 setTeam1(responseGame.data.team1.points);
-                console.log("It gets to line 41");
                 setTeam2(responseGame.data.team2.points);
-                console.log("It gets to line 43");
                 startTimer();
-                console.log("It gets to line 45");
+                console.log("It gets to line 38");
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
                 console.error("Details:", error);
@@ -88,9 +81,12 @@ const PreGame = () => {
     }
     const startTimer = () => {
         console.log('Send Timer Message!');
-        preGameTimerWebSocket.current.send(""
+        preGameTimerWebSocket.current.send(
+            JSON.stringify("")
         );
+        console.log("It gets to line 87");
     }
+
     // Page WebSocket code
     useEffect(() => {
         pageWebSocket.current.onmessage = (event) => {
@@ -104,11 +100,12 @@ const PreGame = () => {
     const [definition, setDefinition] = useState("");
     useEffect(() => {
         preGameTimerWebSocket.current.onmessage = (event) => {
+            console.log("It gets to line 103");
             const TimerMessage = JSON.parse(event.data);
             console.log('Received Timer Message:', TimerMessage);
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
-                changePage(`games/${accessCode}`);
+                changePage();
             }
         }
     },[timer]);
