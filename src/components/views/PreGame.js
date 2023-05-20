@@ -25,28 +25,6 @@ const PreGame = () => {
         audio.play();
       };
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
-                const responseGame = await api.get(`/games/${accessCode}`);
-                await new Promise(resolve => setTimeout(resolve, 100));
-                setRole(responseRole.data);
-                setTeam1(responseGame.data.team1.points);
-                setTeam2(responseGame.data.team2.points);
-                console.log("Line 37 reached.");
-                startTimer();
-                console.log("Line 39 reached.");
-            } catch (error) {
-                console.error(`Something went wrong while fetching the users:`);
-                console.error("Details:", error);
-                alert("Something went wrong while fetching the users! See the console for details.");
-            }
-        }
-
-        fetchData();
-    }, [accessCode, playerName]);
-
     // WebSocket code
     useEffect(() => {
         console.log('Opening Page WebSocket');
@@ -72,6 +50,28 @@ const PreGame = () => {
             preGameTimerWebSocket.current.close();
         }
     }, []);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
+                const responseGame = await api.get(`/games/${accessCode}`);
+                await new Promise(resolve => setTimeout(resolve, 100));
+                setRole(responseRole.data);
+                setTeam1(responseGame.data.team1.points);
+                setTeam2(responseGame.data.team2.points);
+                console.log("Line 37 reached.");
+                startTimer();
+                console.log("Line 39 reached.");
+            } catch (error) {
+                console.error(`Something went wrong while fetching the users:`);
+                console.error("Details:", error);
+                alert("Something went wrong while fetching the users! See the console for details.");
+            }
+        }
+
+        fetchData();
+    }, [accessCode, playerName]);
 
     // Page WebSocket code
     const changePage = () => {
