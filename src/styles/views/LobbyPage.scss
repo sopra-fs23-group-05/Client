@@ -1,6 +1,7 @@
 .title {
     color: white;
     padding: 0 5px;
+    position: absolute;
 }
 
 .team-member-box {
@@ -29,4 +30,17 @@
     margin: -10px;
     color: black;
     font-weight: bold;
+}
+
+.overlayHomepageVideo {
+    position: absolute;
+    min-width: 390px;
+    min-height: 844px;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.homepageVideo {
+    min-width: 390px;
+    min-height: 844px;
+    object-fit: cover;
 }

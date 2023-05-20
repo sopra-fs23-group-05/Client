@@ -3,6 +3,7 @@ import QRCode from "react-qr-code";
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Invite.scss';
 import Button_Click from "./sounds/Button_Click.mp3";
+import BackgroundVideo from "./BackgroundVideo.mp4";
 import {Container, Button, Typography, Box} from "@mui/material";
 
 
@@ -26,10 +27,11 @@ const Invite = () => {
     };
 
     return (
-            <div className="inviteRoot" style={{overflowY: 'scroll'}}>
-
-                <h1 className="title" style={{marginTop: '-50px'}}>Invite To Lobby</h1>
-                <h1 className="title" style={{fontSize: '30px', marginTop: '-100px'}}>Access Code: {accessCode}</h1>
+            <div className="inviteRoot">
+                <div className="overlayHomepageVideo"></div>
+                <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
+                <h1 className="title" style={{marginTop: '-700px'}}>Invite To Lobby</h1>
+                <h1 className="title" style={{fontSize: '30px', marginTop: '-550px'}}>Access Code: {accessCode}</h1>
                 <Container className="flex-container">
                     <Box className="qrCodeBox" sx={{marginTop: '-110px'}}>
                         <Typography variant="h6" className="qr-typography">Send this invite link to your friends</Typography>
@@ -54,15 +56,14 @@ const Invite = () => {
                             />
                         </div>
 
-                    </Box>
-                </Container>
                 <Button variant="contained"
                         className="backButton"
-                        style={{marginTop: '-60px'}}
                         onClick={() => doBack()}
                 >
                     Back
                 </Button>
+                    </Box>
+                </Container>
             </div>
     );
 };

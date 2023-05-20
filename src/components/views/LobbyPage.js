@@ -7,6 +7,7 @@ import 'styles/views/LobbyPage.scss';
 import 'styles/views/Homepage.scss';
 import TabooData from "taboo-data";
 import Button_Click from "./sounds/Button_Click.mp3";
+import BackgroundVideo from "./BackgroundVideo.mp4";
 import {TeamRequest} from "../../models/TeamRequest";
 import {getWebSocketDomain} from "../../helpers/getDomain";
 
@@ -267,10 +268,11 @@ const Lobby = () => {
 
     if (isLeader) {
         content = (
-            <div className="horizontal-box">
+            <div className="horizontal-box" style={{width: '350px', marginLeft: '-484px', marginTop: '100px'}}>
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => goToSettingsPage()}
+                        style={{width: '169px'}}
                 >
                     Settings
                 </Button>
@@ -278,6 +280,7 @@ const Lobby = () => {
                         className="buttonLogin"
                         onClick={() => startGame()}
                         disabled={team1Members.length < 2 || team2Members.length < 2}
+                        style={{width: '169px'}}
                 >
                     Start Game
                 </Button>
@@ -294,51 +297,57 @@ const Lobby = () => {
     ));
 
     return (
-        <div className="homePageRoot">
+        <div className="adminLoginRoot">
+            <div className="overlayHomepageVideo"></div>
+            <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
             <div className="flex-container">
             <div className="horizontal-box">
-                <Typography variant="h5" className="title">Access Code:</Typography>
-                <Typography variant="h5" className="title">{accessCode}</Typography>
+                <Typography variant="h5" className="title" style={{marginLeft: '-950px', marginTop: '-500px'}}>Access Code:</Typography>
+                <Typography variant="h5" className="title" style={{marginLeft: '-700px', marginTop: '-500px'}}>{accessCode}</Typography>
             </div>
 
             <div className="flex-container">
-                <div className="buttonPanel">
-                    <Typography variant="h5" className="title">Team 1</Typography>
+                <div className="buttonPanel" style={{marginLeft: '-456.5px', marginTop: '-50px', marginBottom: '20px'}}>
+                    <Typography variant="h5" className="title" style={{marginTop: '-150px'}}>Team 1</Typography>
                     <ul className="team-member-box">
                         {team1Content}
                     </ul>
                     <Button variant="contained"
                             className="buttonLogin"
                             onClick={() => changeTeam(1, "addition")}
+                            style={{width: '200px'}}
                     >
                         Join
                     </Button>
                 </div>
 
-                <div className="buttonPanel">
-                    <Typography variant="h5" className="title">Team 2</Typography>
+                <div className="buttonPanel" style={{marginLeft: '-456.5px'}}>
+                    <Typography variant="h5" className="title" style={{marginTop: '-150px'}}>Team 2</Typography>
                     <ul className="team-member-box">
                         {team2Content}
                     </ul>
                     <Button variant="contained"
                             className="buttonLogin"
                             onClick={() => changeTeam(2, "addition")}
+                            style={{width: '200px'}}
                     >
                         Join
                     </Button>
                 </div>
             </div>
 
-            <div className="horizontal-box">
+            <div className="horizontal-box" style={{width: '350px', marginLeft: '-484px', marginTop: '20px'}}>
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => goBack()}
+                        style={{width: '169px'}}
                 >
                     Back
                 </Button>
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => goToInvitePage()}
+                        style={{width: '169px'}}
                 >
                     Invite
                 </Button>

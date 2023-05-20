@@ -2,10 +2,11 @@ import React, {useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import User from 'models/User';
 import {useHistory} from 'react-router-dom';
-import {TextField, Button, Typography} from "@mui/material";
+import {TextField, Button, Typography, Box} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import TabooLogo from "./TabooLogo.png";
 import Button_Click from "./sounds/Button_Click.mp3";
+import BackgroundVideo from "./BackgroundVideo.mp4";
 import Lobby from "../../models/Lobby";
 
 const UserLogin = () => {
@@ -83,26 +84,34 @@ const UserLogin = () => {
     };
 
     return (
-            <div className="homePageRoot">
-                <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
-                    <div className="buttonPanel">
-                        <Typography variant="h5" sx={{color: 'white', marginBottom: '20px'}}>Login</Typography>
+        <div className="adminLoginRoot">
+            <div className="overlayHomepageVideo"></div>
+                <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
+                <img className="tabooLogo" src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    position: 'absolute'
+                }}
+                >
+                    <div className="buttonPanel" style={{height: '245.016px'}}>
+                        <Typography variant="h5" sx={{color: 'white', marginBottom: '200px', position: 'absolute'}}>Login</Typography>
                         <TextField className="custom-outlined-text-field"
-                                   sx={{marginBottom: '20px'}}
+                                   sx={{marginBottom: '20px', marginTop: '-50px'}}
                                    label='Access Code'
                                    value={givenAccessCode}
                                    onChange={handleAccessCodeChange}
                         >
                         </TextField>
                         <TextField className="custom-outlined-text-field"
-                                   sx={{marginBottom: '20px'}}
+                                   sx={{marginBottom: '20px', marginTop: '100px'}}
                                    label='Username'
                                    value={username}
                                    onKeyDown={handleEnterKey}
                                    onChange={handleUsernameChange}
                         >
                         </TextField>
-                        <div className="horizontal-box">
+                        <div className="horizontal-box" style={{marginTop: '220px'}}>
                             <Button variant="contained"
                                     className="buttonLogin"
                                     onClick={() => goBack()}
@@ -117,6 +126,7 @@ const UserLogin = () => {
                             </Button>
                         </div>
                     </div>
+                    </Box>
             </div>
     );
 };

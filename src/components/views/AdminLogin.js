@@ -6,6 +6,7 @@ import {TextField, Button, Typography, Box} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import Lobby from "../../models/Lobby";
 import TabooLogo from "./TabooLogo.png";
+import BackgroundVideo from "./BackgroundVideo.mp4";
 import Button_Click from "./sounds/Button_Click.mp3";
 
 
@@ -85,15 +86,18 @@ const AdminLogin = () => {
 
 
     return (
-            <div className="homePageRoot">
-                <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
+            <div className="adminLoginRoot">
+                <div className="overlayHomepageVideo"></div>
+                <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
+                <img className="tabooLogo" src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
+                    position: 'absolute'
                 }}
                 >
                     <div className="buttonPanel">
-                        <Typography variant="h5" sx={{color: 'white', marginBottom: '20px'}}>Login</Typography>
+                        <Typography variant="h5" sx={{color: 'white', marginBottom: '150px', position: 'absolute'}}>Login</Typography>
                         <TextField className="custom-outlined-text-field"
                                    sx={{marginBottom: '20px'}}
                                    label='Username'

@@ -29,14 +29,14 @@
 
 .tabooLogo {
     max-width: 100%;
+    min-width: 390px;
     min-height: 0;
     max-height: 40%;
     align-self: stretch;
     box-sizing: border-box;
     display: block;
     margin: 0 auto;
-    margin-top: -1450px;
-    margin-left: 50px
+    margin-top: -1430px;
     ;
     position: absolute;
 }
@@ -56,7 +56,7 @@
     margin-left: 4px;
     padding: 13px 16px;
     border-radius: 9px;
-    margin-top: -150px;
+    margin-top: -100px;
     position: absolute;
 
     &:before {
@@ -81,8 +81,8 @@
     justify-content: center;
     align-items: center;
     margin: 20px auto;
-    margin-top: 1200px;
-    margin-left: 75px;
+    margin-top: 1250px;
+    margin-left: 85.5px;
     padding: 20px 32.1px;
     border-width: 1px;
     border-radius: 9px;
