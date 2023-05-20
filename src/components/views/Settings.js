@@ -2,27 +2,49 @@ import {api} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Settings.scss';
 import {Container, Button, Typography, Box, Slider} from "@mui/material";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import Button_Click from "./sounds/Button_Click.mp3";
 
 
 const Settings = () => {
     const history = useHistory();
 
-    const [rounds, setRounds] = useState(null);
+    const [rounds, setRounds] = useState(3);
     const [roundTime, setTime] = useState(null);
     const [topic, setTopic] = useState("");
+    const sliderRoundsValueRef = useRef(rounds);
+    const sliderTimeValueRef = useRef(roundTime);
 
     const accessCode = localStorage.getItem('lobbyAccessCode');
-    const handleRoundsChange = (event) => {
-        setRounds(event.target.value)
-    }
-    const handleTimeChange = (event) => {
-        setTime(event.target.value)
+
+    useEffect(() => {
+        const newValue = sliderRoundsValueRef.current;
+        if (!isNaN(newValue)) {
+          doSave();
+        }
+      }, [sliderRoundsValueRef.current]);
+
+
+      useEffect(() => {
+        const newValue = sliderTimeValueRef.current;
+        if (!isNaN(newValue)) {
+          doSave();
+        }
+      }, [sliderTimeValueRef.current]);
+
+
+
+      const handleRoundsChange = (event, newValue) => {
+        sliderRoundsValueRef.current = newValue; // Update the ref value
+        setRounds(newValue);
+      };
+    const handleTimeChange = (event, newValue) => {
+        sliderTimeValueRef.current = newValue;
+        setTime(newValue);
     }
     const handleTopicsChange = async (topics) => {
-        playSound(Button_Click);
         setTopic(topics);
+        doSave();
     }
 
     const playSound = (soundFile) => {
@@ -52,11 +74,8 @@ const Settings = () => {
 
     const doSave = async () => {
         playSound(Button_Click);
-        console.log(accessCode);
         const requestBody = JSON.stringify({rounds, topic, roundTime});
-        console.log(requestBody);
         const url = "/lobbies/" + accessCode + "/settings";
-        console.log(url);
         await api.put(url, requestBody);
     };
 
@@ -81,6 +100,7 @@ const Settings = () => {
                                 valueLabelDisplay="auto"
                                 aria-label="Small"
                                 onChange={handleRoundsChange}
+                                ref={sliderRoundsValueRef}
                                 sx={{
                                     color: '#7f5dab'
                                 }}
@@ -88,12 +108,6 @@ const Settings = () => {
 
                         <Box className="saveBox">
                             <div></div>
-                            <Button variant="contained"
-                                    className="saveButton"
-                                    onClick={() => doSave()}
-                            >
-                                Save
-                            </Button>
                         </Box>
                     </Box>
                 </Container>
@@ -110,6 +124,7 @@ const Settings = () => {
                                 valueLabelDisplay="auto"
                                 aria-label="Small"
                                 onChange={handleTimeChange}
+                                ref={sliderTimeValueRef}
                                 sx={{
                                     color: '#7f5dab'
                                 }}
@@ -117,11 +132,6 @@ const Settings = () => {
 
                         <Box className="saveBox">
                             <div></div>
-                            <Button variant="contained" className="saveButton"
-                                    onClick={() => doSave()}
-                            >
-                                Save
-                            </Button>
                         </Box>
                     </Box>
                 </Container>
@@ -140,7 +150,9 @@ const Settings = () => {
                     <Button variant="contained"
                             className="left-topicsButton"
                             style={{backgroundColor: '#d68042', boxShadow: topic === "ANIMALS" ? "0 0 50px 0 #FFF" : ""}}
-                            onClick={() => handleTopicsChange("ANIMALS")}
+                            onMouseDown={() => handleTopicsChange("ANIMALS")}
+                            onMouseUp={() => handleTopicsChange("ANIMALS")}
+
                     >
                         <h1>
                             Animals
@@ -150,7 +162,8 @@ const Settings = () => {
                     <Button variant="contained"
                             className='right-topicsButton'
                             style={{backgroundColor: '#EA4848', boxShadow: topic === "CARS" ? "0 0 50px 0 #FFF" : "",}}
-                            onClick={() => handleTopicsChange("CARS")}
+                            onMouseDown={() => handleTopicsChange("CARS")}
+                            onMouseUp={() => handleTopicsChange("CARS")}
                     >
                         <h1>
                             Cars
@@ -162,7 +175,8 @@ const Settings = () => {
                     <Button variant="contained"
                             className='left-topicsButton'
                             style={{backgroundColor: '#e5e833', boxShadow: topic === "CITY" ? "0 0 50px 0 #FFF" : ""}}
-                            onClick={() => handleTopicsChange("CITY")}
+                            onMouseDown={() => handleTopicsChange("CITY")}
+                            onMouseUp={() => handleTopicsChange("CITY")}
                     >
                         <h1>
                             Cities
@@ -173,7 +187,8 @@ const Settings = () => {
                     <Button variant="contained"
                             className='right-topicsButton'
                             style={{backgroundColor: '#ff8b26', boxShadow: topic === "FOOD" ? "0 0 50px 0 #FFF" : ""}}
-                            onClick={() => handleTopicsChange("FOOD")}
+                            onMouseDown={() => handleTopicsChange("FOOD")}
+                            onMouseUp={() => handleTopicsChange("FOOD")}
                     >
                         <h1>
                             Food
@@ -185,7 +200,8 @@ const Settings = () => {
                     <Button variant="contained"
                             className='left-topicsButton'
                             style={{backgroundColor: '#4D7CF3', boxShadow: topic === "PEOPLE" ? "0 0 50px 0 #FFF" : ""}}
-                            onClick={() => handleTopicsChange("PEOPLE")}
+                            onMouseDown={() => handleTopicsChange("PEOPLE")}
+                            onMouseUp={() => handleTopicsChange("PEOPLE")}
                     >
                         <h1>
                             Famous People
@@ -194,7 +210,8 @@ const Settings = () => {
                     <Button variant="contained"
                             className='right-topicsButton'
                             style={{backgroundColor: '#C660F6', boxShadow: topic === "THINGS" ? "0 0 50px 0 #FFF" : ""}}
-                            onClick={() => handleTopicsChange("THINGS")}
+                            onMouseDown={() => handleTopicsChange("THINGS")}
+                            onMouseUp={() => handleTopicsChange("THINGS")}
                     >
                         <h1>
                             Home Goods
@@ -206,7 +223,8 @@ const Settings = () => {
                     <Button variant="contained"
                             className='left-topicsButton'
                             style={{backgroundColor: '#a32a49', boxShadow: topic === "LITERATURE" ? "0 0 50px 0 #FFF" : ""}}
-                            onClick={() => handleTopicsChange("LITERATURE")}
+                            onMouseDown={() => handleTopicsChange("LITERATURE")}
+                            onMouseUp={() => handleTopicsChange("LITERATURE")}
                     >
                         <h1>
                             Literature
@@ -216,7 +234,8 @@ const Settings = () => {
                     <Button variant="contained"
                             className='right-topicsButton'
                             style={{backgroundColor: '#69db4d', boxShadow: topic === "SPORTS" ? "0 0 50px 0 #FFF" : ""}}
-                            onClick={() => handleTopicsChange("SPORTS")}
+                            onMouseDown={() => handleTopicsChange("SPORTS")}
+                            onMouseUp={() => handleTopicsChange("SPORTS")}
                     >
                         <h1>
                             Sports
@@ -228,7 +247,8 @@ const Settings = () => {
                     <Button variant="contained"
                             className='left-topicsButton'
                             style={{backgroundColor: '#C1BACB', boxShadow: topic === "TV" ? "0 0 50px 0 #FFF" : ""}}
-                            onClick={() => handleTopicsChange("TV")}
+                            onMouseDown={() => handleTopicsChange("TV")}
+                            onMouseUp={() => handleTopicsChange("TV")}
                     >
                         <h1>
                             TV
@@ -239,7 +259,8 @@ const Settings = () => {
                     <Button variant="contained"
                             className='right-topicsButton'
                             style={{backgroundColor: '#42dbdb', boxShadow: topic === "WEB" ? "0 0 50px 0 #FFF" : ""}}
-                            onClick={() => handleTopicsChange("WEB")}
+                            onMouseDown={() => handleTopicsChange("WEB")}
+                            onMouseUp={() => handleTopicsChange("WEB")}
                     >
                         <h1>
                             Web
@@ -250,14 +271,6 @@ const Settings = () => {
                 <Button variant="contained"
                         className="backButton"
                         style={{marginTop: '-40px'}}
-                        onClick={() => doSave()}
-                >
-                    Save
-                </Button>
-
-                <Button variant="contained"
-                        className="backButton"
-                        style={{marginTop: '-60px'}}
                         onClick={() => doBack()}
                 >
                     Back
