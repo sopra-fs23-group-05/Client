@@ -124,9 +124,6 @@ export default function Game() {
                 await new Promise(resolve => setTimeout(resolve, 100));
                 setRounds(responseGame.data.settings.rounds);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
-                console.log("it reaches line 131");
-                startTimer();
-                console.log("it reaches line 133");
             } catch (error) {
                 console.log("It reaches line 135");
                 console.error("Details:", error);
@@ -295,12 +292,6 @@ export default function Game() {
             history.push(IncomingMessage.url);
         }
     }, [history]);
-
-    const startTimer = () => {
-        console.log('Send Timer Message!');
-        timerWebSocket.current.send(JSON.stringify(""));
-        console.log("It reached line 317");
-    }
 
     // Timer WebSocket code
     useEffect(() => {
