@@ -20,7 +20,6 @@ const Settings = () => {
     useEffect(() => {
         const newValue = sliderRoundsValueRef.current;
         if (!isNaN(newValue)) {
-          setRounds(newValue);
           doSave();
         }
       }, [sliderRoundsValueRef.current]);
@@ -29,7 +28,6 @@ const Settings = () => {
       useEffect(() => {
         const newValue = sliderTimeValueRef.current;
         if (!isNaN(newValue)) {
-          setTime(newValue);
           doSave();
         }
       }, [sliderTimeValueRef.current]);
