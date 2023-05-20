@@ -44,12 +44,10 @@ const Homepage = () => {
 
   return (
     <div className="homePageRoot">
-      <div className="overlayHomepageVideo"></div>
       <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
       <img
         className="tabooLogo"
         src={TabooLogo}
-        style={{ marginBottom: "-30px", marginTop: "30px"}}
         alt="Taboo Logo"
       />
       <div className="buttonPanel">

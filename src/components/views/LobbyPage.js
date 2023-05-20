@@ -268,7 +268,7 @@ const Lobby = () => {
 
     if (isLeader) {
         content = (
-            <div className="horizontal-box" style={{width: '350px', marginLeft: '-484px', marginTop: '100px'}}>
+            <div className="horizontal-box" style={{width: '350px', marginTop: '600px'}}>
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => goToSettingsPage()}
@@ -298,16 +298,15 @@ const Lobby = () => {
 
     return (
         <div className="adminLoginRoot">
-            <div className="overlayHomepageVideo"></div>
             <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
             <div className="flex-container">
-            <div className="horizontal-box">
-                <Typography variant="h5" className="title" style={{marginLeft: '-950px', marginTop: '-500px'}}>Access Code:</Typography>
-                <Typography variant="h5" className="title" style={{marginLeft: '-700px', marginTop: '-500px'}}>{accessCode}</Typography>
+            <div className="horizontal-box" style={{ marginTop: '10px', textAlign: 'center' }}>
+            <Typography variant="h5" className="title" style={{ marginRight: '100px', marginTop: '-600px'}}>Access Code:</Typography>
+            <Typography variant="h5" className="title" style={{ marginLeft: '100px', marginTop: '-600px'}}>{accessCode}</Typography>
             </div>
 
             <div className="flex-container">
-                <div className="buttonPanel" style={{marginLeft: '-456.5px', marginTop: '-50px', marginBottom: '20px'}}>
+                <div className="buttonPanel">
                     <Typography variant="h5" className="title" style={{marginTop: '-150px'}}>Team 1</Typography>
                     <ul className="team-member-box">
                         {team1Content}
@@ -321,7 +320,7 @@ const Lobby = () => {
                     </Button>
                 </div>
 
-                <div className="buttonPanel" style={{marginLeft: '-456.5px'}}>
+                <div className="buttonPanel">
                     <Typography variant="h5" className="title" style={{marginTop: '-150px'}}>Team 2</Typography>
                     <ul className="team-member-box">
                         {team2Content}
@@ -336,7 +335,7 @@ const Lobby = () => {
                 </div>
             </div>
 
-            <div className="horizontal-box" style={{width: '350px', marginLeft: '-484px', marginTop: '20px'}}>
+            <div className="horizontal-box" style={{width: '350px', marginTop: '750px'}}>
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => goBack()}

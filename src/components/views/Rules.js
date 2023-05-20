@@ -56,7 +56,6 @@ const Rules = () => {
 
     return (
             <div className="rulesPageRoot">
-                <div className="overlaySettingsVideo"></div>
                 <video className="settingsVideo" src={BackgroundVideo} autoPlay loop muted />
                 <div className="flex-container">
                     <img className="tabooLogo" src={TabooLogo} alt="Taboo Logo"/>
@@ -72,7 +71,7 @@ const Rules = () => {
                             <br/><br/>
                             You might say:
                             <br/><br/>
-                            <div className="slider" style={{height: '80px'}}>
+                            <div className="slider">
                                 <ArrowBackIosNewOutlinedIcon
                                         className={currentPointExample === 1 ? 'grey-button' : ''}
                                         onClick={() => handlePrevClick("example")}></ArrowBackIosNewOutlinedIcon>
@@ -105,7 +104,7 @@ const Rules = () => {
                             would be TABOO!
                             <br/><br/><br/>
 
-                            <div className="slider" style={{height: '200px'}}>
+                            <div className="slider">
                                 <ArrowBackIosNewOutlinedIcon
                                         className={currentPointRules === 1 ? 'grey-button' : ''}
                                         onClick={() => handlePrevClick("rules")}></ArrowBackIosNewOutlinedIcon>

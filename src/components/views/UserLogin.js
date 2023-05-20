@@ -85,9 +85,8 @@ const UserLogin = () => {
 
     return (
         <div className="adminLoginRoot">
-            <div className="overlayHomepageVideo"></div>
                 <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
-                <img className="tabooLogo" src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
+                <img className="tabooLogo" src={TabooLogo} alt="Taboo logo"/>
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',

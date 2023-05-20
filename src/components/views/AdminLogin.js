@@ -87,7 +87,6 @@ const AdminLogin = () => {
 
     return (
             <div className="adminLoginRoot">
-                <div className="overlayHomepageVideo"></div>
                 <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
                 <img className="tabooLogo" src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
                 <Box sx={{
@@ -97,9 +96,8 @@ const AdminLogin = () => {
                 }}
                 >
                     <div className="buttonPanel">
-                        <Typography variant="h5" sx={{color: 'white', marginBottom: '150px', position: 'absolute'}}>Login</Typography>
+                        <Typography variant="h5" sx={{color: 'white', marginBottom: '150px'}}>Login</Typography>
                         <TextField className="custom-outlined-text-field"
-                                   sx={{marginBottom: '20px'}}
                                    label='Username'
                                    value={username}
                                    onKeyDown={handleEnterKey}
