@@ -65,16 +65,15 @@
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     cursor: pointer;
     position: absolute;
-    backdrop-filter: blur(150px);
+    backdrop-filter: blur(300px);
 
     &:before {
         content: "";
-        position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        backdrop-filter: blur(150px); /* Adjust the blur intensity (8px) to your desired level */
+        backdrop-filter: blur(300px); /* Adjust the blur intensity (8px) to your desired level */
         background-color: rgba(0,0,0,0.1);
         z-index: -1;
       }
