@@ -101,11 +101,7 @@ export default function Game() {
     const updateTeamScore = async (scoredPoints) => {
         try {
             const requestBody = JSON.stringify({accessCode, scoredPoints});
-            await api.put(
-                    `/games/${accessCode}/turns`,
-                    requestBody
-            );
-
+            await api.put(`/games/${accessCode}/turns`, requestBody);
         } catch (error) {
             alert(`Something went wrong during the join: \n${handleError(error)}`);
         }
@@ -128,8 +124,12 @@ export default function Game() {
                 await new Promise(resolve => setTimeout(resolve, 100));
                 setRounds(responseGame.data.settings.rounds);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
+                console.log("it reaches line 131");
                 startTimer();
+                console.log("it reaches line 133");
             } catch (error) {
+                console.log("It reaches line 135");
+                console.error("Details:", error);
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
         }
@@ -307,13 +307,17 @@ export default function Game() {
             history.push(IncomingMessage.url);
         }
     }, [history]);
+
     const startTimer = () => {
         console.log('Send Timer Message!');
         timerWebSocket.current.send(JSON.stringify(""));
+        console.log("It reached line 317");
     }
+
     // Timer WebSocket code
     useEffect(() => {
         timerWebSocket.current.onmessage = (event) => {
+            console.log("It reached line 323");
             const TimerMessage = JSON.parse(event.data);
             console.log('Received Timer Message:', TimerMessage);
             setTimer(TimerMessage);
@@ -321,11 +325,9 @@ export default function Game() {
                 webSocket.current.close();
                 if (roundsPlayed <= rounds) {
                     updateTeamScore(scoredPoints);
-                    //TODO: fix changePage
                     changePage(`/games/${accessCode}/pregame`);
                 } else {
                     updateTeamScore(scoredPoints);
-                    //TODO: fix changePage
                     changePage(`/games/${accessCode}/endscreen`);
                 }
             }
