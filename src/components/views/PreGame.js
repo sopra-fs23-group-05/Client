@@ -35,7 +35,6 @@ const PreGame = () => {
                 setTeam1(responseGame.data.team1.points);
                 setTeam2(responseGame.data.team2.points);
                 startTimer();
-                console.log("It gets to line 38");
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
                 console.error("Details:", error);
@@ -84,7 +83,6 @@ const PreGame = () => {
         preGameTimerWebSocket.current.send(
             JSON.stringify("")
         );
-        console.log("It gets to line 87");
     }
 
     // Page WebSocket code
@@ -100,7 +98,6 @@ const PreGame = () => {
     const [definition, setDefinition] = useState("");
     useEffect(() => {
         preGameTimerWebSocket.current.onmessage = (event) => {
-            console.log("It gets to line 103");
             const TimerMessage = JSON.parse(event.data);
             console.log('Received Timer Message:', TimerMessage);
             setTimer(TimerMessage);
