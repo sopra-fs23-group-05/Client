@@ -309,7 +309,7 @@ export default function Game() {
     }, [history]);
     const startTimer = () => {
         console.log('Send Timer Message!');
-        timerWebSocket.current.send("");
+        timerWebSocket.current.send(JSON.stringify(""));
     }
     // Timer WebSocket code
     useEffect(() => {
