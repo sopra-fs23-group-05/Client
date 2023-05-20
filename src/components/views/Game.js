@@ -176,24 +176,12 @@ export default function Game() {
     }, [accessCode]);
 
     // Card websocket code
-    const sendCardMessage = () => {
-        if (cardWebSocket) {
-            console.log('Send Card Request!');
-            cardWebSocket.current.send(
-                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                    JSON.stringify(new CardRequest(window.location.href.slice(-6), "draw"))
-            );
-        }
-    };
-
-    // Card websocket code
     useEffect(() => {
         console.log('Opening Card WebSocket');
         cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards/' + accessCode);
         const openCardWebSocket = () => {
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
-                sendCardMessage();
             }
             cardWebSocket.current.onclose = (event) => {
                 console.log('Close Card WebSocket:', event);
