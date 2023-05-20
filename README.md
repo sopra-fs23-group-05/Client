@@ -102,7 +102,7 @@ TODO
 
 ### Joining a Team
 <div style="display: flex; align-items: center; gap: 10px;">
-    TODO insert lobby screen shot
+    <img src="./src/styles/Images/LobbyPicture.png" alt="Image" width="150" height="300">
     <p style="max-width: 400px">
         When you joined the lobby, you will be able to select one of the two teams available.
     </p>
