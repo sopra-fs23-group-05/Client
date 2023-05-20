@@ -34,7 +34,9 @@ const PreGame = () => {
                 setRole(responseRole.data);
                 setTeam1(responseGame.data.team1.points);
                 setTeam2(responseGame.data.team2.points);
+                console.log("Line 37 reached.");
                 startTimer();
+                console.log("Line 39 reached.");
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
                 console.error("Details:", error);
@@ -83,6 +85,7 @@ const PreGame = () => {
         preGameTimerWebSocket.current.send(
             JSON.stringify("")
         );
+        console.log("Line 88 reached.");
     }
 
     // Page WebSocket code
