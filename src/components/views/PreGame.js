@@ -28,13 +28,21 @@ const PreGame = () => {
     useEffect(() => {
         async function fetchData() {
             try {
+                console.log("It gets to line 31");
                 const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
+                console.log("It gets to line 33");
                 const responseGame = await api.get(`/games/${accessCode}`);
+                console.log("It gets to line 35");
                 await new Promise(resolve => setTimeout(resolve, 100));
+                console.log("It gets to line 37");
                 setRole(responseRole.data);
+                console.log("It gets to line 39");
                 setTeam1(responseGame.data.team1.points);
+                console.log("It gets to line 41");
                 setTeam2(responseGame.data.team2.points);
+                console.log("It gets to line 43");
                 startTimer();
+                console.log("It gets to line 45");
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
                 console.error("Details:", error);
