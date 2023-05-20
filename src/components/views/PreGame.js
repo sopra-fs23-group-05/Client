@@ -61,6 +61,7 @@ const PreGame = () => {
                 setTeam1(responseGame.data.team1.points);
                 setTeam2(responseGame.data.team2.points);
                 console.log("Line 37 reached.");
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 startTimer();
                 console.log("Line 39 reached.");
             } catch (error) {
