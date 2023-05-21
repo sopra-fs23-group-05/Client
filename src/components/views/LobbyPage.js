@@ -7,6 +7,7 @@ import 'styles/views/LobbyPage.scss';
 import 'styles/views/Homepage.scss';
 import TabooData from "taboo-data";
 import Button_Click from "./sounds/Button_Click.mp3";
+import BackgroundVideo from "./BackgroundVideo.mp4";
 import {TeamRequest} from "../../models/TeamRequest";
 import {getWebSocketDomain} from "../../helpers/getDomain";
 
