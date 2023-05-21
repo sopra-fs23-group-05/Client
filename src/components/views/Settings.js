@@ -103,7 +103,7 @@ const Settings = () => {
                                 onChange={handleRoundsChange}
                                 ref={sliderRoundsValueRef}
                                 sx={{
-                                    color: '#7f5dab'
+                                    color: 'white'
                                 }}
                         />
 
@@ -127,7 +127,7 @@ const Settings = () => {
                                 onChange={handleTimeChange}
                                 ref={sliderTimeValueRef}
                                 sx={{
-                                    color: '#7f5dab'
+                                    color: 'white'
                                 }}
                         />
 

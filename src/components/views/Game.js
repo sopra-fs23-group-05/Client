@@ -23,6 +23,7 @@ import Button_Click from "./sounds/Button_Click.mp3";
 import Send_Sound from "./sounds/Send_Sound.mp3";
 import Receive_Sound from "./sounds/Receive_Sound.mp3";
 import Buzzer_Sound from "./sounds/Buzzer_Sound.mp3";
+import BackgroundVideo from "./BackgroundVideo.mp4";
 import {CardRequest} from "../../models/CardRequest";
 import {getWebSocketDomain} from 'helpers/getDomain';
 
@@ -563,6 +564,7 @@ export default function Game() {
 
     return (
             <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
+                <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
                 <div className="flex-container" style={{marginTop: '-20px'}}>
                     <div className="card-and-timer-box">
                         {cardComponent}

@@ -1,10 +1,12 @@
 import {Typography} from "@mui/material";
 import 'styles/views/PreGame.scss';
+import "styles/views/LobbyPage.scss";
 import {useHistory} from 'react-router-dom';
 import {useEffect, useRef, useState} from "react";
 import {api} from "../../helpers/api";
 import {getWebSocketDomain} from "../../helpers/getDomain";
 import Button_Click from "./sounds/Button_Click.mp3";
+import BackgroundVideo from "./BackgroundVideo.mp4";
 import Button from "@mui/material/Button";
 
 
@@ -116,7 +118,8 @@ const PreGame = () => {
     }
 
     return (
-        <div className="homePageRoot" style={{justifyContent: 'center'}}>
+        <div className="lobbyPageRoot" style={{justifyContent: 'center'}}>
+            <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
             <div className="flex-container" style={{gap: '50px'}}>
             <div className="buttonPanel">
                 <Typography variant="h5" className="title"> Next Round Starts</Typography>
@@ -131,6 +134,7 @@ const PreGame = () => {
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={showDefinition}
+                        style={{width: '200px'}}
                 >
                     What Do I Do?
                 </Button>
