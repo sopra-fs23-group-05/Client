@@ -285,7 +285,7 @@ export default function Game() {
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
                 chatWebSocket.current.close();
-                if (roundsPlayed <= rounds) {
+                if (roundsPlayed < rounds) {
                     changeTurn(scoredPoints);
                     changePage(`/games/${accessCode}/pregame`);
                 } else {
