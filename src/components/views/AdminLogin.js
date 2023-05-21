@@ -96,7 +96,7 @@ const AdminLogin = () => {
                 }}
                 >
                     <div className="buttonPanel">
-                        <Typography variant="h5" sx={{color: 'white', marginBottom: '150px'}}>Login</Typography>
+                        <Typography variant="h5" sx={{color: 'white', marginBottom: '100px'}}>Login</Typography>
                         <TextField className="custom-outlined-text-field"
                                    label='Username'
                                    value={username}
