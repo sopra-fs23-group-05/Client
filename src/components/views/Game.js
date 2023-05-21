@@ -252,23 +252,12 @@ export default function Game() {
     };
 
     // Card websocket code
-    const sendCardMessageBuzz = () => {
+    const sendCardMessage = (action) => {
         if (cardWebSocket) {
-            console.log('Send Buzz Request!');
+            console.log('Send ' + action + ' request!');
             cardWebSocket.current.send(
-                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                    JSON.stringify(new CardRequest(window.location.href.slice(-6), "buzz"))
-            );
-        }
-    };
-
-    // Card websocket code
-    const sendCardMessageSkip = () => {
-        if (cardWebSocket) {
-            console.log('Send Skip Request!');
-            cardWebSocket.current.send(
-                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                    JSON.stringify(new CardRequest(window.location.href.slice(-6), "skip"))
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new CardRequest(window.location.href.slice(-6), action))
             );
         }
     };
@@ -369,7 +358,7 @@ export default function Game() {
     let skipButton = (
             <Button variant="contained" className="skip-button"
                     onClick={() => {
-                        sendCardMessageSkip();
+                        sendCardMessage("skip");
                         playSound(Button_Click);
                     }}
             >
@@ -417,7 +406,7 @@ export default function Game() {
                 <Button variant="contained"
                         className="Buzzer"
                         onClick={() => {
-                            sendCardMessageBuzz();
+                            sendCardMessage("buzz");
                             playSound(Buzzer_Sound);
                         }}
                 >
