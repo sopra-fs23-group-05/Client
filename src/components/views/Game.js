@@ -253,7 +253,6 @@ export default function Game() {
 
     // Card websocket code
     const sendCardMessageBuzz = () => {
-        playSound(Buzzer_Sound);
         if (cardWebSocket) {
             console.log('Send Buzz Request!');
             cardWebSocket.current.send(
@@ -265,7 +264,6 @@ export default function Game() {
 
     // Card websocket code
     const sendCardMessageSkip = () => {
-        playSound(Button_Click);
         if (cardWebSocket) {
             console.log('Send Skip Request!');
             cardWebSocket.current.send(
@@ -370,7 +368,10 @@ export default function Game() {
     let buzzerButton = null;
     let skipButton = (
             <Button variant="contained" className="skip-button"
-                    onClick={sendCardMessageSkip}
+                    onClick={() => {
+                        sendCardMessageSkip();
+                        playSound(Button_Click);
+                    }}
             >
                 Skip Card
             </Button>
@@ -415,7 +416,10 @@ export default function Game() {
         buzzerButton = (
                 <Button variant="contained"
                         className="Buzzer"
-                        onClick={sendCardMessageBuzz}
+                        onClick={() => {
+                            sendCardMessageBuzz();
+                            playSound(Buzzer_Sound);
+                        }}
                 >
                     Buzzer
                 </Button>
