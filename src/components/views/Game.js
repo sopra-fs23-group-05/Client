@@ -105,6 +105,7 @@ export default function Game() {
 
     const doLeaveLeader = async () => {
         try {
+            // Request to the server to stop the game
             await api.put(`/games/${accessCode}/finishes`);
         } catch (error) {
             alert(`Something went wrong: \n${handleError(error)}`);
