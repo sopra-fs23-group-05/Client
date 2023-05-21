@@ -28,12 +28,11 @@ const Invite = () => {
 
     return (
             <div className="inviteRoot">
-                <div className="overlayHomepageVideo"></div>
                 <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
-                <h1 className="title" style={{marginTop: '-700px'}}>Invite To Lobby</h1>
-                <h1 className="title" style={{fontSize: '30px', marginTop: '-550px'}}>Access Code: {accessCode}</h1>
                 <Container className="flex-container">
-                    <Box className="qrCodeBox" sx={{marginTop: '-110px'}}>
+                <h1 className="title" style={{marginTop: '-700px'}}>Invite To Lobby</h1>
+                <h1 className="title" style={{fontSize: '28px', marginTop: '-550px'}}>Access Code: {accessCode}</h1>
+                    <Box className="qrCodeBox">
                         <Typography variant="h6" className="qr-typography">Send this invite link to your friends</Typography>
                         <Button
                                 variant="contained"
