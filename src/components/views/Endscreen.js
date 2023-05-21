@@ -7,6 +7,7 @@ import StarIcon from '@mui/icons-material/Star';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import Button_Click from "./sounds/Button_Click.mp3";
 import Winner_Sound from "./sounds/Winner_Sound.mp3";
+import BackgroundVideo from "./BackgroundVideo.mp4";
 import {useEffect, useState} from "react";
 import {api} from "../../helpers/api";
 
@@ -115,7 +116,8 @@ const Endscreen = () => {
 
 
     return (
-            <div className="homePageRoot">
+            <div className="endScreenRoot">
+                <video className="homepageVideo" src={BackgroundVideo} autoPlay loop muted />
                 <div className="flex-container">
                 <img src={TabooLogo} alt="Taboo logo" className="tabooLogo"/>
                     <div className="horizontal-box">
@@ -127,7 +129,7 @@ const Endscreen = () => {
                     <h1 className="h1">YOU PLAYED {roundsPlayed} ROUNDS</h1>
                     <h1 className="h1">SCORES</h1>
 
-                    <div className="horizontal-box" style={{gap: '10px'}}>
+                    <div className="horizontal-box" style={{gap: '10px', marginBottom: '80px'}}>
                         <div className="buttonPanel" style={{height: '80px'}}>
                             <h1 className="h1">TEAM 1</h1>
                             <h1 className="h1" style={{fontSize: '40px'}}>{team1Points}</h1>
@@ -197,7 +199,7 @@ const Endscreen = () => {
 
                     </div>
 
-                    <h1 className="h1" style={{fontSize: '32px'}}>Most Valuable Player</h1>
+                    <h1 className="h1" style={{fontSize: '32px', marginTop: '100px'}}>Most Valuable Player</h1>
                     <div className="horizontal-box">
                         <EmojiEventsIcon style={{fontSize: '96px', color: '#EA854C'}}/>
                         <div style={{marginLeft: '50px'}}>
