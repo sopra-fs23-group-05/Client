@@ -25,32 +25,12 @@ const PreGame = () => {
         audio.play();
       };
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
-                const responseGame = await api.get(`/games/${accessCode}`);
-                await new Promise(resolve => setTimeout(resolve, 100));
-                setRole(responseRole.data);
-                setTeam1(responseGame.data.team1.points);
-                setTeam2(responseGame.data.team2.points);
-
-            } catch (error) {
-                console.error(`Something went wrong while fetching the users:`);
-                console.error("Details:", error);
-                alert("Something went wrong while fetching the users! See the console for details.");
-            }
-        }
-
-        fetchData();
-    }, [accessCode, playerName]);
-
     // WebSocket code
     useEffect(() => {
         console.log('Opening Page WebSocket');
-        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages' );
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
         console.log('Opening PreGame WebSocket');
-        preGameTimerWebSocket.current = new WebSocket(getWebSocketDomain() + '/pregameTimers' );
+        preGameTimerWebSocket.current = new WebSocket(getWebSocketDomain() + '/pregameTimers/' + accessCode);
 
         const openWebSocket = () => {
             pageWebSocket.current.onopen = (event) => {
@@ -71,6 +51,24 @@ const PreGame = () => {
         }
     }, []);
 
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
+                const responseGame = await api.get(`/games/${accessCode}`);
+                setRole(responseRole.data);
+                setTeam1(responseGame.data.team1.points);
+                setTeam2(responseGame.data.team2.points);
+            } catch (error) {
+                console.error(`Something went wrong while fetching the users:`);
+                console.error("Details:", error);
+                alert("Something went wrong while fetching the users! See the console for details.");
+            }
+        }
+
+        fetchData();
+    }, [accessCode, playerName]);
+
     // Page WebSocket code
     const changePage = () => {
         console.log('Send Page Message!');
@@ -90,13 +88,15 @@ const PreGame = () => {
     }, [history]);
 
     const [definition, setDefinition] = useState("");
+
+    // Timer WebSocket code
     useEffect(() => {
         preGameTimerWebSocket.current.onmessage = (event) => {
             const TimerMessage = JSON.parse(event.data);
             console.log('Received Timer Message:', TimerMessage);
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
-                changePage(`games/${accessCode}`);
+                changePage();
             }
         }
     },[timer]);

@@ -103,7 +103,7 @@ const Lobby = () => {
         console.log('Opening Team WebSocket');
         teamWebSocket.current = new WebSocket(getWebSocketDomain() + '/teams');
         console.log('Opening Page WebSocket');
-        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
         const openWebSocket = () => {
             teamWebSocket.current.onopen = (event) => {
                 console.log('Open Team WebSocket:', event);
@@ -207,7 +207,7 @@ const Lobby = () => {
     const startGame = async () => {
         playSound(Button_Click);
         try {
-            if(settings==="city"){
+            if (settings === "city") {
                 console.log(settings);
                 setSettings("city-country");
                 console.log(settings);
@@ -216,9 +216,8 @@ const Lobby = () => {
             await api.post(`/games/${accessCode}`);
 
             //get json file for the selected category
-        
+
             const categoryFile = await TabooData.getCategory(settings, 'en');
-            console.log("taken settings", settings);
             const categoryJSONFile = JSON.stringify(categoryFile);
             const originalObj = JSON.parse(categoryJSONFile);
 
@@ -244,19 +243,14 @@ const Lobby = () => {
                 }
             }
 
-            console.log("newObj", newObj);
             const newJson = JSON.stringify(Object.values(newObj));
-            console.log("newJson", newJson);
 
             const array = JSON.parse(newJson);
-            console.log("array", array);
             for (let i = 0; i < array.length; i++) {
                 const item = JSON.stringify(array[i]);
                 const slicedCard = item.slice();
-                console.log("sliced", slicedCard);
                 await api.post(`/games/${accessCode}/cards`, slicedCard);
             }
-
             changePage();
         } catch (error) {
             alert(`Error: \n${handleError(error)}`);

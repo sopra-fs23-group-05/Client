@@ -11,13 +11,14 @@
     background-blend-mode: normal, normal;
     background: radial-gradient(ellipse closest-side at 50% 50%, #b219fe 5%, #48007e);
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    overflow: auto;
-    position: center;
-    margin: 0 auto;
-    width: 390px;
-    max-width: 390px;
-    height: 844px;
-    max-height: 844px;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+
 
 
     .leaveButton {
@@ -37,8 +38,7 @@
 }
 
 .tabooLogo {
-    min-width: 0;
-    max-width: 100%;
+    width: 330px;
     min-height: 0;
     max-height: 40%;
     align-self: stretch;
