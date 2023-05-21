@@ -1,4 +1,5 @@
 import AppRouter from "components/routing/routers/AppRouter";
+import BackgroundMusic from "components/views/sounds/BackgroundMusic";
 
 /**
  * Happy coding!
@@ -9,6 +10,7 @@ const App = () => {
   return (
     <div>
       <AppRouter/>
+      <BackgroundMusic/>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import TabooLogo from "./TabooLogo.png";
 import Button_Click from "./sounds/Button_Click.mp3";
 import BackgroundVideo from "./BackgroundVideo.mp4";
 import Button from "@mui/material/Button";
+import BackgroundMusic from './sounds/BackgroundMusic.js';
 
 const Homepage = () => {
   const history = useHistory();
