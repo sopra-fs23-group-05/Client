@@ -82,23 +82,24 @@ export default function Game() {
         if (isLeader) {
             await doLeaveLeader();
         }
+
         else {
-            await api.delete(`/games/${accessCode}/${playerName}`);
-            localStorage.removeItem('lobbyAccessCode');
-            localStorage.removeItem('token');
-            localStorage.removeItem('userName')
+            try {
+                await api.delete(`/games/${accessCode}/${playerName}`);
 
-            const responseGame = await api.get(`/games/${accessCode}`);
-            setTeam1Players(responseGame.data.team1.players);
-            setTeam2Players(responseGame.data.team2.players);
+                const responseGame = await api.get(`/games/${accessCode}`);
+                setTeam1Players(responseGame.data.team1.players);
+                setTeam2Players(responseGame.data.team2.players);
 
-            if (team1Players.length < 2 || team2Players.length < 2) {
-                changePage(`/games/${accessCode}/endscreen`);
+                // push only this user back to the homepage
+                localStorage.removeItem('lobbyAccessCode');
+                localStorage.removeItem('token');
+                localStorage.removeItem('userName')
                 history.push('/homepage');
                 window.location.reload();
-            } else {
-                history.push('/homepage');
-                window.location.reload();
+            }
+            catch (error) {
+                alert(`Something went wrong: \n${handleError(error)}`);
             }
         }
     }
@@ -144,8 +145,6 @@ export default function Game() {
                 alert("Something went wrong while fetching the game!");
             }
         }
-
-
         fetchData()
     }, [accessCode]);
 
