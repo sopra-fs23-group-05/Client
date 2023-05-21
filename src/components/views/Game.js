@@ -99,10 +99,12 @@ export default function Game() {
     }
 
     const changeTurn = async () => {
-        try {
-            await api.put(`/games/${accessCode}/turns`);
-        } catch (error) {
-            alert(`Something went wrong while changing the turn in the backend: \n${handleError(error)}`);
+        if(isLeader) {
+            try {
+                await api.put(`/games/${accessCode}/turns`);
+            } catch (error) {
+                alert(`Something went wrong while changing the turn in the backend: \n${handleError(error)}`);
+            }
         }
     };
 
