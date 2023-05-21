@@ -55,7 +55,7 @@ export default function Game() {
 
     const history = useHistory();
     const scrollBottomRef = useRef(null);
-    const webSocket = useRef(null);
+    const chatWebSocket = useRef(null);
     const cardWebSocket = useRef(null);
     const pageWebSocket = useRef(null);
     const timerWebSocket = useRef(null);
@@ -142,58 +142,53 @@ export default function Game() {
 
     // Websocket code
     useEffect(() => {
-        console.log('Opening Chat WebSocket');
-        console.log('Opening Page WebSocket');
-        webSocket.current = new WebSocket(getWebSocketDomain() + '/chats/' + accessCode);
+        chatWebSocket.current = new WebSocket(getWebSocketDomain() + '/chats/' + accessCode);
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
+        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards/' + accessCode);
         timerWebSocket.current = new WebSocket(getWebSocketDomain() + '/timers/' + accessCode);
 
-
         const openWebSocket = () => {
-            webSocket.current.onopen = (event) => {
+            chatWebSocket.current.onopen = (event) => {
                 console.log('Open Chat WebSocket:', event);
-                console.log('Open Page WebSocket:', event);
-                console.log('Open Timer WebSocket:', event);
             }
-            webSocket.current.onclose = (event) => {
+            chatWebSocket.current.onclose = (event) => {
                 console.log('Close Chat WebSocket:', event);
-                console.log('Close Page WebSocket:', event);
-                console.log('Close Timer WebSocket:', event);
             }
-        }
-        openWebSocket();
-        return () => {
-            console.log('Closing Chat WebSocket');
-            webSocket.current.close();
-            console.log('Closing Page WebSocket');
-            pageWebSocket.current.close();
-            console.log('Closing Timer WebSocket');
-            timerWebSocket.current.close();
-        }
-    }, [accessCode]);
-
-    // Card websocket code
-    useEffect(() => {
-        console.log('Opening Card WebSocket');
-        cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards/' + accessCode);
-        const openCardWebSocket = () => {
+            pageWebSocket.current.onopen = (event) => {
+                console.log('Open Page WebSocket:', event);
+            }
+            pageWebSocket.current.onclose = (event) => {
+                console.log('Close Page WebSocket:', event);
+            }
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
             }
             cardWebSocket.current.onclose = (event) => {
                 console.log('Close Card WebSocket:', event);
             }
+            timerWebSocket.current.onopen = (event) => {
+                console.log('Open Timer WebSocket:', event);
+            }
+            timerWebSocket.current.onclose = (event) => {
+                console.log('Close Timer WebSocket:', event);
+            }
         }
-        openCardWebSocket();
+        openWebSocket();
         return () => {
+            console.log('Closing Chat WebSocket');
+            chatWebSocket.current.close();
+            console.log('Closing Page WebSocket');
+            pageWebSocket.current.close();
             console.log('Closing Card WebSocket');
             cardWebSocket.current.close();
+            console.log('Closing Timer WebSocket');
+            timerWebSocket.current.close();
         }
-    }, []);
+    }, [accessCode]);
 
-    // Websocket code
+    // Chat websocket code
     useEffect(() => {
-        webSocket.current.onmessage = (event) => {
+        chatWebSocket.current.onmessage = (event) => {
             const ChatMessage = JSON.parse(event.data);
             console.log('Received Chat Message:', ChatMessage);
             playSound(Receive_Sound);
@@ -226,24 +221,24 @@ export default function Game() {
         }
     }, [displayedCard], [scoredPoints]);
 
-    // Websocket code
+    // Chat websocket code
     const handleMessageChange = (event) => {
         setMessage(event.target.value);
     }
 
-    // Websocket code
+    // Chat websocket code
     const handleEnterKey = (event) => {
         if (event.keyCode === ENTER_KEY_CODE) {
             sendChatMessage();
         }
     }
 
-    // Websocket code
+    // Chat websocket code
     const sendChatMessage = () => {
         if (user && message && messageType) {
             playSound(Send_Sound);
             console.log('Send Chat Message!');
-            webSocket.current.send(
+            chatWebSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456
                     JSON.stringify(new ChatMessage(window.location.href.slice(-6), parseInt(localStorage.getItem('token')), message, messageType))
             );
@@ -252,30 +247,17 @@ export default function Game() {
     };
 
     // Card websocket code
-    const sendCardMessageBuzz = () => {
-        playSound(Buzzer_Sound);
+    const sendCardMessage = (action) => {
         if (cardWebSocket) {
-            console.log('Send Buzz Request!');
+            console.log('Send ' + action + ' request!');
             cardWebSocket.current.send(
-                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                    JSON.stringify(new CardRequest(window.location.href.slice(-6), "buzz"))
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new CardRequest(window.location.href.slice(-6), action))
             );
         }
     };
 
-    // Card websocket code
-    const sendCardMessageSkip = () => {
-        playSound(Button_Click);
-        if (cardWebSocket) {
-            console.log('Send Skip Request!');
-            cardWebSocket.current.send(
-                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                    JSON.stringify(new CardRequest(window.location.href.slice(-6), "skip"))
-            );
-        }
-    };
-
-    // Page WebSocket code
+    // Page websocket code
     const changePage = (url) => {
         console.log('Send Page Message!');
         pageWebSocket.current.send(
@@ -283,7 +265,7 @@ export default function Game() {
         );
     }
 
-    // Page WebSocket code
+    // Page websocket code
     useEffect(() => {
         pageWebSocket.current.onmessage = (event) => {
             console.log(event.data);
@@ -293,7 +275,7 @@ export default function Game() {
         }
     }, [history]);
 
-    // Timer WebSocket code
+    // Timer websocket code
     useEffect(() => {
         timerWebSocket.current.onmessage = (event) => {
             console.log("It reached line 323");
@@ -301,7 +283,7 @@ export default function Game() {
             console.log('Received Timer Message:', TimerMessage);
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
-                webSocket.current.close();
+                chatWebSocket.current.close();
                 if (roundsPlayed <= rounds) {
                     updateTeamScore(scoredPoints);
                     changePage(`/games/${accessCode}/pregame`);
@@ -314,8 +296,7 @@ export default function Game() {
     }, [timer,accessCode,roundsPlayed,rounds,updateTeamScore,changePage, scoredPoints]);
 
     /* This code is iterating over an array of chatMessages and returning
-    * a new array of ListItem components
-     */
+    * a new array of ListItem components. */
     const listChatMessages = chatMessages.map((ChatMessage, index) =>
             <div className="chat-message-line" key={index}
                  style={{flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse'}}>
@@ -370,7 +351,10 @@ export default function Game() {
     let buzzerButton = null;
     let skipButton = (
             <Button variant="contained" className="skip-button"
-                    onClick={sendCardMessageSkip}
+                    onClick={() => {
+                        sendCardMessage("skip");
+                        playSound(Button_Click);
+                    }}
             >
                 Skip Card
             </Button>
@@ -410,12 +394,14 @@ export default function Game() {
             </div>
     );
 
-
     if (role === "buzzer") {
         buzzerButton = (
                 <Button variant="contained"
                         className="Buzzer"
-                        onClick={sendCardMessageBuzz}
+                        onClick={() => {
+                            sendCardMessage("buzz");
+                            playSound(Buzzer_Sound);
+                        }}
                 >
                     Buzzer
                 </Button>
@@ -423,7 +409,6 @@ export default function Game() {
         skipButton = null;
         sendFields = null;
     }
-
 
     //card component is not visible for guessing team
     let cardComponent = null;
