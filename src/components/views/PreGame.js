@@ -17,7 +17,7 @@ const PreGame = () => {
     const [team1, setTeam1] = useState(null);
     const [team2, setTeam2] = useState(null);
     const pageWebSocket = useRef(null);
-    const preGameTimerWebSocket = useRef(null);
+    const timerWebSocket = useRef(null);
     const [timer, setTimer] = useState(10);
 
     const playSound = (soundFile) => {
@@ -27,27 +27,29 @@ const PreGame = () => {
 
     // WebSocket code
     useEffect(() => {
-        console.log('Opening Page WebSocket');
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
-        console.log('Opening PreGame WebSocket');
-        preGameTimerWebSocket.current = new WebSocket(getWebSocketDomain() + '/pregameTimers/' + accessCode);
+        timerWebSocket.current = new WebSocket(getWebSocketDomain() + '/pregameTimers/' + accessCode);
 
         const openWebSocket = () => {
             pageWebSocket.current.onopen = (event) => {
                 console.log('Open Page WebSocket:', event);
-                console.log('Open PreGame WebSocket:', event);
             }
             pageWebSocket.current.onclose = (event) => {
                 console.log('Close Page WebSocket:', event);
-                console.log('Close PreGame WebSocket:', event);
+            }
+            timerWebSocket.current.onopen = (event) => {
+                console.log('Open Timer WebSocket:', event);
+            }
+            timerWebSocket.current.onerror = (event) => {
+                console.log('Close Timer WebSocket:', event);
             }
         }
         openWebSocket();
         return () => {
             console.log('Closing Page WebSocket');
             pageWebSocket.current.close();
-            console.log('Closing PreGame WebSocket');
-            preGameTimerWebSocket.current.close();
+            console.log('Closing Timer WebSocket');
+            timerWebSocket.current.close();
         }
     }, []);
 
@@ -91,7 +93,7 @@ const PreGame = () => {
 
     // Timer WebSocket code
     useEffect(() => {
-        preGameTimerWebSocket.current.onmessage = (event) => {
+        timerWebSocket.current.onmessage = (event) => {
             const TimerMessage = JSON.parse(event.data);
             console.log('Received Timer Message:', TimerMessage);
             setTimer(TimerMessage);
