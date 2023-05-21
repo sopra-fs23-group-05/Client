@@ -335,7 +335,7 @@ const Lobby = () => {
         muted
       />
       <div className="flex-container">
-      <div className="horizontal-box" style={{ position: "fixed", top: 0 }}>
+      <div className="horizontal-box">
         <Typography variant="h5" className="title">
             Access Code:
         </Typography>
@@ -344,7 +344,6 @@ const Lobby = () => {
         </Typography>
         </div>
 
-        <div className="flex-container">
           <div className="buttonPanel">
             <Typography variant="h5" className="title">
               Team 1
@@ -374,7 +373,6 @@ const Lobby = () => {
               Join
             </Button>
           </div>
-        </div>
         <div className="horizontal-box">
           <Button
             variant="contained"
