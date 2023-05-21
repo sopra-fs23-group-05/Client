@@ -142,9 +142,6 @@ export default function Game() {
 
     // Websocket code
     useEffect(() => {
-        console.log('Opening Chat WebSocket');
-        console.log('Opening Page WebSocket');
-        console.log('Opening Card WebSocket');
         chatWebSocket.current = new WebSocket(getWebSocketDomain() + '/chats/' + accessCode);
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
         cardWebSocket.current = new WebSocket(getWebSocketDomain() + '/cards/' + accessCode);
@@ -153,20 +150,27 @@ export default function Game() {
         const openWebSocket = () => {
             chatWebSocket.current.onopen = (event) => {
                 console.log('Open Chat WebSocket:', event);
-                console.log('Open Page WebSocket:', event);
-                console.log('Open Timer WebSocket:', event);
             }
             chatWebSocket.current.onclose = (event) => {
                 console.log('Close Chat WebSocket:', event);
-                console.log('Close Page WebSocket:', event);
-                console.log('Close Timer WebSocket:', event);
             }
-
+            pageWebSocket.current.onopen = (event) => {
+                console.log('Open Page WebSocket:', event);
+            }
+            pageWebSocket.current.onclose = (event) => {
+                console.log('Close Page WebSocket:', event);
+            }
             cardWebSocket.current.onopen = (event) => {
                 console.log('Open Card WebSocket:', event);
             }
             cardWebSocket.current.onclose = (event) => {
                 console.log('Close Card WebSocket:', event);
+            }
+            timerWebSocket.current.onopen = (event) => {
+                console.log('Open Timer WebSocket:', event);
+            }
+            timerWebSocket.current.onclose = (event) => {
+                console.log('Close Timer WebSocket:', event);
             }
         }
         openWebSocket();
