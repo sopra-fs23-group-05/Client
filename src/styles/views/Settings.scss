@@ -4,159 +4,138 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 0 27px 80px 27px;
     box-sizing: border-box;
-    background-position: 50% 50%;
-    background-size: cover;
-    background-blend-mode: normal, normal;
-    background: radial-gradient(ellipse closest-side at 50% 50%, #b219fe 5%, #48007e);
+    background: transparent;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    overflow: hidden;
+    overflow: auto;
+    width: 100vw;
+    height: auto;
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-
+  
+    .homepageVideo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+  
     .inputBox {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        width: 100%;
-        height: 200px;
-        background-color: #D1C4E9;
-        border-radius: 20px;
-        border: 1px solid white;
-        padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      width: 360px;
+      height: 150px;
+      background-color: #D1C4E9;
+      border-radius: 20px;
+      border: 1px solid white;
+      padding: 20px;
     }
-
-    .saveBox {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        margin-top: 20px;
-        max-width: 500px;
-
-        .saveButton {
-            background-color: #7f5dab;
-            color: #EA854C;
-            width: 40%;
-            font-family: Inter, sans-serif;
-            font-weight: 600;
-            font-size: 18px;
-            border: 1px solid white;
-
-            &:hover {
-                background-color: #8a2be2;
-            }
-        }
-    }
-
+  
     .topicsButton {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 170px;
-        height: 170px;
-        max-width: 200px;
-        max-height: 200px;
-        border-radius: 20px;
-        padding: 20px;
-
-
-        h1 {
-            color: white;
-            text-transform: none;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
-        }
-    }
-
-    .left-topicsButton {
-        @extend .topicsButton;
-        margin: -30px 10px -30px 0;
-    }
-
-    .right-topicsButton {
-        @extend .topicsButton;
-        margin: -30px 0 -30px 10px;
-    }
-
-
-    .textField {
-        background-color: lightgray;
-        width: 90%;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-
-        & .MuiOutlinedInput-root {
-            & fieldset {
-                border-color: white;
-            }
-
-            &:hover fieldset {
-                border-color: white;
-            }
-
-            &.Mui-focused fieldset {
-                border-color: white;
-            }
-        }
-    }
-
-    .input {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 170px;
+      height: 170px;
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 20px;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+  
+      h1 {
         color: white;
-    }
-
-    .backButton {
-        background-color: #7f5dab;
-        color: orange;
-        border: 0.5px solid white;
-
-        &:hover {
-            background-color: #8a2be2
-        }
-    ;
-        width: 90%;
-        margin-top: -20px;
-        font-size: 18px;
-        font-weight: 600;
-        font-family: Inter, sans-serif;
-    }
-
-    .settings-title {
-        color: white;
-        font-size: 40px;
-        font-weight: 600;
-        font-family: Inter, sans-serif;
-        margin-right: 150px;
-        margin-top: 1150px;
-    }
-
-    .settings-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    }
-
-    .typography {
-        color: white;
-        font-size: 24px;
-        font-weight: 600;
-        font-family: Inter, sans-serif;
+        text-transform: none;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+      }
     }
-
+  
+    .left-topicsButton {
+      @extend .topicsButton;
+      margin: -30px 10px -30px 0;
+    }
+  
+    .right-topicsButton {
+      @extend .topicsButton;
+      margin: -30px 0 -30px 10px;
+    }
+  
+    .textField {
+      background-color: lightgray;
+      width: 90%;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  
+      & .MuiOutlinedInput-root {
+        & fieldset {
+          border-color: white;
+        }
+  
+        &:hover fieldset {
+          border-color: white;
+        }
+  
+        &.Mui-focused fieldset {
+          border-color: white;
+        }
+      }
+    }
+  
+    .input {
+      color: white;
+    }
+  
+    .backButton {
+      background-color: #7f5dab;
+      color: orange;
+      border: 0.5px solid white;
+  
+      &:hover {
+        background-color: #8a2be2;
+      }
+      ;
+      width: 360px;
+      margin-top: -20px;
+      margin-bottom: 50px;
+      font-size: 18px;
+      font-weight: 600;
+      font-family: Inter, sans-serif;
+    }
+  
+    .settings-title {
+      color: white;
+      font-size: 40px;
+      font-weight: 600;
+      font-family: Inter, sans-serif;
+    }
+  
+    .settings-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+  
+    .typography {
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+      font-family: Inter, sans-serif;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    }
+  
     .topic-row {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: -30px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: -30px;
     }
-}
+  }
+  
