@@ -79,22 +79,35 @@ export default function Game() {
 
     const doLeave = async () => {
         playSound(Button_Click);
-        await api.delete(`/games/${accessCode}/${playerName}`);
-        localStorage.removeItem('lobbyAccessCode');
-        localStorage.removeItem('token');
-        localStorage.removeItem('userName')
-
-        const responseGame = await api.get(`/games/${accessCode}`);
-        setTeam1Players(responseGame.data.team1.players);
-        setTeam2Players(responseGame.data.team2.players);
-        if(team1Players.length < 2 || team2Players.length < 2){
-            changePage(`/games/${accessCode}/endscreen`);
-            history.push('/homepage');
-            window.location.reload();
+        if (isLeader) {
+            await doLeaveLeader();
         }
-        else{
-            history.push('/homepage');
-            window.location.reload();
+        else {
+            await api.delete(`/games/${accessCode}/${playerName}`);
+            localStorage.removeItem('lobbyAccessCode');
+            localStorage.removeItem('token');
+            localStorage.removeItem('userName')
+
+            const responseGame = await api.get(`/games/${accessCode}`);
+            setTeam1Players(responseGame.data.team1.players);
+            setTeam2Players(responseGame.data.team2.players);
+
+            if (team1Players.length < 2 || team2Players.length < 2) {
+                changePage(`/games/${accessCode}/endscreen`);
+                history.push('/homepage');
+                window.location.reload();
+            } else {
+                history.push('/homepage');
+                window.location.reload();
+            }
+        }
+    }
+
+    const doLeaveLeader = async () => {
+        try {
+            await api.put(`/games/${accessCode}/finishes`);
+        } catch (error) {
+            alert(`Something went wrong: \n${handleError(error)}`);
         }
     }
 
@@ -447,24 +460,38 @@ export default function Game() {
         );
     }
 
+    const leaderInformation = (isLeader) ? "When you click on leave, the game will end for each player after the current round." : "";
+
     let clickOnLeave = (
             <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
                 <DialogTitle>Leave Game?</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
+                    <DialogContentText>Are you sure you want to leave this game? {leaderInformation}</DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpenLeave(false)}>Close</Button>
-                    <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
+                    <Button style={{color: "red"}}
+                            onClick={() => {
+                                doLeave();
+                                setLeaderClickedOnLeave(true);
+                                setOpenLeave(false);
+                            }}
+                    >
+                        Leave
+                    </Button>
                 </DialogActions>
             </Dialog>
     );
 
+    const [leaderClickedOnLeave, setLeaderClickedOnLeave] = useState(false);
+
     let leaveButton = (
         <div className="leave-box">
-        <Button onClick={() => handleOpenLeave(true)}
+        <Button
+                disabled={isLeader && leaderClickedOnLeave}
+                onClick={() => handleOpenLeave(true)}
             >
-                <LogoutIcon sx={{color: 'white'}}/>
+                <LogoutIcon sx={{color: (isLeader && leaderClickedOnLeave) ? 'grey' : 'white' }}/>
             </Button>
         </div>
     )
@@ -485,18 +512,6 @@ export default function Game() {
                     <div  className="title">Score</div>
                     <div  className="title">{scoredPoints}</div>
                 </div>
-
-
-            <Dialog open={openLeave} onClose={() => handleOpenLeave(false)}>
-            <DialogTitle>Leave Game?</DialogTitle>
-            <DialogContent>
-                <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={() => handleOpenLeave(false)}>Close</Button>
-                <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
-            </DialogActions>
-            </Dialog>
             </div>
     );
 
@@ -514,9 +529,10 @@ export default function Game() {
 
                     <div>
                     <Button style={{marginTop: '-80px'}}
-                        onClick={() => setOpenLeave(true)}
+                            disabled={isLeader && leaderClickedOnLeave}
+                            onClick={() => handleOpenLeave(true)}
                     >
-                        <LogoutIcon sx={{color: 'white'}}/>
+                        <LogoutIcon sx={{color: (isLeader && leaderClickedOnLeave) ? 'grey' : 'white' }}/>
                     </Button>
                     {clickOnLeave}
                     </div>
