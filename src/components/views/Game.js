@@ -113,12 +113,13 @@ export default function Game() {
         }
     }
 
-    const updateTeamScore = async (scoredPoints) => {
-        try {
-            const requestBody = JSON.stringify({accessCode, scoredPoints});
-            await api.put(`/games/${accessCode}/turns`, requestBody);
-        } catch (error) {
-            alert(`Something went wrong during the join: \n${handleError(error)}`);
+    const changeTurn = async () => {
+        if(isLeader) {
+            try {
+                await api.put(`/games/${accessCode}/turns`);
+            } catch (error) {
+                alert(`Something went wrong while changing the turn in the backend: \n${handleError(error)}`);
+            }
         }
     };
 
@@ -298,15 +299,15 @@ export default function Game() {
             if (TimerMessage === 0) {
                 chatWebSocket.current.close();
                 if (roundsPlayed <= rounds) {
-                    updateTeamScore(scoredPoints);
+                    changeTurn(scoredPoints);
                     changePage(`/games/${accessCode}/pregame`);
                 } else {
-                    updateTeamScore(scoredPoints);
+                    changeTurn(scoredPoints);
                     changePage(`/games/${accessCode}/endscreen`);
                 }
             }
         }
-    }, [timer,accessCode,roundsPlayed,rounds,updateTeamScore,changePage, scoredPoints]);
+    }, [timer,accessCode,roundsPlayed,rounds,changeTurn,changePage, scoredPoints]);
 
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components. */
