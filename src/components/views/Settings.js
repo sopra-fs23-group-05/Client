@@ -92,7 +92,7 @@ const Settings = () => {
 
                 <Container className="settings-container">
                     <Box className="inputBox" sx={{marginTop: '-115px'}}>
-                        <Typography variant="h6" className="typography">Number of Rounds</Typography>
+                        <Typography variant="h6" className="typography">Number of Rounds: {rounds}</Typography>
                         <Slider
                                 value={rounds}
                                 min={3}
@@ -114,7 +114,7 @@ const Settings = () => {
 
                 <Container className="settings-container">
                     <Box className="inputBox" sx={{marginTop: '-85px'}}>
-                        <Typography variant="h6" className="typography">Time Per Round</Typography>
+                        <Typography variant="h6" className="typography">Time Per Round: {roundTime}</Typography>
 
                         <Slider
                                 value={roundTime}
