@@ -427,7 +427,7 @@ export default function Game() {
                                     const response = await fetch(`https://api.datamuse.com/words?sp=${displayedCard.word}&md=d`);
                                     const data = await response.json();
                                     if (data.length > 0 && data[0].defs) {
-                                        setWordDefinition(data[0].defs[0]);
+                                        setWordDefinition(data[0].defs.map(def => def.substring(2)));
                                     } else {
                                         setWordDefinition("No definition found");
                                     }
