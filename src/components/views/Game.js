@@ -1,15 +1,6 @@
 import "styles/views/Game.scss";
 import {
-    Box,
-    Divider,
-    Button,
-    TextField,
-    ListItem,
-    DialogTitle,
-    Dialog,
-    DialogContent,
-    DialogContentText,
-    DialogActions,
+    Box, Divider, Button, TextField, ListItem, DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions,
 } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import SendIcon from '@mui/icons-material/Send';
@@ -39,7 +30,7 @@ export default function Game() {
                 // response is "cluegiver", "guesser" or "buzzer"
                 const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
                 setRole(responseRole.data.toString().toLowerCase());
-                
+
                 const userResponse = await api.get(`/users/${userId}`);
                 setIsLeader(userResponse.data.leader);
             } catch (error) {
@@ -48,6 +39,7 @@ export default function Game() {
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
         }
+
         fetchData();
     }, [accessCode, playerName, userId]);
 
@@ -67,6 +59,8 @@ export default function Game() {
     const [roundsPlayed, setRoundsPlayed] = useState("");
     const [team1Players, setTeam1Players] = useState([]);
     const [team2Players, setTeam2Players] = useState([]);
+    const [isBuzzerPressed, setIsBuzzerPressed] = useState(false);
+    const [displayedWord, setDisplayedWord] = useState('');
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
 
     const [timer, setTimer] = useState(null);
@@ -74,7 +68,7 @@ export default function Game() {
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
         audio.play();
-      };
+    };
 
 
     const doLeave = async () => {
@@ -87,12 +81,11 @@ export default function Game() {
         const responseGame = await api.get(`/games/${accessCode}`);
         setTeam1Players(responseGame.data.team1.players);
         setTeam2Players(responseGame.data.team2.players);
-        if(team1Players.length < 2 || team2Players.length < 2){
+        if (team1Players.length < 2 || team2Players.length < 2) {
             changePage(`/games/${accessCode}/endscreen`);
             history.push('/homepage');
             window.location.reload();
-        }
-        else{
+        } else {
             history.push('/homepage');
             window.location.reload();
         }
@@ -179,12 +172,11 @@ export default function Game() {
     const sendCardMessage = () => {
         if (cardWebSocket) {
             console.log('Send Card Request!');
-            cardWebSocket.current.send(
-                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                    JSON.stringify(new CardRequest(window.location.href.slice(-6), "draw"))
-            );
+            cardWebSocket.current.send(// Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new CardRequest(window.location.href.slice(-6), "draw")));
         }
     };
+
 
     // Card websocket code
     useEffect(() => {
@@ -229,6 +221,9 @@ export default function Game() {
         cardWebSocket.current.onmessage = (event) => {
             const Card = JSON.parse(event.data);
             console.log('Received Card:', Card);
+            if (Card.word !== displayedWord) {
+            setDisplayedWord(Card.word)
+            }
             setCard({
                 word: Card.word,
                 taboo1: Card.taboo1,
@@ -240,6 +235,11 @@ export default function Game() {
             setScoredPoints(Card.turnPoints);
         }
     }, [displayedCard], [scoredPoints]);
+
+    useEffect(() => {
+        setIsBuzzerPressed(false);
+        console.log("buzzer is false");
+    }, [displayedWord]);
 
     // Websocket code
     const handleMessageChange = (event) => {
@@ -258,23 +258,24 @@ export default function Game() {
         if (user && message && messageType) {
             playSound(Send_Sound);
             console.log('Send Chat Message!');
-            webSocket.current.send(
-                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                    JSON.stringify(new ChatMessage(window.location.href.slice(-6), parseInt(localStorage.getItem('token')), message, messageType))
-            );
+            webSocket.current.send(// Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new ChatMessage(window.location.href.slice(-6), parseInt(localStorage.getItem('token')), message, messageType)));
             setMessage('');
         }
     };
 
     // Card websocket code
     const sendCardMessageBuzz = () => {
-        playSound(Buzzer_Sound);
-        if (cardWebSocket) {
-            console.log('Send Buzz Request!');
-            cardWebSocket.current.send(
-                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+        if (!isBuzzerPressed) {
+            console.log("Buzzer pressed!");
+            playSound(Buzzer_Sound);
+            setIsBuzzerPressed(true);
+            if (cardWebSocket) {
+                console.log("Send Buzz Request!");
+                cardWebSocket.current.send(
                     JSON.stringify(new CardRequest(window.location.href.slice(-6), "buzz"))
-            );
+                );
+            }
         }
     };
 
@@ -283,19 +284,15 @@ export default function Game() {
         playSound(Button_Click);
         if (cardWebSocket) {
             console.log('Send Skip Request!');
-            cardWebSocket.current.send(
-                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                    JSON.stringify(new CardRequest(window.location.href.slice(-6), "skip"))
-            );
+            cardWebSocket.current.send(// Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new CardRequest(window.location.href.slice(-6), "skip")));
         }
     };
 
     // Page WebSocket code
     const changePage = (url) => {
         console.log('Send Page Message!');
-        pageWebSocket.current.send(
-            JSON.stringify({url: url})
-        );
+        pageWebSocket.current.send(JSON.stringify({url: url}));
     }
 
     // Page WebSocket code
@@ -332,29 +329,27 @@ export default function Game() {
                 }
             }
         }
-    }, [timer,accessCode,roundsPlayed,rounds,updateTeamScore,changePage, scoredPoints]);
+    }, [timer, accessCode, roundsPlayed, rounds, updateTeamScore, changePage, scoredPoints]);
 
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components
      */
-    const listChatMessages = chatMessages.map((ChatMessage, index) =>
-            <div className="chat-message-line" key={index}
-                 style={{flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse'}}>
-                <Box
-                        sx={{
-                            backgroundColor: ChatMessage.type === "description" ? 'primary.main' : 'secondary.main',
-                            borderRadius: '5px',
-                            paddingTop: '2px',
-                            paddingBottom: '2px',
-                            paddingLeft: '5px',
-                            paddingRight: '5px',
-                            maxWidth: '100%'
-                        }}
-                >
-                    {ChatMessage.type}: {ChatMessage.message}
-                </Box>
-            </div>
-    );
+    const listChatMessages = chatMessages.map((ChatMessage, index) => <div className="chat-message-line" key={index}
+                                                                           style={{flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse'}}>
+        <Box
+            sx={{
+                backgroundColor: ChatMessage.type === "description" ? 'primary.main' : 'secondary.main',
+                borderRadius: '5px',
+                paddingTop: '2px',
+                paddingBottom: '2px',
+                paddingLeft: '5px',
+                paddingRight: '5px',
+                maxWidth: '100%'
+            }}
+        >
+            {ChatMessage.type}: {ChatMessage.message}
+        </Box>
+    </div>);
 
     const [wordDefinition, setWordDefinition] = useState("");
     const [openDefinition, setOpenDefinition] = useState(false);
@@ -373,15 +368,13 @@ export default function Game() {
     let cardContent = null;
 
     if (displayedCard) {
-        cardContent = (
-                <div className="side-box">
-                    <div>{displayedCard.taboo1}</div>
-                    <div>{displayedCard.taboo2}</div>
-                    <div>{displayedCard.taboo3}</div>
-                    <div>{displayedCard.taboo4}</div>
-                    <div>{displayedCard.taboo5}</div>
-                </div>
-        );
+        cardContent = (<div className="side-box">
+                <div>{displayedCard.taboo1}</div>
+                <div>{displayedCard.taboo2}</div>
+                <div>{displayedCard.taboo3}</div>
+                <div>{displayedCard.taboo4}</div>
+                <div>{displayedCard.taboo5}</div>
+            </div>);
     }
 
     //Buzzer Button is only visible for buzzing team
@@ -389,58 +382,50 @@ export default function Game() {
     //chat input field and send button not visible for buzzing team
 
     let buzzerButton = null;
-    let skipButton = (
-            <Button variant="contained" className="skip-button"
-                    onClick={sendCardMessageSkip}
-            >
-                Skip Card
-            </Button>
-    );
-    let sendFields = (
-            <div className="send-fields">
-                <TextField className={"textField-chat-input"}
-                           onChange={handleMessageChange}
-                           onKeyDown={handleEnterKey}
-                           label="Type your message..."
-                           value={message}
-                           variant="outlined"
-                        // placeholder="Describe the word"
-                           InputProps={{
-                               sx: {
-                                   '& fieldset': {
-                                       backgroundColor: '#6600B6', // Set background color only within the borders
-                                       opacity: '0.43',
-                                       marginRight: '5px', // Add margin between TextField and Button
-                                   },
+    let skipButton = (<Button variant="contained" className="skip-button"
+                              onClick={sendCardMessageSkip}
+        >
+            Skip Card
+        </Button>);
+    let sendFields = (<div className="send-fields">
+            <TextField className={"textField-chat-input"}
+                       onChange={handleMessageChange}
+                       onKeyDown={handleEnterKey}
+                       label="Type your message..."
+                       value={message}
+                       variant="outlined"
+                // placeholder="Describe the word"
+                       InputProps={{
+                           sx: {
+                               '& fieldset': {
+                                   backgroundColor: '#6600B6', // Set background color only within the borders
+                                   opacity: '0.43', marginRight: '5px', // Add margin between TextField and Button
                                },
-                           }}
-                           sx={{
-                               flexGrow: '1',
-                           }}
-                />
-                <Button
-                        onClick={sendChatMessage}
-                        variant="contained"
-                        color="primary"
-                        sx={{
-                            borderRadius: '15px',
-                            height: '100%'
-                        }}>
-                    <SendIcon/>
-                </Button>
-            </div>
-    );
+                           },
+                       }}
+                       sx={{
+                           flexGrow: '1',
+                       }}
+            />
+            <Button
+                onClick={sendChatMessage}
+                variant="contained"
+                color="primary"
+                sx={{
+                    borderRadius: '15px', height: '100%'
+                }}>
+                <SendIcon/>
+            </Button>
+        </div>);
 
 
     if (role === "buzzer") {
-        buzzerButton = (
-                <Button variant="contained"
-                        className="Buzzer"
-                        onClick={sendCardMessageBuzz}
-                >
-                    Buzzer
-                </Button>
-        );
+        buzzerButton = (<Button variant="contained"
+                                className="Buzzer"
+                                onClick={sendCardMessageBuzz}
+            >
+                Buzzer
+            </Button>);
         skipButton = null;
         sendFields = null;
     }
@@ -450,139 +435,128 @@ export default function Game() {
     let cardComponent = null;
 
     if (role !== "guesser" || role === "cluegiver") {
-        cardComponent = (
-                <div className="card-box">
-                    <div className="side-box">
-                        <Button variant="contained" className="word-button"
-                                onClick={async () => {
-                                    const response = await fetch(`https://api.datamuse.com/words?sp=${displayedCard.word}&md=d`);
-                                    const data = await response.json();
-                                    if (data.length > 0 && data[0].defs) {
-                                        setWordDefinition(data[0].defs[0]);
-                                    } else {
-                                        setWordDefinition("No definition found");
-                                    }
-                                    handleOpenDefinitionChange(true);
-                                }}>
-                            {displayedCard.word}
-                        </Button>
+        cardComponent = (<div className="card-box">
+                <div className="side-box">
+                    <Button variant="contained" className="word-button"
+                            onClick={async () => {
+                                const response = await fetch(`https://api.datamuse.com/words?sp=${displayedCard.word}&md=d`);
+                                const data = await response.json();
+                                if (data.length > 0 && data[0].defs) {
+                                    setWordDefinition(data[0].defs[0]);
+                                } else {
+                                    setWordDefinition("No definition found");
+                                }
+                                handleOpenDefinitionChange(true);
+                            }}>
+                        {displayedCard.word}
+                    </Button>
 
-                        <Dialog open={openDefinition} onClose={() => setOpenDefinition(false)}>
-                            <DialogTitle>{displayedCard.word}</DialogTitle>
-                            <DialogContent>
-                                <DialogContentText>{wordDefinition}</DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={() => handleOpenDefinitionChange(false)}>Close</Button>
-                            </DialogActions>
-                        </Dialog>
-                        {skipButton}
-                    </div>
-                    {cardContent}
+                    <Dialog open={openDefinition} onClose={() => setOpenDefinition(false)}>
+                        <DialogTitle>{displayedCard.word}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>{wordDefinition}</DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => handleOpenDefinitionChange(false)}>Close</Button>
+                        </DialogActions>
+                    </Dialog>
+                    {skipButton}
                 </div>
-        );
+                {cardContent}
+            </div>);
     }
 
-    let clickOnLeave = (
-            <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
-                <DialogTitle>Leave Game?</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenLeave(false)}>Close</Button>
-                    <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
-                </DialogActions>
-            </Dialog>
-    );
-
-    let leaveButton = null;
-
-    if (!isLeader) {
-        leaveButton = (
-            <div className="leave-box">
-            <Button variant="contained" className="leaveButton"
-                        onClick={() => handleOpenLeave(true)}
-                >
-                    <LogoutIcon sx={{color: 'white'}}/>
-                </Button>
-            </div>
-        )
-    }
-
-    let timerBox = (
-            <div className="flex-container" style={{gap: '0'}}>
-
-                <div>
-                {leaveButton}
-                {clickOnLeave}
-                </div>
-
-                <div className="timer-box">
-                    <div  className="title">Timer</div>
-                    <div className="title" >{timer}</div>
-                    <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
-                    <div  className="title">Score</div>
-                    <div  className="title">{scoredPoints}</div>
-                </div>
-
-
-            <Dialog open={openLeave} onClose={() => handleOpenLeave(false)}>
+    let clickOnLeave = (<Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
             <DialogTitle>Leave Game?</DialogTitle>
             <DialogContent>
                 <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => handleOpenLeave(false)}>Close</Button>
+                <Button onClick={() => setOpenLeave(false)}>Close</Button>
                 <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
             </DialogActions>
-            </Dialog>
+        </Dialog>);
+
+    let leaveButton = null;
+
+    if (!isLeader) {
+        leaveButton = (<div className="leave-box">
+                <Button variant="contained" className="leaveButton"
+                        onClick={() => handleOpenLeave(true)}
+                >
+                    <LogoutIcon sx={{color: 'white'}}/>
+                </Button>
+            </div>)
+    }
+
+    let timerBox = (<div className="flex-container" style={{gap: '0'}}>
+
+            <div>
+                {leaveButton}
+                {clickOnLeave}
             </div>
-    );
+
+            <div className="timer-box">
+                <div className="title">Timer</div>
+                <div className="title">{timer}</div>
+                <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
+                <div className="title">Score</div>
+                <div className="title">{scoredPoints}</div>
+            </div>
+
+
+            <Dialog open={openLeave} onClose={() => handleOpenLeave(false)}>
+                <DialogTitle>Leave Game?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Are you sure you want to leave this game?</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleOpenLeave(false)}>Close</Button>
+                    <Button style={{color: "red"}} onClick={() => doLeave()}>Leave</Button>
+                </DialogActions>
+            </Dialog>
+        </div>);
 
     if (role === "guesser") {
-        timerBox =
-                <div className="horizontal-box" style={{justifyContent: 'space-between'}}>
+        timerBox = <div className="horizontal-box" style={{justifyContent: 'space-between'}}>
 
-                    <div className="timer-box">
-                        <div  className="title">Timer</div>
-                        <div className="title">{timer}</div>
-                        <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
-                        <div  className="title">Score</div>
-                        <div  className="title">{scoredPoints}</div>
-                    </div>
+            <div className="timer-box">
+                <div className="title">Timer</div>
+                <div className="title">{timer}</div>
+                <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
+                <div className="title">Score</div>
+                <div className="title">{scoredPoints}</div>
+            </div>
 
-                    <div>
-                    <Button style={{marginTop: '-80px'}}
+            <div>
+                <Button style={{marginTop: '-80px'}}
                         onClick={() => setOpenLeave(true)}
-                    >
-                        <LogoutIcon sx={{color: 'white'}}/>
-                    </Button>
-                    {clickOnLeave}
-                    </div>
+                >
+                    <LogoutIcon sx={{color: 'white'}}/>
+                </Button>
+                {clickOnLeave}
+            </div>
 
-                </div>
+        </div>
     }
 
 
-    return (
-            <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
-                <div className="flex-container" style={{marginTop: '-20px'}}>
-                    <div className="card-and-timer-box">
-                        {cardComponent}
-                        {timerBox}
-                    </div>
-                    <div className="chat-components-box">
-                        <div className="chat-box-containing-messages"
-                             style={{height: role === "buzzer" ? '525px' : '539px'}}
-                        >
-                            {listChatMessages}
-                            <ListItem ref={scrollBottomRef}></ListItem>
-                        </div>
-                        {sendFields}
-                    </div>
-                    {buzzerButton}
+    return (<div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
+            <div className="flex-container" style={{marginTop: '-20px'}}>
+                <div className="card-and-timer-box">
+                    {cardComponent}
+                    {timerBox}
                 </div>
+                <div className="chat-components-box">
+                    <div className="chat-box-containing-messages"
+                         style={{height: role === "buzzer" ? '525px' : '539px'}}
+                    >
+                        {listChatMessages}
+                        <ListItem ref={scrollBottomRef}></ListItem>
+                    </div>
+                    {sendFields}
+                </div>
+                {buzzerButton}
             </div>
-    );
+        </div>);
 }
