@@ -7,6 +7,8 @@ import 'styles/views/LobbyPage.scss';
 import 'styles/views/Homepage.scss';
 import TabooData from "taboo-data";
 import Button_Click from "./sounds/Button_Click.mp3";
+import Join_Sound from "./sounds/Join_Sound.mp3";
+import Start_Sound from "./sounds/Start_Sound.mp3";
 import {TeamRequest} from "../../models/TeamRequest";
 import {getWebSocketDomain} from "../../helpers/getDomain";
 
@@ -125,7 +127,7 @@ const Lobby = () => {
 
     // Team WebSocket code
     const changeTeam = (teamNr, type) => {
-        playSound(Button_Click);
+        playSound(Join_Sound);
         console.log('Send Team Message!');
         teamWebSocket.current.send(
             JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), teamNr, parseInt(userId, 10), type))
@@ -205,7 +207,7 @@ const Lobby = () => {
         history.push(`/lobbies/${accessCode}/settings`)
     }
     const startGame = async () => {
-        playSound(Button_Click);
+        playSound(Start_Sound);
         try {
             if (settings === "city") {
                 console.log(settings);
