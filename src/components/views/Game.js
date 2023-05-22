@@ -61,8 +61,6 @@ export default function Game() {
     const pageWebSocket = useRef(null);
     const timerWebSocket = useRef(null);
     const [chatMessages, setChatMessages] = useState([]);
-    // Activate the following line as soon as the actual user is obtained from the backend.
-    // const [user, setUser] = useState('');
     const [message, setMessage] = useState('');
     let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
@@ -131,7 +129,6 @@ export default function Game() {
                 setTeam1Size(responseGame.data.team1.players.length);
                 setTeam2Size(responseGame.data.team2.players.length);
             } catch (error) {
-                console.log("It reaches line 135");
                 console.error("Details:", error);
                 alert("Something went wrong while fetching the game!");
             }
@@ -285,7 +282,6 @@ export default function Game() {
     // Timer websocket code
     useEffect(() => {
         timerWebSocket.current.onmessage = (event) => {
-            console.log("It reached line 323");
             const TimerMessage = JSON.parse(event.data);
             console.log('Received Timer Message:', TimerMessage);
             setTimer(TimerMessage);
