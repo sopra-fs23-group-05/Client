@@ -77,30 +77,23 @@ export default function Game() {
 
     const doLeave = async () => {
         playSound(Leave_Sound);
-        if (isLeader) {
-            await doLeaveLeader();
-        }
-        await api.delete(`/games/${accessCode}/${playerName}`);
-        localStorage.removeItem('lobbyAccessCode');
-        localStorage.removeItem('token');
-        localStorage.removeItem('userName')
 
-        const responseGame = await api.get(`/games/${accessCode}`);
-        const updatedTeam1Size = responseGame.data.team1.players.length;
-        const updatedTeam2Size = responseGame.data.team2.players.length;
-        if(updatedTeam1Size < 2 || updatedTeam2Size < 2){
-            history.push('/homepage');
-            changePage(`/games/${accessCode}/endscreen`);
-        }
-        else{
-            history.push('/homepage');
-        }
-    }
-
-    const doLeaveLeader = async () => {
         try {
-            // Request to the server to stop the game
-            await api.put(`/games/${accessCode}/finishes`);
+            //if the leader clicks on finish, the game will end after the current round is over for everyone
+            if (isLeader) {
+                await api.put(`/games/${accessCode}/finishes`);
+            }
+
+            else {
+                //delete the player from the team/game
+                await api.delete(`/games/${accessCode}/${playerName}`);
+
+                // redirect leaving player to homepage
+                history.push('/homepage');
+                localStorage.removeItem('lobbyAccessCode');
+                localStorage.removeItem('token');
+                localStorage.removeItem('userName');
+            }
         } catch (error) {
             alert(`Something went wrong: \n${handleError(error)}`);
         }
@@ -141,7 +134,7 @@ export default function Game() {
             }
         }
         fetchData()
-    }, [accessCode]);
+    }, [accessCode, doLeave]);
 
     const [rounds, setRounds] = useState("");
 
@@ -290,7 +283,7 @@ export default function Game() {
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
                 chatWebSocket.current.close();
-                if (roundsPlayed <= rounds) {
+                if (roundsPlayed < rounds) {
                     changeTurn(scoredPoints);
                     changePage(`/games/${accessCode}/pregame`);
                 } else {
@@ -453,38 +446,48 @@ export default function Game() {
         );
     }
 
-    const leaderInformation = (isLeader) ? "When you click on leave, the game will end for each player after the current round." : "";
+    const leaderInformation = (isLeader) ? "When you click on finish, the game will end for each player after the current round." : "";
+    const title = (isLeader) ? "Finish Game" : "Leave Game";
+    const action = (isLeader) ? "finish" : "leave";
+    const buttonWord = (isLeader) ? "Finish" : "Leave";
 
     let clickOnLeave = (
             <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
-                <DialogTitle>Leave Game?</DialogTitle>
+                <DialogTitle>{title}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Are you sure you want to leave this game? {leaderInformation}</DialogContentText>
+                    <DialogContentText>Are you sure you want to {action} this game? {leaderInformation}</DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpenLeave(false)}>Close</Button>
                     <Button style={{color: "red"}}
                             onClick={() => {
                                 doLeave();
-                                setLeaderClickedOnLeave(true);
+                                handleFinishButtonClick();
                                 setOpenLeave(false);
                             }}
                     >
-                        Leave
+                        {buttonWord}
                     </Button>
                 </DialogActions>
             </Dialog>
     );
 
-    const [leaderClickedOnLeave, setLeaderClickedOnLeave] = useState(false);
+    const disabledFinishButton = (isLeader && roundsPlayed === rounds);
+    const [leaderClickedOnFinish, setLeaderClickedOnFinish] = useState(false);
+
+    const handleFinishButtonClick = () => {
+        if (isLeader) {
+            setLeaderClickedOnFinish(true);
+        }
+    }
 
     let leaveButton = (
         <div className="leave-box">
         <Button
-                disabled={isLeader && leaderClickedOnLeave}
+                disabled={disabledFinishButton || leaderClickedOnFinish}
                 onClick={() => handleOpenLeave(true)}
             >
-                <LogoutIcon sx={{color: (isLeader && leaderClickedOnLeave) ? 'grey' : 'white' }}/>
+                <LogoutIcon sx={{color: (disabledFinishButton || leaderClickedOnFinish) ? 'grey' : 'white' }}/>
             </Button>
         </div>
     )
@@ -522,10 +525,10 @@ export default function Game() {
 
                     <div>
                     <Button style={{marginTop: '-80px'}}
-                            disabled={isLeader && leaderClickedOnLeave}
+                            disabled={disabledFinishButton || leaderClickedOnFinish}
                             onClick={() => handleOpenLeave(true)}
                     >
-                        <LogoutIcon sx={{color: (isLeader && leaderClickedOnLeave) ? 'grey' : 'white' }}/>
+                        <LogoutIcon sx={{color: (disabledFinishButton || leaderClickedOnFinish) ? 'grey' : 'white' }}/>
                     </Button>
                     {clickOnLeave}
                     </div>
