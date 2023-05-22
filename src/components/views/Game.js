@@ -100,9 +100,15 @@ export default function Game() {
     }
 
     const changeTurn = async () => {
+        console.log("changeTurn called");
         if(isLeader) {
             try {
                 await api.put(`/games/${accessCode}/turns`);
+                if (roundsPlayed <= rounds) {
+                    changePage(`/games/${accessCode}/pregame`);
+                } else {
+                    changePage(`/games/${accessCode}/endscreen`);
+                }
             } catch (error) {
                 alert(`Something went wrong while changing the turn in the backend: \n${handleError(error)}`);
             }
@@ -286,13 +292,7 @@ export default function Game() {
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
                 chatWebSocket.current.close();
-                if (roundsPlayed <= rounds) {
-                    changeTurn(scoredPoints);
-                    changePage(`/games/${accessCode}/pregame`);
-                } else {
-                    changeTurn(scoredPoints);
-                    changePage(`/games/${accessCode}/endscreen`);
-                }
+                changeTurn(scoredPoints).then(() => {});
             }
         }
     }, [timer,accessCode,roundsPlayed,rounds,changeTurn,changePage, scoredPoints]);
