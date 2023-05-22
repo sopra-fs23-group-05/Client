@@ -252,7 +252,7 @@ const Lobby = () => {
                 await api.post(`/games/${accessCode}/cards`, slicedCard);
             }
             if(isLeader){
-                await api.put('/games/${accessCode}/cards');
+                await api.put(`/games/${accessCode}/cards`);
                 console.log("The cards were shuffled and the first card was drawn.");
                 changePage();
             }
