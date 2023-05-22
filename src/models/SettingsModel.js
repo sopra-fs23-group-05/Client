@@ -1,7 +1,7 @@
 /**
  * Lobby model
  */
-class Lobby {
+class SettingsModel {
     constructor(data = {}) {
         this.rounds = null;
         this.roundTime = null;
@@ -10,4 +10,4 @@ class Lobby {
     }
 }
 
-export default Lobby;
+export default SettingsModel;
