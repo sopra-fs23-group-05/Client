@@ -33,6 +33,7 @@ export default function Game() {
     const [role, setRole] = useState("");
     const [isLeader, setIsLeader] = useState(false);
 
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -76,6 +77,10 @@ export default function Game() {
         audio.play();
       };
 
+      
+
+
+
 
     const doLeave = async () => {
         playSound(Button_Click);
@@ -85,16 +90,14 @@ export default function Game() {
         localStorage.removeItem('userName')
 
         const responseGame = await api.get(`/games/${accessCode}`);
-        setTeam1Size(responseGame.data.team1.players.length);
-        setTeam2Size(responseGame.data.team2.players.length);
-        if(team1Size < 2 || team2Size < 2){
-            changePage(`/games/${accessCode}/endscreen`);
+        const updatedTeam1Size = responseGame.data.team1.players.length;
+        const updatedTeam2Size = responseGame.data.team2.players.length;
+        if(updatedTeam1Size < 2 || updatedTeam2Size < 2){
             history.push('/homepage');
-            window.location.reload();
+            changePage(`/games/${accessCode}/endscreen`);
         }
         else{
             history.push('/homepage');
-            window.location.reload();
         }
     }
 
@@ -125,8 +128,6 @@ export default function Game() {
                 setRoundsPlayed(responseGame.data.roundsPlayed);
                 setTeam1Size(responseGame.data.team1.players.length);
                 setTeam2Size(responseGame.data.team2.players.length);
-                console.log(team1Size);
-                console.log(team2Size);
             } catch (error) {
                 console.log("It reaches line 135");
                 console.error("Details:", error);
@@ -139,6 +140,7 @@ export default function Game() {
     }, [accessCode]);
 
     const [rounds, setRounds] = useState("");
+
 
     // Get the actual user from the backend.
     const user = new User({username: "felix", id: 666});
