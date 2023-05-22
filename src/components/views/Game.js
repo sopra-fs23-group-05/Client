@@ -20,7 +20,7 @@ import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
 import Card from "../../models/Card";
 import Button_Click from "./sounds/Button_Click.mp3";
-import Send_Sound from "./sounds/Send_Sound.mp3";
+import Notification_Sound from "./sounds/Notification_Sound.mp3";
 import Buzzer_Sound from "./sounds/Buzzer_Sound.mp3";
 import Leave_Sound from "./sounds/Leave_Sound.mp3";
 import {CardRequest} from "../../models/CardRequest";
@@ -64,8 +64,6 @@ export default function Game() {
     const [message, setMessage] = useState('');
     let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
-    const [team1Size, setTeam1Size] = useState(0);
-    const [team2Size, setTeam2Size] = useState(0);
     const [buzzerWasPressed, setBuzzerWasPressed] = useState(false);
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
 
@@ -133,8 +131,6 @@ export default function Game() {
                 await new Promise(resolve => setTimeout(resolve, 100));
                 setRounds(responseGame.data.settings.rounds);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
-                setTeam1Size(responseGame.data.team1.players.length);
-                setTeam2Size(responseGame.data.team2.players.length);
             } catch (error) {
                 console.error("Details:", error);
                 alert("Something went wrong while fetching the game!");
@@ -219,6 +215,7 @@ export default function Game() {
         cardWebSocket.current.onmessage = (event) => {
             const Card = JSON.parse(event.data);
             console.log('Received Card:', Card);
+            playSound(Notification_Sound);
             if (Card.word !== displayedCard.word) {
                 enableBuzzer();
             }
@@ -252,7 +249,6 @@ export default function Game() {
     // Chat websocket code
     const sendChatMessage = () => {
         if (user && message && messageType) {
-            playSound(Send_Sound);
             console.log('Send Chat Message!');
             chatWebSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456

@@ -127,7 +127,6 @@ const Lobby = () => {
 
     // Team WebSocket code
     const changeTeam = (teamNr, type) => {
-        playSound(Join_Sound);
         console.log('Send Team Message!');
         teamWebSocket.current.send(
             JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), teamNr, parseInt(userId, 10), type))
@@ -143,6 +142,7 @@ const Lobby = () => {
 
 
             if (IncomingMessage.type === 'addition') {
+                playSound(Join_Sound);
                 if (IncomingMessage.teamNr === 1) {
                     setTeam1Members([...team1Members, {
                         username: IncomingMessage.username
@@ -194,6 +194,7 @@ const Lobby = () => {
             console.log(event.data);
             const IncomingMessage = JSON.parse(event.data);
             console.log('Received Page Message:', IncomingMessage);
+            playSound(Start_Sound);
             history.push(IncomingMessage.url);
         }
     }, [history]);
@@ -207,7 +208,6 @@ const Lobby = () => {
         history.push(`/lobbies/${accessCode}/settings`)
     }
     const startGame = async () => {
-        playSound(Start_Sound);
         try {
             if (settings === "city") {
                 console.log(settings);
