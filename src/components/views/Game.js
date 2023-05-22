@@ -105,7 +105,7 @@ export default function Game() {
         if(isLeader) {
             try {
                 await api.put(`/games/${accessCode}/turns`);
-                if (roundsPlayed <= rounds) {
+                if (roundsPlayed < rounds) {
                     changePage(`/games/${accessCode}/pregame`);
                 } else {
                     changePage(`/games/${accessCode}/endscreen`);
@@ -302,7 +302,7 @@ export default function Game() {
                 changeTurn(scoredPoints).then(() => {});
             }
         }
-    }, [timer,accessCode,roundsPlayed,rounds,changeTurn,changePage, scoredPoints]);
+    }, [timer, accessCode, roundsPlayed, rounds, changeTurn, changePage, scoredPoints]);
 
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components. */
