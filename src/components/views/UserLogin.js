@@ -11,7 +11,7 @@ import Lobby from "../../models/Lobby";
 const UserLogin = () => {
     const history = useHistory();
     const ENTER_KEY_CODE = 13;
-    const [username, setUsername] = useState(null);
+    const [username, setUsername] = useState("");
     const leader = false;
     const url = window.location.href;
     const parts = url.split("/");
@@ -84,7 +84,7 @@ const UserLogin = () => {
 
     return (
             <div className="homePageRoot">
-                <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
+                <img src={TabooLogo} alt="Taboo logo" style={{width: '340px', maxHeight: "40%"}}/>
                     <div className="buttonPanel">
                         <Typography variant="h5" sx={{color: 'white', marginBottom: '20px'}}>Login</Typography>
                         <TextField className="custom-outlined-text-field"
