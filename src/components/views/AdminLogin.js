@@ -86,7 +86,7 @@ const AdminLogin = () => {
 
     return (
             <div className="homePageRoot">
-                <img src={TabooLogo} alt="Taboo logo" style={{maxWidth: "100%", maxHeight: "40%"}}/>
+                <img src={TabooLogo} alt="Taboo logo" style={{width: '340px', maxHeight: "40%"}}/>
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',

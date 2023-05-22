@@ -33,6 +33,7 @@ export default function Game() {
     const [role, setRole] = useState("");
     const [isLeader, setIsLeader] = useState(false);
 
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -65,8 +66,8 @@ export default function Game() {
     const [message, setMessage] = useState('');
     let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
-    const [team1Players, setTeam1Players] = useState([]);
-    const [team2Players, setTeam2Players] = useState([]);
+    const [team1Size, setTeam1Size] = useState(0);
+    const [team2Size, setTeam2Size] = useState(0);
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
 
     const [timer, setTimer] = useState(null);
@@ -75,6 +76,10 @@ export default function Game() {
         const audio = new Audio(soundFile);
         audio.play();
       };
+
+      
+
+
 
 
     const doLeave = async () => {
@@ -85,16 +90,14 @@ export default function Game() {
         localStorage.removeItem('userName')
 
         const responseGame = await api.get(`/games/${accessCode}`);
-        setTeam1Players(responseGame.data.team1.players);
-        setTeam2Players(responseGame.data.team2.players);
-        if(team1Players.length < 2 || team2Players.length < 2){
-            changePage(`/games/${accessCode}/endscreen`);
+        const updatedTeam1Size = responseGame.data.team1.players.length;
+        const updatedTeam2Size = responseGame.data.team2.players.length;
+        if(updatedTeam1Size < 2 || updatedTeam2Size < 2){
             history.push('/homepage');
-            window.location.reload();
+            changePage(`/games/${accessCode}/endscreen`);
         }
         else{
             history.push('/homepage');
-            window.location.reload();
         }
     }
 
@@ -125,6 +128,8 @@ export default function Game() {
                 await new Promise(resolve => setTimeout(resolve, 100));
                 setRounds(responseGame.data.settings.rounds);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
+                setTeam1Size(responseGame.data.team1.players.length);
+                setTeam2Size(responseGame.data.team2.players.length);
             } catch (error) {
                 console.log("It reaches line 135");
                 console.error("Details:", error);
@@ -137,6 +142,7 @@ export default function Game() {
     }, [accessCode]);
 
     const [rounds, setRounds] = useState("");
+
 
     // Get the actual user from the backend.
     const user = new User({username: "felix", id: 666});
