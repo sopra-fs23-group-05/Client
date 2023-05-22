@@ -21,8 +21,8 @@ import User from "../../models/User";
 import Card from "../../models/Card";
 import Button_Click from "./sounds/Button_Click.mp3";
 import Send_Sound from "./sounds/Send_Sound.mp3";
-import Receive_Sound from "./sounds/Receive_Sound.mp3";
 import Buzzer_Sound from "./sounds/Buzzer_Sound.mp3";
+import Leave_Sound from "./sounds/Leave_Sound.mp3";
 import {CardRequest} from "../../models/CardRequest";
 import {getWebSocketDomain} from 'helpers/getDomain';
 
@@ -83,7 +83,7 @@ export default function Game() {
 
 
     const doLeave = async () => {
-        playSound(Button_Click);
+        playSound(Leave_Sound);
         await api.delete(`/games/${accessCode}/${playerName}`);
         localStorage.removeItem('lobbyAccessCode');
         localStorage.removeItem('token');
@@ -196,7 +196,6 @@ export default function Game() {
         chatWebSocket.current.onmessage = (event) => {
             const ChatMessage = JSON.parse(event.data);
             console.log('Received Chat Message:', ChatMessage);
-            playSound(Receive_Sound);
             setChatMessages([...chatMessages, {
                 accessCode: ChatMessage.accessCode,
                 userId: ChatMessage.userId,
