@@ -84,7 +84,7 @@ const UserLogin = () => {
 
     return (
             <div className="homePageRoot">
-                <img src={TabooLogo} alt="Taboo logo" style={{width: '340px', maxHeight: "40%"}}/>
+                <img className="tabooLogo" src={TabooLogo} alt="Taboo Logo"/>
                     <div className="buttonPanel">
                         <Typography variant="h5" sx={{color: 'white', marginBottom: '20px'}}>Login</Typography>
                         <TextField className="custom-outlined-text-field"
