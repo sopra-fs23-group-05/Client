@@ -265,6 +265,12 @@ const Lobby = () => {
 
     let content = <div className="horizontal-box"></div>
 
+    const checkAllUsersJoinedTeam = async () => {
+        const usersResponse = await api.get(`/lobbies/${accessCode}/users/teams`);
+        console.log(usersResponse.data);
+        return usersResponse.data;
+    }
+
     if (isLeader) {
         content = (
             <div className="horizontal-box">
@@ -277,7 +283,7 @@ const Lobby = () => {
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => startGame()}
-                        disabled={team1Members.length < 2 || team2Members.length < 2}
+                        disabled={team1Members.length < 2 || team2Members.length < 2 || !checkAllUsersJoinedTeam()}
                 >
                     Start Game
                 </Button>
