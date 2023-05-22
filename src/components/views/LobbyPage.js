@@ -253,7 +253,11 @@ const Lobby = () => {
                 const slicedCard = item.slice();
                 await api.post(`/games/${accessCode}/cards`, slicedCard);
             }
-            changePage();
+            if(isLeader){
+                await api.put(`/games/${accessCode}/cards`);
+                console.log("The cards were shuffled and the first card was drawn.");
+                changePage();
+            }
         } catch (error) {
             alert(`Error: \n${handleError(error)}`);
         }
