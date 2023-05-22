@@ -111,6 +111,7 @@ const AdminLogin = () => {
                             <Button variant="contained"
                                     className="buttonLogin"
                                     onClick={() => doLogin()}
+                                    disabled={username===""}
                             >
                                 Enter
                             </Button>
