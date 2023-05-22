@@ -36,16 +36,11 @@ const AppRouter = () => {
                 <Route exact path="/rules">
                     <Rules/>
                 </Route>
-
                 <Route exact path="/lobbies/:accessCode/invite">
-                    <InviteGuard>
                         <Invite/>
-                    </InviteGuard>
                 </Route>
                 <Route exact path="/lobbies/:accessCode/settings">
-                    <SettingsGuard>
                         <Settings/>
-                    </SettingsGuard>
                 </Route>
                 <Route exact path="/">
                     <Redirect to="/homepage"/>
@@ -65,19 +60,13 @@ const AppRouter = () => {
                     </LobbyGuard>
                 </Route>
                 <Route exact path="/games/:accessCode">
-                    <GameGuard>
                         <Game/>
-                    </GameGuard>
                 </Route>
                 <Route exact path="/games/:accessCode/pregame">
-                    <PreGameGuard>
                         <PreGame/>
-                    </PreGameGuard>
                 </Route>
                 <Route exact path="/games/:accessCode/endscreen">
-                    <EndscreenGuard>
                         <Endscreen/>
-                    </EndscreenGuard>
                 </Route>
             </Switch>
         </BrowserRouter>
