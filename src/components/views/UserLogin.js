@@ -17,7 +17,7 @@ const UserLogin = () => {
     const parts = url.split("/");
     var accessCodeURL = parts.pop().toString();
     if (accessCodeURL === 'user-login') {
-        accessCodeURL = null;
+        accessCodeURL = "";
     }
     const [givenAccessCode, setGivenAccessCode] = useState(accessCodeURL);
 
