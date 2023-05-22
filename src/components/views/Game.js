@@ -39,7 +39,7 @@ export default function Game() {
                 // response is "cluegiver", "guesser" or "buzzer"
                 const responseRole = await api.get(`/games/${accessCode}/users/${playerName}`);
                 setRole(responseRole.data.toString().toLowerCase());
-                
+
                 const userResponse = await api.get(`/users/${userId}`);
                 setIsLeader(userResponse.data.leader);
             } catch (error) {
@@ -301,10 +301,11 @@ export default function Game() {
     * a new array of ListItem components. */
     const listChatMessages = chatMessages.map((ChatMessage, index) =>
             <div className="chat-message-line" key={index}
-                 style={{flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse'}}>
+                 style={{flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse',
+                        justifyContent: ChatMessage.type === "information" ? 'center' : 'flex-start'}}>
                 <Box
                         sx={{
-                            backgroundColor: ChatMessage.type === "description" ? 'primary.main' : 'secondary.main',
+                            backgroundColor: ChatMessage.type === "description" ? 'primary.main' : (ChatMessage.type === "information" ? 'white' : 'secondary.main'),
                             borderRadius: '5px',
                             paddingTop: '2px',
                             paddingBottom: '2px',
@@ -313,7 +314,7 @@ export default function Game() {
                             maxWidth: '100%'
                         }}
                 >
-                    {ChatMessage.type}: {ChatMessage.message}
+                    {ChatMessage.type !== "information" ? `${ChatMessage.type}: ${ChatMessage.message}` : ChatMessage.message}
                 </Box>
             </div>
     );
