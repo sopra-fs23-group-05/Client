@@ -3,6 +3,8 @@ import 'styles/views/PreGame.scss';
 import {useHistory} from 'react-router-dom';
 import {useEffect, useRef, useState} from "react";
 import {api} from "../../helpers/api";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import {getWebSocketDomain} from "../../helpers/getDomain";
 import Button_Click from "./sounds/Button_Click.mp3";
 import Button from "@mui/material/Button";
@@ -126,6 +128,11 @@ const PreGame = () => {
     return (
         <div className="homePageRoot" style={{justifyContent: 'center'}}>
             <div className="flex-container" style={{gap: '50px'}}>
+            <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert variant="filled" severity="info">
+                    The game is loading!
+                </Alert>
+            </Stack>
             <div className="buttonPanel">
                 <Typography variant="h5" className="title"> Next Round Starts</Typography>
                 <br/>
