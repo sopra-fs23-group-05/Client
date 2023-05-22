@@ -42,6 +42,8 @@ const Lobby = () => {
             try {
                 console.log('The site was reloaded');
 
+                const remainingUsersResponse = await api.get(`/lobbies/${accessCode}/remainingUsers`);
+                setRemainingUsers(remainingUsersResponse.data);
                 //get user
                 const userResponse = await api.get(`/users/${userId}`);
                 console.log('user info', userResponse.data);
@@ -169,7 +171,6 @@ const Lobby = () => {
           }
       
           const remainingUsersResponse = await api.get(`/lobbies/${accessCode}/remainingUsers`);
-          console.log(remainingUsersResponse.data);
           setRemainingUsers(remainingUsersResponse.data);
         };
       
