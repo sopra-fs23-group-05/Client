@@ -23,6 +23,7 @@ const Lobby = () => {
 
     const accessCode = window.location.pathname.slice(-6);
     const userId = localStorage.getItem('token');
+    const username = localStorage.getItem('userName');
 
     const teamWebSocket = useRef(null);
     const pageWebSocket = useRef(null);
@@ -135,50 +136,47 @@ const Lobby = () => {
 
     // Team WebSocket code
     useEffect(() => {
-        teamWebSocket.current.onmessage = (event) => {
-            console.log(event.data);
-            const IncomingMessage = JSON.parse(event.data);
-            console.log('Received Team Message:', IncomingMessage);
-
-
-            if (IncomingMessage.type === 'addition') {
-                playSound(Join_Sound);
-                if (IncomingMessage.teamNr === 1) {
-                    setTeam1Members([...team1Members, {
-                        username: IncomingMessage.username
-                    }]);
-                    lobby.team1.push({
-                        id: null,
-                        leader: null,
-                        username: IncomingMessage.username
-                    });
-                } else if (IncomingMessage.teamNr === 2) {
-                    setTeam2Members([...team2Members, {
-                        username: IncomingMessage.username
-                    }]);
-                    lobby.team2.push({
-                        id: null,
-                        leader: null,
-                        username: IncomingMessage.username
-                    });
-                }
-            } else if (IncomingMessage.type === 'removal') {
-                if (IncomingMessage.teamNr === 1) {
-                    lobby.team1 = lobby.team1.filter(user => user.username !== IncomingMessage.username);
-                    const newTeam1Members = team1Members.filter(member => member.username !== IncomingMessage.username);
-                    setTeam1Members(newTeam1Members);
-                } else if (IncomingMessage.teamNr === 2) {
-                    lobby.team2 = lobby.team2.filter(user => user.username !== IncomingMessage.username);
-                    const newTeam2Members = team2Members.filter(member => member.username !== IncomingMessage.username);
-                    setTeam2Members(newTeam2Members);
-                }
-            } else if (IncomingMessage.type === 'error') {
-                if (IncomingMessage.username === user.username) {
-                    alert("Joining this team would lead to an unfair game. Therefore, wait until more users have joined the lobby or join the other team!")
-                }
+        const handleMessage = async (event) => {
+          console.log(event.data);
+          const IncomingMessage = JSON.parse(event.data);
+          console.log('Received Team Message:', IncomingMessage);
+      
+          if (IncomingMessage.type === 'addition') {
+            playSound(Join_Sound);
+            if (IncomingMessage.teamNr === 1) {
+              setTeam1Members([...team1Members, { username: IncomingMessage.username }]);
+              lobby.team1.push({ id: null, leader: null, username: IncomingMessage.username });
+            } else if (IncomingMessage.teamNr === 2) {
+              setTeam2Members([...team2Members, { username: IncomingMessage.username }]);
+              lobby.team2.push({ id: null, leader: null, username: IncomingMessage.username });
             }
-        }
-    }, [lobby, team1Members, team2Members]);
+          } else if (IncomingMessage.type === 'removal') {
+            if (IncomingMessage.teamNr === 1) {
+              lobby.team1 = lobby.team1.filter((user) => user.username !== IncomingMessage.username);
+              const newTeam1Members = team1Members.filter((member) => member.username !== IncomingMessage.username);
+              setTeam1Members(newTeam1Members);
+            } else if (IncomingMessage.teamNr === 2) {
+              lobby.team2 = lobby.team2.filter((user) => user.username !== IncomingMessage.username);
+              const newTeam2Members = team2Members.filter((member) => member.username !== IncomingMessage.username);
+              setTeam2Members(newTeam2Members);
+            }
+          } else if (IncomingMessage.type === 'error') {
+            if (IncomingMessage.username === user.username) {
+              alert(
+                "Joining this team would lead to an unfair game. Therefore, wait until more users have joined the lobby or join the other team!"
+              );
+            }
+          }
+      
+          const remainingUsersResponse = await api.get(`/lobbies/${accessCode}/remainingUsers`);
+          console.log(remainingUsersResponse.data);
+          setRemainingUsers(remainingUsersResponse.data);
+        };
+      
+        teamWebSocket.current.onmessage = handleMessage;
+      }, [accessCode, lobby, team1Members, team2Members, user]);
+      
+
 
     // Page WebSocket code
     const changePage = () => {
@@ -299,13 +297,24 @@ const Lobby = () => {
         <div key = {user.username} className="team-member">{user.username}</div>
     ));
 
+
+    const [remainingUsers, setRemainingUsers] = useState(4);
+
     return (
         <div className="homePageRoot">
             <div className="flex-container">
-            <div className="horizontal-box">
-                <Typography variant="h5" className="title">Access Code:</Typography>
-                <Typography variant="h5" className="title">{accessCode}</Typography>
+            
+            <div className="horizontal-box" style={{marginTop: '-20px'}}>
+                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>Username:</Typography>
+                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>{username}</Typography>
+                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>Access Code:</Typography>
+                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>{accessCode}</Typography>
             </div>
+
+            <div className="horizontal-box" style={{marginTop: '-20px'}}>
+                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>You need at least {remainingUsers} players to start the game</Typography>
+            </div>
+
 
             <div className="flex-container">
                 <div className="buttonPanel">
