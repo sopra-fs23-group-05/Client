@@ -11,7 +11,7 @@ import Lobby from "../../models/Lobby";
 const UserLogin = () => {
     const history = useHistory();
     const ENTER_KEY_CODE = 13;
-    const [username, setUsername] = useState(null);
+    const [username, setUsername] = useState("");
     const leader = false;
     const url = window.location.href;
     const parts = url.split("/");
