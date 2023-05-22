@@ -1,28 +1,34 @@
-import {Redirect} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
-import {api} from "../../../helpers/api";
-//delete line
-/**
- * routeProtectors interfaces can tell the router whether or not it should allow navigation to a requested route.
- * They are functional components. Based on the props passed, a route gets rendered.
- * In this case, if the user is authenticated (i.e., a token is stored in the local storage)
- * {props.children} are rendered --> The content inside the <GameGuard> in the App.js file, i.e. the user is able to access the main app.
- * If the user isn't authenticated, the components redirects to the /login screen
- * @Guard
- * @param props
- */
-export const GameGuard = async props => {
-  const accessCode = localStorage.getItem('lobbyAccessCode');
+import { api } from "../../../helpers/api";
 
-  const url = window.location.href;
-  const urlSplit = url.split("/");
+export const GameGuard = (props) => {
+  const [isAuthorized, setIsAuthorized] = useState(null);
 
-  if (urlSplit[3] === "games" && urlSplit[4] === accessCode) {
-    return props.children;
+  useEffect(() => {
+    const checkAuthorization = async () => {
+      const accessCode = localStorage.getItem("lobbyAccessCode");
+      const url = window.location.href;
+      const urlSplit = url.split("/");
+
+      if (urlSplit[3] === "games" && urlSplit[4] === accessCode) {
+        setIsAuthorized(true);
+      } else {
+        setIsAuthorized(false);
+      }
+    };
+
+    checkAuthorization();
+  }, []);
+
+  if (isAuthorized === null) {
+    return <p>Loading...</p>;
   }
-  return <Redirect to="/homepage"/>;
+
+  return isAuthorized ? props.children : <Redirect to="/homepage" />;
 };
 
 GameGuard.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };

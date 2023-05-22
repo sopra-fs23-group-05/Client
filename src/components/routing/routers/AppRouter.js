@@ -10,11 +10,9 @@ import PreGame from "../../views/PreGame";
 import Game from "../../views/Game";
 import Endscreen from "../../views/Endscreen";
 import {GameGuard} from "../routeProtectors/GameGuard";
-import {InviteGuard} from "../routeProtectors/InviteGuard";
 import {SettingsGuard} from "../routeProtectors/SettingsGuard";
 import {LobbyGuard} from "../routeProtectors/LobbyGuard";
-import {PreGameGuard} from "../routeProtectors/PreGameGuard";
-import {EndscreenGuard} from "../routeProtectors/EndscreenGuard";
+
 
 /**
  * Main router of your application.
@@ -30,6 +28,9 @@ const AppRouter = () => {
 
         <BrowserRouter>
             <Switch>
+                <Route exact path="/">
+                    <Redirect to="/homepage"/>
+                </Route>
                 <Route exact path="/homepage">
                     <Homepage/>
                 </Route>
@@ -40,10 +41,14 @@ const AppRouter = () => {
                         <Invite/>
                 </Route>
                 <Route exact path="/lobbies/:accessCode/settings">
+                    <SettingsGuard>
                         <Settings/>
+                    </SettingsGuard>
                 </Route>
-                <Route exact path="/">
-                    <Redirect to="/homepage"/>
+                <Route exact path="/lobbies/:accessCode">
+                    <LobbyGuard>
+                        <LobbyPage/>
+                    </LobbyGuard>
                 </Route>
                 <Route exact path="/admin-login">
                     <AdminLogin/>
@@ -54,19 +59,20 @@ const AppRouter = () => {
                 <Route exact path="/user-login/:accessCode">
                     <UserLogin/>
                 </Route>
-                <Route exact path="/lobbies/:accessCode">
-                    <LobbyGuard>
-                        <LobbyPage/>
-                    </LobbyGuard>
-                </Route>
                 <Route exact path="/games/:accessCode">
+                    <GameGuard>
                         <Game/>
+                    </GameGuard>
                 </Route>
                 <Route exact path="/games/:accessCode/pregame">
+                    <GameGuard>
                         <PreGame/>
+                    </GameGuard>
                 </Route>
                 <Route exact path="/games/:accessCode/endscreen">
+                    <GameGuard>
                         <Endscreen/>
+                    </GameGuard>
                 </Route>
             </Switch>
         </BrowserRouter>
