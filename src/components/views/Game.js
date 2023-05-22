@@ -314,7 +314,7 @@ export default function Game() {
                             maxWidth: '100%'
                         }}
                 >
-                    {ChatMessage.type !== "information" ? `${ChatMessage.type}: ${ChatMessage.message}` : ChatMessage.message}
+                    {ChatMessage.message}
                 </Box>
             </div>
     );
