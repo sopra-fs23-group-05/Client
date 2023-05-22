@@ -66,6 +66,7 @@ export default function Game() {
     const [roundsPlayed, setRoundsPlayed] = useState("");
     const [team1Size, setTeam1Size] = useState(0);
     const [team2Size, setTeam2Size] = useState(0);
+    const [buzzerWasPressed, setBuzzerWasPressed] = useState(false);
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
 
     const [timer, setTimer] = useState(null);
@@ -218,6 +219,9 @@ export default function Game() {
         cardWebSocket.current.onmessage = (event) => {
             const Card = JSON.parse(event.data);
             console.log('Received Card:', Card);
+            if (Card.word !== displayedCard.word) {
+                enableBuzzer();
+            }
             setCard({
                 word: Card.word,
                 taboo1: Card.taboo1,
@@ -230,6 +234,9 @@ export default function Game() {
         }
     }, [displayedCard], [scoredPoints]);
 
+    const enableBuzzer = () => {
+        setBuzzerWasPressed(false);
+    }
     // Chat websocket code
     const handleMessageChange = (event) => {
         setMessage(event.target.value);
@@ -401,8 +408,11 @@ export default function Game() {
                 <Button variant="contained"
                         className="Buzzer"
                         onClick={() => {
-                            sendCardMessage("buzz");
-                            playSound(Buzzer_Sound);
+                            if (!buzzerWasPressed) {
+                                setBuzzerWasPressed(true);
+                                sendCardMessage("buzz");
+                                playSound(Buzzer_Sound);
+                            }
                         }}
                 >
                     Buzzer
