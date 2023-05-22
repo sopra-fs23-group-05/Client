@@ -68,7 +68,7 @@ export default function Game() {
     const [roundsPlayed, setRoundsPlayed] = useState("");
     const [team1Size, setTeam1Size] = useState(0);
     const [team2Size, setTeam2Size] = useState(0);
-    const [isBuzzerPressed, setIsBuzzerPressed] = useState(false);
+    const [buzzerWasPressed, setBuzzerWasPressed] = useState(false);
     const [displayedWord, setDisplayedWord] = useState('');
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
 
@@ -245,8 +245,7 @@ export default function Game() {
         }
     }
     useEffect(() => {
-        setIsBuzzerPressed(false);
-        console.log("buzzer is false");
+        setBuzzerWasPressed(false);
     }, [displayedWord]);
 
     // Chat websocket code
@@ -415,9 +414,8 @@ export default function Game() {
                 <Button variant="contained"
                         className="Buzzer"
                         onClick={() => {
-                            if (!isBuzzerPressed) {
-                                console.log("Buzzer pressed!");
-                                setIsBuzzerPressed(true)
+                            if (!buzzerWasPressed) {
+                                setBuzzerWasPressed(true)
                                 sendCardMessage("buzz");
                                 playSound(Buzzer_Sound);
                             }
