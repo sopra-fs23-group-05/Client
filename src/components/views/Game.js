@@ -20,7 +20,7 @@ import {ChatMessage} from "models/ChatMessage";
 import User from "../../models/User";
 import Card from "../../models/Card";
 import Button_Click from "./sounds/Button_Click.mp3";
-import Send_Sound from "./sounds/Send_Sound.mp3";
+import Notification_Sound from "./sounds/Notification_Sound.mp3";
 import Buzzer_Sound from "./sounds/Buzzer_Sound.mp3";
 import Leave_Sound from "./sounds/Leave_Sound.mp3";
 import {CardRequest} from "../../models/CardRequest";
@@ -63,8 +63,7 @@ export default function Game() {
     const [message, setMessage] = useState('');
     let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
-    const [team1Size, setTeam1Size] = useState(0);
-    const [team2Size, setTeam2Size] = useState(0);
+    const [buzzerWasPressed, setBuzzerWasPressed] = useState(false);
     // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
 
     const [timer, setTimer] = useState(null);
@@ -100,9 +99,15 @@ export default function Game() {
     }
 
     const changeTurn = async () => {
+        console.log("changeTurn called");
         if(isLeader) {
             try {
                 await api.put(`/games/${accessCode}/turns`);
+                if (roundsPlayed < rounds) {
+                    changePage(`/games/${accessCode}/pregame`);
+                } else {
+                    changePage(`/games/${accessCode}/endscreen`);
+                }
             } catch (error) {
                 alert(`Something went wrong while changing the turn in the backend: \n${handleError(error)}`);
             }
@@ -126,8 +131,6 @@ export default function Game() {
                 await new Promise(resolve => setTimeout(resolve, 100));
                 setRounds(responseGame.data.settings.rounds);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
-                setTeam1Size(responseGame.data.team1.players.length);
-                setTeam2Size(responseGame.data.team2.players.length);
             } catch (error) {
                 console.error("Details:", error);
                 alert("Something went wrong while fetching the game!");
@@ -209,6 +212,10 @@ export default function Game() {
         cardWebSocket.current.onmessage = (event) => {
             const Card = JSON.parse(event.data);
             console.log('Received Card:', Card);
+            playSound(Notification_Sound);
+            if (Card.word !== displayedCard.word) {
+                enableBuzzer();
+            }
             setCard({
                 word: Card.word,
                 taboo1: Card.taboo1,
@@ -221,6 +228,9 @@ export default function Game() {
         }
     }, [displayedCard], [scoredPoints]);
 
+    const enableBuzzer = () => {
+        setBuzzerWasPressed(false);
+    }
     // Chat websocket code
     const handleMessageChange = (event) => {
         setMessage(event.target.value);
@@ -236,7 +246,6 @@ export default function Game() {
     // Chat websocket code
     const sendChatMessage = () => {
         if (user && message && messageType) {
-            playSound(Send_Sound);
             console.log('Send Chat Message!');
             chatWebSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456
@@ -283,16 +292,10 @@ export default function Game() {
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
                 chatWebSocket.current.close();
-                if (roundsPlayed < rounds) {
-                    changeTurn(scoredPoints);
-                    changePage(`/games/${accessCode}/pregame`);
-                } else {
-                    changeTurn(scoredPoints);
-                    changePage(`/games/${accessCode}/endscreen`);
-                }
+                changeTurn(scoredPoints).then(() => {});
             }
         }
-    }, [timer,accessCode,roundsPlayed,rounds,changeTurn,changePage, scoredPoints]);
+    }, [timer, accessCode, roundsPlayed, rounds, changeTurn, changePage, scoredPoints]);
 
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components. */
@@ -398,8 +401,11 @@ export default function Game() {
                 <Button variant="contained"
                         className="Buzzer"
                         onClick={() => {
-                            sendCardMessage("buzz");
-                            playSound(Buzzer_Sound);
+                            if (!buzzerWasPressed) {
+                                setBuzzerWasPressed(true);
+                                sendCardMessage("buzz");
+                                playSound(Buzzer_Sound);
+                            }
                         }}
                 >
                     Buzzer

@@ -14,6 +14,7 @@ const PreGame = () => {
 
     const playerName = localStorage.getItem('userName')
     const [role, setRole] = useState(null);
+    const [isLeader, setIsLeader] = useState(false);
     const [team1Points, setTeam1Points] = useState(null);
     const [team2points, setTeam2points] = useState(null);
     const pageWebSocket = useRef(null);
@@ -61,6 +62,9 @@ const PreGame = () => {
                 setRole(responseRole.data);
                 setTeam1Points(responseGame.data.team1.points);
                 setTeam2points(responseGame.data.team2.points);
+
+                const userResponse = await api.get(`/users/${localStorage.getItem('token')}`);
+                setIsLeader(userResponse.data.leader);
             } catch (error) {
                 console.error(`Something went wrong while fetching the users:`);
                 console.error("Details:", error);
@@ -98,7 +102,9 @@ const PreGame = () => {
             console.log('Received Timer Message:', TimerMessage);
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
-                changePage();
+                if(isLeader) {
+                    changePage();
+                }
             }
         }
     },[timer]);
