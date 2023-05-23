@@ -27,6 +27,7 @@ const UserLogin = () => {
   const [errorAlertVisible, setErrorAlertVisible] = useState(false); // State for error alert
   const [loginButtonDisables, disableLoginButton] = useState(true); // State for login button
   const [errorContent, setErrorContent] = useState(null);
+  const isNumeric = /^\d+$/;
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -41,15 +42,14 @@ const UserLogin = () => {
     if (username !== '') {
       disableLoginButton(false);
     }
-    const accessCodeNumber = parseInt(givenAccessCode);
 
     // Hide error message if access code is empty
-    if (!isNaN(accessCodeNumber) || givenAccessCode === '') {
+    if (isNumeric.test(givenAccessCode) || givenAccessCode === '') {
       setErrorContent(null);
     }
 
     // Disable login button if access code is not a number
-    if (isNaN(accessCodeNumber) && givenAccessCode !== '') {
+    if (!isNumeric.test(givenAccessCode) && givenAccessCode !== '') {
       disableLoginButton(true);
       setErrorContent(
           <Typography variant="h5" className="title" style={{
