@@ -2,7 +2,7 @@ import {Typography} from "@mui/material";
 import 'styles/views/PreGame.scss';
 import {useHistory} from 'react-router-dom';
 import {useEffect, useRef, useState} from "react";
-import {api} from "../../helpers/api";
+import {api, handleError} from "../../helpers/api";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import {getWebSocketDomain} from "../../helpers/getDomain";
@@ -22,6 +22,8 @@ const PreGame = () => {
     const pageWebSocket = useRef(null);
     const timerWebSocket = useRef(null);
     const [timer, setTimer] = useState(10);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [errorAlertVisible, setErrorAlertVisible] = useState(false);
 
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
@@ -68,9 +70,11 @@ const PreGame = () => {
                 const userResponse = await api.get(`/users/${localStorage.getItem('token')}`);
                 setIsLeader(userResponse.data.leader);
             } catch (error) {
-                console.error(`Something went wrong while fetching the users:`);
-                console.error("Details:", error);
-                alert("Something went wrong while fetching the users! See the console for details.");
+                setErrorMessage(error);
+                setErrorAlertVisible(true);
+                setTimeout(() => {
+                    setErrorAlertVisible(false);
+              }, 8000);
             }
         }
 
@@ -128,11 +132,6 @@ const PreGame = () => {
     return (
         <div className="homePageRoot" style={{justifyContent: 'center'}}>
             <div className="flex-container" style={{gap: '50px'}}>
-            <Stack sx={{ width: '100%' }} spacing={2}>
-                <Alert variant="filled" severity="info">
-                    The game is loading!
-                </Alert>
-            </Stack>
             <div className="buttonPanel">
                 <Typography variant="h5" className="title"> Next Round Starts</Typography>
                 <br/>
@@ -159,6 +158,13 @@ const PreGame = () => {
                 <Typography variant="h5" className="title" style={{alignSelf: "flex-start"}}>Team 2:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{team2points}</Typography>
             </div>
             </div>
+            {errorAlertVisible && (
+        <Stack sx={{ width: '100%' }} spacing={2}>
+          <Alert variant="filled" severity="error">
+            Error: {handleError(errorMessage)}
+          </Alert>
+        </Stack>
+      )}
         </div>
     );
 
