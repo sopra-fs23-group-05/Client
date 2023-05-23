@@ -47,7 +47,7 @@ export default function Game() {
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
         }
-        fetchData();
+        fetchData().then(() => {});
     }, [accessCode, playerName, userId]);
 
     const ENTER_KEY_CODE = 13;
@@ -67,7 +67,7 @@ export default function Game() {
 
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
-        audio.play();
+        audio.play().then(() => {});
       };
 
     const doLeave = async () => {
@@ -131,7 +131,7 @@ export default function Game() {
                 alert("Something went wrong while fetching the game!");
             }
         }
-        fetchData()
+        fetchData().then(() => {});
     }, [accessCode, doLeave]);
 
     const [rounds, setRounds] = useState("");
@@ -202,21 +202,21 @@ export default function Game() {
     // Card websocket code
     useEffect(() => {
         cardWebSocket.current.onmessage = (event) => {
-            const Card = JSON.parse(event.data);
-            console.log('Received Card:', Card);
+            const CardDTO = JSON.parse(event.data);
+            console.log('Received Card:', CardDTO);
             playSound(Notification_Sound);
-            if (Card.word !== displayedCard.word) {
+            if (CardDTO.word !== displayedCard.word) {
                 enableBuzzer();
             }
             setCard({
-                word: Card.word,
-                taboo1: Card.taboo1,
-                taboo2: Card.taboo2,
-                taboo3: Card.taboo3,
-                taboo4: Card.taboo4,
-                taboo5: Card.taboo5
+                word: CardDTO.word,
+                taboo1: CardDTO.taboo1,
+                taboo2: CardDTO.taboo2,
+                taboo3: CardDTO.taboo3,
+                taboo4: CardDTO.taboo4,
+                taboo5: CardDTO.taboo5
             });
-            setScoredPoints(Card.turnPoints);
+            setScoredPoints(CardDTO.turnPoints);
         }
     }, [displayedCard], [scoredPoints]);
 
@@ -423,7 +423,7 @@ export default function Game() {
                                     } else {
                                         setWordDefinition("No definition found");
                                     }
-                                    handleOpenDefinitionChange(true);
+                                    await handleOpenDefinitionChange(true);
                                 }}>
                             {displayedCard.word}
                         </Button>
@@ -459,7 +459,7 @@ export default function Game() {
                     <Button onClick={() => setOpenLeave(false)}>Close</Button>
                     <Button style={{color: "red"}}
                             onClick={() => {
-                                doLeave();
+                                doLeave().then(() => {});
                                 handleFinishButtonClick();
                                 setOpenLeave(false);
                             }}
