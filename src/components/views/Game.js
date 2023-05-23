@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import SendIcon from '@mui/icons-material/Send';
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
 import {api, handleError} from 'helpers/api';
 import {ChatMessage} from "models/ChatMessage";
@@ -64,6 +64,7 @@ export default function Game() {
     const [buzzerWasPressed, setBuzzerWasPressed] = useState(false);
     const [timer, setTimer] = useState(null);
     const messageType = role === "cluegiver" ? "description" : "guess";
+    const [rounds, setRounds] = useState("");
 
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
@@ -94,7 +95,7 @@ export default function Game() {
         }
     }
 
-    const changeTurn = async () => {
+    const changeTurn = useCallback(async () => {
         console.log("changeTurn called");
         if(isLeader) {
             try {
@@ -108,7 +109,7 @@ export default function Game() {
                 alert(`Something went wrong while changing the turn in the backend: \n${handleError(error)}`);
             }
         }
-    };
+    }, [accessCode, isLeader, rounds, roundsPlayed]);
 
     let [displayedCard, setCard] = useState(new Card({
         word: "Loading...",
@@ -133,8 +134,6 @@ export default function Game() {
         }
         fetchData().then(() => {});
     }, [accessCode, doLeave]);
-
-    const [rounds, setRounds] = useState("");
 
     // Websocket code
     useEffect(() => {
@@ -284,10 +283,10 @@ export default function Game() {
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
                 chatWebSocket.current.close();
-                changeTurn(scoredPoints).then(() => {});
+                changeTurn().then(() => {});
             }
         }
-    }, [timer, accessCode, roundsPlayed, rounds, changeTurn, changePage, scoredPoints]);
+    }, [changeTurn, changePage]);
 
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components. */
