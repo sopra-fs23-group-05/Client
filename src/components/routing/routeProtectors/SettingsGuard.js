@@ -14,7 +14,7 @@ export const SettingsGuard = (props) => {
             const url = window.location.href;
             const urlSplit = url.split("/");
             console.log(isLeader);
-            if (urlSplit[3] === "lobbies" && urlSplit[4] === accessCode && urlSplit[5] === "settings" && isLeader) {
+            if ( urlSplit[4] === accessCode && isLeader) {
                 setIsAuthorized(true);
             } else {
                 setIsAuthorized(false);

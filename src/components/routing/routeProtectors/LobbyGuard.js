@@ -12,7 +12,7 @@ export const LobbyGuard = (props) => {
             const url = window.location.href;
             const urlSplit = url.split("/");
             console.log(urlSplit[3]);
-            if (urlSplit[3] === "lobbies" && urlSplit[4] === accessCode) {
+            if ( urlSplit[4] === accessCode) {
                 setIsAuthorized(true);
             } else {
                 setIsAuthorized(false);

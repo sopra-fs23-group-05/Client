@@ -12,7 +12,7 @@ export const GameGuard = (props) => {
       const url = window.location.href;
       const urlSplit = url.split("/");
 
-      if (urlSplit[3] === "games" && urlSplit[4] === accessCode) {
+      if (urlSplit[4] === accessCode) {
         setIsAuthorized(true);
       } else {
         setIsAuthorized(false);
