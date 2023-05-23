@@ -3,7 +3,7 @@ Unleash your word-guessing skills and experience the excitement of Taboo with th
 
 ## Introduction
 This project is an online version of the game Taboo. The objective of the game is for a designated "Clue-Giver" to describe a word without using five specified "taboo words",
-while his team members attempt to correctly guess the word. The game consists of multiple rounds, which users can determine the number of. 
+while his team members attempt to guess the word correctly. The game consists of multiple rounds, which users can determine the number of. 
 Each round consists of two turns. In one turn, a team acts as the guessing team, while in the other turn, they become the Buzzer Team. 
 The Buzzer Team's responsibility is to watch for any accidental use of the taboo words by the Clue-Giver. 
 At the end of all the rounds, the team with the most correctly guessed words is declared the winner.
@@ -78,7 +78,7 @@ This launches the test runner in an interactive watch mode. See the section abou
 > For macOS user running into a 'fsevents' error: https://github.com/jest-community/vscode-jest/issues/423
 
 ## Technologies
-We used React with HTML/CSS and JS for this client code of the application. Further we used:
+We used React with HTML/CSS and JS for the client code of this application. Additionally, we used:
 TODO 
 
 * [MUI](https://mui.com) for UI elements.
@@ -87,6 +87,19 @@ TODO
 * [Twitter API](https://developer.twitter.com/en/docs/twitter-api) to share the result.
 * [Taboo API](https://github.com/Kovah/Taboo-Data) to get the card data.
 * Axios API to make API calls to our server.
+
+## High-Level Components
+The client application consists of several high-level components
+* The [Lobby-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/LobbyPage.js) component is responsible for managing the overall lobby functionality. It serves as the main entry point for users, 
+ providing them with essential lobby details such as the Access Code. On the lobby page, users can join a team and navigate to other pages, such as the [Settings-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Settings.js) or the [Invite-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Invite.js). 
+ The lobby page also enables the Lobby-Leader to initiate the game.
+* The [Settings-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Settings.js) component handles the configuration and customization of the game settings. 
+ The Lobby-Leader can view and modify various settings details, such as the number of rounds or the time allocated per round. Additionally, he can choose from multiple categories for the card deck.
+* The [Game-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Game.js) component is the core component responsible for managing the game itself.
+ it displays crucial game details, including the current score and timer. Also, it presents the card with its taboo words and enables communication through the chat feature. Upon completion of a turn, the game page navigates the users to 
+the [Pregame-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/PreGame.js) to prepare for the next turn. Once all rounds are played, the game page directs users to the [Endscreen](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Endscreen.js) when the all rounds are played.
+* The [Endscreen](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Endscreen.js) component provides users with a summary of the game's outcome. It displays the number of rounds played and showcases the final team scores, declaring the winner-team. 
+ Additionally, the endgame page presents a ranking of player scores, highlighting the best player of the game. Players have the option to share the game results on Twitter.
 
 ## Illustrations
 
@@ -146,15 +159,8 @@ TODO
     TODO import picture of end screen
     <p style="max-width: 400px">
         At the end of the game, the end screen displays the team with the highest score, indicating their victory.
-        Furthermore, the end screen showcases the individual player who successfully guessed the most words throughout the game.
-    </p>
-</div>
-
-### Share
-<div style="display: flex; align-items: center; gap: 10px;">
-    TODO import picture of share screen
-    <p style="max-width: 400px">
-        After the game, you can share your achievements on Twitter.
+        Furthermore, the end screen showcases the individual player who successfully guessed the most words throughout the game. 
+        You also have the option to share the final results on Twitter.
     </p>
 </div>
 
@@ -173,10 +179,3 @@ We are open for more ideas!
 
 ## License
 This project is licensed under Apache 2.0 - see [this](https://github.com/sopra-fs23-group-05/Client/blob/main/LICENSE) file for details
-
-## Acknowledgments
-TODO
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
