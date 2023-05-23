@@ -119,7 +119,6 @@ export default function Game() {
         taboo5: "Loading..."
     }));
 
-
     useEffect(() => {
         async function fetchData() {
             try {
