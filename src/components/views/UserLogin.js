@@ -119,7 +119,7 @@ const UserLogin = () => {
       setErrorAlertVisible(true); // Show the error alert
       setTimeout(() => {
         setErrorAlertVisible(false); // Hide the error alert after 5 seconds
-      }, 5000);
+      }, 8000);
     }
   };
 
@@ -161,7 +161,7 @@ const UserLogin = () => {
       {errorAlertVisible && ( // Render the alert if errorAlertVisible is true
         <Stack sx={{ width: '100%' }} spacing={2}>
           <Alert variant="filled" severity="error">
-            Something went wrong during the login: {handleError(errorMessage)}
+            Error: {handleError(errorMessage)}
           </Alert>
         </Stack>
       )}
