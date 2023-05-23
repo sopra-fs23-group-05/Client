@@ -100,9 +100,25 @@ const Lobby = () => {
     const goBack = async () => {
         playSound(Button_Click);
         if (isLeader) {
-            await api.delete(`/lobbies/${accessCode}`);
+            if (team1Members.some((member) => member.username === user.username)) {
+                teamWebSocket.current.send(
+                    JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), 1, parseInt(userId, 10), "LeaderLeftLobby"))
+                );
+            } else {
+                teamWebSocket.current.send(
+                    JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), 2, parseInt(userId, 10), "LeaderLeftLobby"))
+                );
+            }
         }else {
-            await api.delete(`/lobbies/${accessCode}/users/${userId}`);
+            if (team1Members.some((member) => member.username === user.username)) {
+                teamWebSocket.current.send(
+                    JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), 1, parseInt(userId, 10), "UserLeftLobby"))
+                );
+            } else {
+                teamWebSocket.current.send(
+                    JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), 2, parseInt(userId, 10), "UserLeftLobby"))
+                );
+            }
         }
         localStorage.removeItem('token');
         localStorage.removeItem('lobbyAccessCode');
@@ -150,7 +166,7 @@ const Lobby = () => {
           console.log(event.data);
           const IncomingMessage = JSON.parse(event.data);
           console.log('Received Team Message:', IncomingMessage);
-      
+
           if (IncomingMessage.type === 'addition') {
             playSound(Join_Sound);
             if (IncomingMessage.teamNr === 1) {
@@ -161,16 +177,32 @@ const Lobby = () => {
               lobby.team2.push({ id: null, leader: null, username: IncomingMessage.username });
             }
           } else if (IncomingMessage.type === 'removal') {
-            if (IncomingMessage.teamNr === 1) {
-              lobby.team1 = lobby.team1.filter((user) => user.username !== IncomingMessage.username);
-              const newTeam1Members = team1Members.filter((member) => member.username !== IncomingMessage.username);
-              setTeam1Members(newTeam1Members);
-            } else if (IncomingMessage.teamNr === 2) {
-              lobby.team2 = lobby.team2.filter((user) => user.username !== IncomingMessage.username);
-              const newTeam2Members = team2Members.filter((member) => member.username !== IncomingMessage.username);
-              setTeam2Members(newTeam2Members);
-            }
-          } else if (IncomingMessage.type === 'error') {
+              console.log(typeof (lobby.team1));
+              if (IncomingMessage.teamNr === 1) {
+                  lobby.team1 = lobby.team1.filter((user) => user.username !== IncomingMessage.username);
+                  const newTeam1Members = team1Members.filter((member) => member.username !== IncomingMessage.username);
+                  setTeam1Members(newTeam1Members);
+              } else if (IncomingMessage.teamNr === 2) {
+                  lobby.team2 = lobby.team2.filter((user) => user.username !== IncomingMessage.username);
+                  const newTeam2Members = team2Members.filter((member) => member.username !== IncomingMessage.username);
+                  setTeam2Members(newTeam2Members);
+              }
+          } else if (IncomingMessage.type === 'UserLeftLobby') {
+
+                console.log('User left lobby');
+                if (IncomingMessage.teamNr === 1) {
+                    lobby.team1 = lobby.team1.filter((user) => user.username !== IncomingMessage.username);
+                    const newTeam1Members = team1Members.filter((member) => member.username !== IncomingMessage.username);
+                    setTeam1Members(newTeam1Members);
+                } else if (IncomingMessage.teamNr === 2) {
+                    console.log('User left team 2');
+                    lobby.team2 = lobby.team2.filter((user) => user.username !== IncomingMessage.username);
+                    const newTeam2Members = team2Members.filter((member) => member.username !== IncomingMessage.username);
+                    setTeam2Members(newTeam2Members);
+                }
+            }else if (IncomingMessage.type === 'LeaderLeftLobby'){
+               history.push('/homepage');
+            } else if (IncomingMessage.type === 'error') {
             if (IncomingMessage.username === user.username) {
               alert(
                 "Joining this team would lead to an unfair game. Therefore, wait until more users have joined the lobby or join the other team!"
