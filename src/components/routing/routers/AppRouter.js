@@ -38,7 +38,7 @@ const AppRouter = () => {
                     <Rules/>
                 </Route>
                 <Route exact path="/lobbies/:accessCode/invite">
-                        <Invite/>
+                    <Invite/>
                 </Route>
                 <Route exact path="/lobbies/:accessCode/settings">
                     <SettingsGuard>

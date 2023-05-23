@@ -1,15 +1,15 @@
 import "styles/views/Game.scss";
 import {
     Box,
-    Divider,
     Button,
-    TextField,
-    ListItem,
-    DialogTitle,
     Dialog,
+    DialogActions,
     DialogContent,
     DialogContentText,
-    DialogActions,
+    DialogTitle,
+    Divider,
+    ListItem,
+    TextField,
 } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import SendIcon from '@mui/icons-material/Send';
@@ -47,6 +47,7 @@ export default function Game() {
                 alert("Something went wrong while fetching the users! See the console for details.");
             }
         }
+
         fetchData();
     }, [accessCode, playerName, userId]);
 
@@ -68,7 +69,7 @@ export default function Game() {
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
         audio.play();
-      };
+    };
 
     const doLeave = async () => {
         playSound(Leave_Sound);
@@ -77,9 +78,7 @@ export default function Game() {
             //if the leader clicks on finish, the game will end after the current round is over for everyone
             if (isLeader) {
                 await api.put(`/games/${accessCode}/finishes`);
-            }
-
-            else {
+            } else {
                 //delete the player from the team/game
                 await api.delete(`/games/${accessCode}/${playerName}`);
 
@@ -96,7 +95,7 @@ export default function Game() {
 
     const changeTurn = async () => {
         console.log("changeTurn called");
-        if(isLeader) {
+        if (isLeader) {
             try {
                 await api.put(`/games/${accessCode}/turns`);
                 if (roundsPlayed < rounds) {
@@ -131,6 +130,7 @@ export default function Game() {
                 alert("Something went wrong while fetching the game!");
             }
         }
+
         fetchData()
     }, [accessCode, doLeave]);
 
@@ -240,8 +240,8 @@ export default function Game() {
         if (message && messageType) {
             console.log('Send Chat Message!');
             chatWebSocket.current.send(
-                    // Take the access code from the URL, e.g. http://localhost:3000/game/123456
-                    JSON.stringify(new ChatMessage(window.location.href.slice(-6), parseInt(localStorage.getItem('token')), message, messageType))
+                // Take the access code from the URL, e.g. http://localhost:3000/game/123456
+                JSON.stringify(new ChatMessage(window.location.href.slice(-6), parseInt(localStorage.getItem('token')), message, messageType))
             );
             setMessage('');
         }
@@ -284,7 +284,8 @@ export default function Game() {
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
                 chatWebSocket.current.close();
-                changeTurn(scoredPoints).then(() => {});
+                changeTurn(scoredPoints).then(() => {
+                });
             }
         }
     }, [timer, accessCode, roundsPlayed, rounds, changeTurn, changePage, scoredPoints]);
@@ -292,23 +293,25 @@ export default function Game() {
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components. */
     const listChatMessages = chatMessages.map((ChatMessage, index) =>
-            <div className="chat-message-line" key={index}
-                 style={{flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse',
-                        justifyContent: ChatMessage.type === "information" ? 'center' : 'flex-start'}}>
-                <Box
-                        sx={{
-                            backgroundColor: ChatMessage.type === "description" ? 'primary.main' : (ChatMessage.type === "information" ? 'white' : 'secondary.main'),
-                            borderRadius: '5px',
-                            paddingTop: '2px',
-                            paddingBottom: '2px',
-                            paddingLeft: '5px',
-                            paddingRight: '5px',
-                            maxWidth: '100%'
-                        }}
-                >
-                    {ChatMessage.message}
-                </Box>
-            </div>
+        <div className="chat-message-line" key={index}
+             style={{
+                 flexDirection: ChatMessage.type === "description" ? 'row' : 'row-reverse',
+                 justifyContent: ChatMessage.type === "information" ? 'center' : 'flex-start'
+             }}>
+            <Box
+                sx={{
+                    backgroundColor: ChatMessage.type === "description" ? 'primary.main' : (ChatMessage.type === "information" ? 'white' : 'secondary.main'),
+                    borderRadius: '5px',
+                    paddingTop: '2px',
+                    paddingBottom: '2px',
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
+                    maxWidth: '100%'
+                }}
+            >
+                {ChatMessage.message}
+            </Box>
+        </div>
     );
 
     const [wordDefinition, setWordDefinition] = useState("");
@@ -329,13 +332,13 @@ export default function Game() {
 
     if (displayedCard) {
         cardContent = (
-                <div className="side-box">
-                    <div>{displayedCard.taboo1}</div>
-                    <div>{displayedCard.taboo2}</div>
-                    <div>{displayedCard.taboo3}</div>
-                    <div>{displayedCard.taboo4}</div>
-                    <div>{displayedCard.taboo5}</div>
-                </div>
+            <div className="side-box">
+                <div>{displayedCard.taboo1}</div>
+                <div>{displayedCard.taboo2}</div>
+                <div>{displayedCard.taboo3}</div>
+                <div>{displayedCard.taboo4}</div>
+                <div>{displayedCard.taboo5}</div>
+            </div>
         );
     }
 
@@ -345,64 +348,64 @@ export default function Game() {
 
     let buzzerButton = null;
     let skipButton = (
-            <Button variant="contained" className="skip-button"
-                    onClick={() => {
-                        sendCardMessage("skip");
-                        playSound(Button_Click);
-                    }}
-            >
-                Skip Card
-            </Button>
+        <Button variant="contained" className="skip-button"
+                onClick={() => {
+                    sendCardMessage("skip");
+                    playSound(Button_Click);
+                }}
+        >
+            Skip Card
+        </Button>
     );
     let sendFields = (
-            <div className="send-fields">
-                <TextField className={"textField-chat-input"}
-                           onChange={handleMessageChange}
-                           onKeyDown={handleEnterKey}
-                           label="Type your message..."
-                           value={message}
-                           variant="outlined"
-                        // placeholder="Describe the word"
-                           InputProps={{
-                               sx: {
-                                   '& fieldset': {
-                                       backgroundColor: '#6600B6', // Set background color only within the borders
-                                       opacity: '0.43',
-                                       marginRight: '5px', // Add margin between TextField and Button
-                                   },
+        <div className="send-fields">
+            <TextField className={"textField-chat-input"}
+                       onChange={handleMessageChange}
+                       onKeyDown={handleEnterKey}
+                       label="Type your message..."
+                       value={message}
+                       variant="outlined"
+                // placeholder="Describe the word"
+                       InputProps={{
+                           sx: {
+                               '& fieldset': {
+                                   backgroundColor: '#6600B6', // Set background color only within the borders
+                                   opacity: '0.43',
+                                   marginRight: '5px', // Add margin between TextField and Button
                                },
-                           }}
-                           sx={{
-                               flexGrow: '1',
-                           }}
-                />
-                <Button
-                        onClick={sendChatMessage}
-                        variant="contained"
-                        color="primary"
-                        sx={{
-                            borderRadius: '15px',
-                            height: '100%'
-                        }}>
-                    <SendIcon/>
-                </Button>
-            </div>
+                           },
+                       }}
+                       sx={{
+                           flexGrow: '1',
+                       }}
+            />
+            <Button
+                onClick={sendChatMessage}
+                variant="contained"
+                color="primary"
+                sx={{
+                    borderRadius: '15px',
+                    height: '100%'
+                }}>
+                <SendIcon/>
+            </Button>
+        </div>
     );
 
     if (role === "buzzer") {
         buzzerButton = (
-                <Button variant="contained"
-                        className="Buzzer"
-                        onClick={() => {
-                            if (!buzzerWasPressed) {
-                                setBuzzerWasPressed(true);
-                                sendCardMessage("buzz");
-                                playSound(Buzzer_Sound);
-                            }
-                        }}
-                >
-                    Buzzer
-                </Button>
+            <Button variant="contained"
+                    className="Buzzer"
+                    onClick={() => {
+                        if (!buzzerWasPressed) {
+                            setBuzzerWasPressed(true);
+                            sendCardMessage("buzz");
+                            playSound(Buzzer_Sound);
+                        }
+                    }}
+            >
+                Buzzer
+            </Button>
         );
         skipButton = null;
         sendFields = null;
@@ -413,35 +416,35 @@ export default function Game() {
 
     if (role !== "guesser" || role === "cluegiver") {
         cardComponent = (
-                <div className="card-box">
-                    <div className="side-box">
-                        <Button variant="contained" className="word-button"
-                                onClick={async () => {
-                                    const response = await fetch(`https://api.datamuse.com/words?sp=${displayedCard.word}&md=d`);
-                                    const data = await response.json();
-                                    if (data.length > 0 && data[0].defs) {
-                                        setWordDefinition(data[0].defs.map(def => def.substring(2)));
-                                    } else {
-                                        setWordDefinition("No definition found");
-                                    }
-                                    handleOpenDefinitionChange(true);
-                                }}>
-                            {displayedCard.word}
-                        </Button>
+            <div className="card-box">
+                <div className="side-box">
+                    <Button variant="contained" className="word-button"
+                            onClick={async () => {
+                                const response = await fetch(`https://api.datamuse.com/words?sp=${displayedCard.word}&md=d`);
+                                const data = await response.json();
+                                if (data.length > 0 && data[0].defs) {
+                                    setWordDefinition(data[0].defs.map(def => def.substring(2)));
+                                } else {
+                                    setWordDefinition("No definition found");
+                                }
+                                handleOpenDefinitionChange(true);
+                            }}>
+                        {displayedCard.word}
+                    </Button>
 
-                        <Dialog open={openDefinition} onClose={() => setOpenDefinition(false)}>
-                            <DialogTitle>{displayedCard.word}</DialogTitle>
-                            <DialogContent>
-                                <DialogContentText>{wordDefinition}</DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={() => handleOpenDefinitionChange(false)}>Close</Button>
-                            </DialogActions>
-                        </Dialog>
-                        {skipButton}
-                    </div>
-                    {cardContent}
+                    <Dialog open={openDefinition} onClose={() => setOpenDefinition(false)}>
+                        <DialogTitle>{displayedCard.word}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>{wordDefinition}</DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => handleOpenDefinitionChange(false)}>Close</Button>
+                        </DialogActions>
+                    </Dialog>
+                    {skipButton}
                 </div>
+                {cardContent}
+            </div>
         );
     }
 
@@ -451,24 +454,24 @@ export default function Game() {
     const buttonWord = (isLeader) ? "Finish" : "Leave";
 
     let clickOnLeave = (
-            <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
-                <DialogTitle>{title}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>Are you sure you want to {action} this game? {leaderInformation}</DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenLeave(false)}>Close</Button>
-                    <Button style={{color: "red"}}
-                            onClick={() => {
-                                doLeave();
-                                handleFinishButtonClick();
-                                setOpenLeave(false);
-                            }}
-                    >
-                        {buttonWord}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+        <Dialog open={openLeave} onClose={() => setOpenLeave(false)}>
+            <DialogTitle>{title}</DialogTitle>
+            <DialogContent>
+                <DialogContentText>Are you sure you want to {action} this game? {leaderInformation}</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => setOpenLeave(false)}>Close</Button>
+                <Button style={{color: "red"}}
+                        onClick={() => {
+                            doLeave();
+                            handleFinishButtonClick();
+                            setOpenLeave(false);
+                        }}
+                >
+                    {buttonWord}
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 
     const disabledFinishButton = (isLeader && roundsPlayed === rounds);
@@ -482,78 +485,78 @@ export default function Game() {
 
     let leaveButton = (
         <div className="leave-box">
-        <Button
+            <Button
                 disabled={disabledFinishButton || leaderClickedOnFinish}
                 onClick={() => handleOpenLeave(true)}
             >
-                <LogoutIcon sx={{color: (disabledFinishButton || leaderClickedOnFinish) ? 'grey' : 'white' }}/>
+                <LogoutIcon sx={{color: (disabledFinishButton || leaderClickedOnFinish) ? 'grey' : 'white'}}/>
             </Button>
         </div>
     )
 
 
     let timerBox = (
-            <div className="flex-container" style={{gap: '0', height: '100%'}}>
+        <div className="flex-container" style={{gap: '0', height: '100%'}}>
 
-                <div>
+            <div>
                 {leaveButton}
                 {clickOnLeave}
-                </div>
-
-                <div className="timer-box">
-                    <div  className="title">Timer</div>
-                    <div className="title" >{timer}</div>
-                    <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
-                    <div  className="title">Score</div>
-                    <div  className="title">{scoredPoints}</div>
-                </div>
             </div>
+
+            <div className="timer-box">
+                <div className="title">Timer</div>
+                <div className="title">{timer}</div>
+                <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
+                <div className="title">Score</div>
+                <div className="title">{scoredPoints}</div>
+            </div>
+        </div>
     );
 
     if (role === "guesser") {
         timerBox =
-                <div className="horizontal-box" style={{justifyContent: 'space-between'}}>
+            <div className="horizontal-box" style={{justifyContent: 'space-between'}}>
 
-                    <div className="timer-box">
-                        <div  className="title">Timer</div>
-                        <div className="title">{timer}</div>
-                        <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
-                        <div  className="title">Score</div>
-                        <div  className="title">{scoredPoints}</div>
-                    </div>
+                <div className="timer-box">
+                    <div className="title">Timer</div>
+                    <div className="title">{timer}</div>
+                    <Divider sx={{color: 'white', border: '0.5px solid white', width: '80%', margin: '5px'}}/>
+                    <div className="title">Score</div>
+                    <div className="title">{scoredPoints}</div>
+                </div>
 
-                    <div>
+                <div>
                     <Button style={{marginTop: '-80px'}}
                             disabled={disabledFinishButton || leaderClickedOnFinish}
                             onClick={() => handleOpenLeave(true)}
                     >
-                        <LogoutIcon sx={{color: (disabledFinishButton || leaderClickedOnFinish) ? 'grey' : 'white' }}/>
+                        <LogoutIcon sx={{color: (disabledFinishButton || leaderClickedOnFinish) ? 'grey' : 'white'}}/>
                     </Button>
                     {clickOnLeave}
-                    </div>
-
                 </div>
+
+            </div>
     }
 
 
     return (
-            <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
-                <div className="flex-container" style={{marginTop: '-20px'}}>
-                    <div className="card-and-timer-box">
-                        {cardComponent}
-                        {timerBox}
-                    </div>
-                    <div className="chat-components-box">
-                        <div className="chat-box-containing-messages"
-                             style={{height: role === "buzzer" ? '525px' : '539px'}}
-                        >
-                            {listChatMessages}
-                            <ListItem ref={scrollBottomRef}></ListItem>
-                        </div>
-                        {sendFields}
-                    </div>
-                    {buzzerButton}
+        <div className="homePageRoot" style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
+            <div className="flex-container" style={{marginTop: '-20px'}}>
+                <div className="card-and-timer-box">
+                    {cardComponent}
+                    {timerBox}
                 </div>
+                <div className="chat-components-box">
+                    <div className="chat-box-containing-messages"
+                         style={{height: role === "buzzer" ? '525px' : '539px'}}
+                    >
+                        {listChatMessages}
+                        <ListItem ref={scrollBottomRef}></ListItem>
+                    </div>
+                    {sendFields}
+                </div>
+                {buzzerButton}
             </div>
+        </div>
     );
 }
