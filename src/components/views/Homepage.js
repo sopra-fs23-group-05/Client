@@ -1,11 +1,9 @@
 import React from "react";
-import { handleError } from "helpers/api";
 import { useHistory } from "react-router-dom";
 import "styles/views/Homepage.scss";
 import TabooLogo from "./TabooLogo.png";
 import Button_Click from "./sounds/Button_Click.mp3";
 import Button from "@mui/material/Button";
-import BackgroundMusic from './sounds/BackgroundMusic.js';
 
 const Homepage = () => {
   const history = useHistory();
@@ -16,30 +14,18 @@ const Homepage = () => {
   };
 
   const doCreate = () => {
-    try {
       playSound(Button_Click);
       history.push(`/admin-login`);
-    } catch (error) {
-      alert(`Something went wrong during the login: \n${handleError(error)}`);
-    }
   };
 
   const doJoin = () => {
-    try {
       playSound(Button_Click);
       history.push(`/user-login`);
-    } catch (error) {
-      alert(`Something went wrong during the login: \n${handleError(error)}`);
-    }
   };
 
   const doRules = () => {
-    try {
       playSound(Button_Click);
       history.push(`/rules`);
-    } catch (error) {
-      alert(`Something went wrong during the login: \n${handleError(error)}`);
-    }
   };
 
   return (

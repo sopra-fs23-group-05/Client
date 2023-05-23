@@ -3,6 +3,8 @@ import {api, handleError} from 'helpers/api';
 import User from 'models/User';
 import {useHistory} from 'react-router-dom';
 import {TextField, Button, Typography, Box} from "@mui/material";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import 'styles/views/AdminLogin.scss';
 import Lobby from "../../models/Lobby";
 import TabooLogo from "./TabooLogo.png";
@@ -12,6 +14,8 @@ import Button_Click from "./sounds/Button_Click.mp3";
 const AdminLogin = () => {
     const history = useHistory();
     const [username, setUsername] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [errorAlertVisible, setErrorAlertVisible] = useState(false);
     const leader = true;
     const ENTER_KEY_CODE = 13;
 
@@ -78,8 +82,11 @@ const AdminLogin = () => {
             history.push(`/lobbies/${lobby.accessCode}`);
 
         } catch (error) {
-            alert(`Something went wrong during the login: \n${handleError(error)}`);
-            window.location.reload();
+            setErrorMessage(error);
+          setErrorAlertVisible(true); // Show the error alert
+          setTimeout(() => {
+            setErrorAlertVisible(false); // Hide the error alert after 5 seconds
+          }, 8000);
         }
     };
 
@@ -118,6 +125,13 @@ const AdminLogin = () => {
                         </div>
                     </div>
                 </Box>
+                {errorAlertVisible && (
+                <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert variant="filled" severity="error">
+                    Error: {handleError(errorMessage)}
+                </Alert>
+                </Stack>
+            )}
             </div>
     );
 };

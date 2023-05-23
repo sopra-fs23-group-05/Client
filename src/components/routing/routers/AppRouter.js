@@ -74,6 +74,7 @@ const AppRouter = () => {
                         <Endscreen/>
                     </GameGuard>
                 </Route>
+                <Route path="*"> {} <Redirect to="/homepage" /> </Route>
             </Switch>
         </BrowserRouter>
 

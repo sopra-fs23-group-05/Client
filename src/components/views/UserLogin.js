@@ -24,7 +24,7 @@ const UserLogin = () => {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [givenAccessCode, setGivenAccessCode] = useState(accessCodeURL);
-  const [errorAlertVisible, setErrorAlertVisible] = useState(false); // State for error alert
+  const [errorAlertVisible, setErrorAlertVisible] = useState(false);
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -81,11 +81,12 @@ const UserLogin = () => {
       history.push(`/lobbies/${lobby.accessCode}`);
 
     } catch (error) {
+      console.log(error);
         setErrorMessage(error);
-      setErrorAlertVisible(true); // Show the error alert
+      setErrorAlertVisible(true);
       setTimeout(() => {
-        setErrorAlertVisible(false); // Hide the error alert after 5 seconds
-      }, 5000);
+        setErrorAlertVisible(false);
+      }, 8000);
     }
   };
 
@@ -123,10 +124,10 @@ const UserLogin = () => {
           </Button>
         </div>
       </div>
-      {errorAlertVisible && ( // Render the alert if errorAlertVisible is true
+      {errorAlertVisible && (
         <Stack sx={{ width: '100%' }} spacing={2}>
           <Alert variant="filled" severity="error">
-            Something went wrong during the login: {handleError(errorMessage)}
+            Error: {handleError(errorMessage)}
           </Alert>
         </Stack>
       )}

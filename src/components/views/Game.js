@@ -18,6 +18,8 @@ import {useHistory} from 'react-router-dom';
 import {api, handleError} from 'helpers/api';
 import {ChatMessage} from "models/ChatMessage";
 import Card from "../../models/Card";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import Button_Click from "./sounds/Button_Click.mp3";
 import Notification_Sound from "./sounds/Notification_Sound.mp3";
 import Buzzer_Sound from "./sounds/Buzzer_Sound.mp3";
@@ -42,9 +44,11 @@ export default function Game() {
                 const userResponse = await api.get(`/users/${userId}`);
                 setIsLeader(userResponse.data.leader);
             } catch (error) {
-                console.error(`Something went wrong while fetching the users:`);
-                console.error("Details:", error);
-                alert("Something went wrong while fetching the users! See the console for details.");
+                setErrorMessage(error);
+                setErrorAlertVisible(true);
+                    setTimeout(() => {
+                setErrorAlertVisible(false);
+              }, 8000);
             }
         }
         fetchData();
@@ -64,6 +68,8 @@ export default function Game() {
     const [buzzerWasPressed, setBuzzerWasPressed] = useState(false);
     const [timer, setTimer] = useState(null);
     const messageType = role === "cluegiver" ? "description" : "guess";
+    const [errorMessage, setErrorMessage] = useState("");
+    const [errorAlertVisible, setErrorAlertVisible] = useState(false);
 
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
@@ -90,7 +96,11 @@ export default function Game() {
                 localStorage.removeItem('userName');
             }
         } catch (error) {
-            alert(`Something went wrong: \n${handleError(error)}`);
+            setErrorMessage(error);
+            setErrorAlertVisible(true);
+            setTimeout(() => {
+                setErrorAlertVisible(false);
+          }, 8000);
         }
     }
 
@@ -105,7 +115,11 @@ export default function Game() {
                     changePage(`/games/${accessCode}/endscreen`);
                 }
             } catch (error) {
-                alert(`Something went wrong while changing the turn in the backend: \n${handleError(error)}`);
+                setErrorMessage(error);
+                setErrorAlertVisible(true);
+                setTimeout(() => {
+                    setErrorAlertVisible(false);
+              }, 8000);
             }
         }
     };
@@ -127,8 +141,11 @@ export default function Game() {
                 setRounds(responseGame.data.settings.rounds);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
             } catch (error) {
-                console.error("Details:", error);
-                alert("Something went wrong while fetching the game!");
+                setErrorMessage(error);
+                setErrorAlertVisible(true);
+                setTimeout(() => {
+                    setErrorAlertVisible(false);
+              }, 8000);
             }
         }
         fetchData()
@@ -554,6 +571,13 @@ export default function Game() {
                     </div>
                     {buzzerButton}
                 </div>
+                {errorAlertVisible && ( // Render the alert if errorAlertVisible is true
+                <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert variant="filled" severity="error">
+                    Error: {handleError(errorMessage)}
+                </Alert>
+                </Stack>
+            )}
             </div>
     );
 }
