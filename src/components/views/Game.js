@@ -17,7 +17,6 @@ import {useEffect, useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
 import {api, handleError} from 'helpers/api';
 import {ChatMessage} from "models/ChatMessage";
-import User from "../../models/User";
 import Card from "../../models/Card";
 import Button_Click from "./sounds/Button_Click.mp3";
 import Notification_Sound from "./sounds/Notification_Sound.mp3";
@@ -52,7 +51,6 @@ export default function Game() {
     }, [accessCode, playerName, userId]);
 
     const ENTER_KEY_CODE = 13;
-
     const history = useHistory();
     const scrollBottomRef = useRef(null);
     const chatWebSocket = useRef(null);
@@ -64,15 +62,13 @@ export default function Game() {
     let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
     const [buzzerWasPressed, setBuzzerWasPressed] = useState(false);
-    // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
-
     const [timer, setTimer] = useState(null);
     const messageType = role === "cluegiver" ? "description" : "guess";
+
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
         audio.play();
       };
-
 
     const doLeave = async () => {
         playSound(Leave_Sound);
@@ -123,7 +119,6 @@ export default function Game() {
         taboo5: "Loading..."
     }));
 
-
     useEffect(() => {
         async function fetchData() {
             try {
@@ -140,9 +135,6 @@ export default function Game() {
     }, [accessCode, doLeave]);
 
     const [rounds, setRounds] = useState("");
-
-    // Get the actual user from the backend.
-    const user = new User({username: "felix", id: 666});
 
     // Websocket code
     useEffect(() => {
@@ -245,7 +237,7 @@ export default function Game() {
 
     // Chat websocket code
     const sendChatMessage = () => {
-        if (user && message && messageType) {
+        if (message && messageType) {
             console.log('Send Chat Message!');
             chatWebSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456
