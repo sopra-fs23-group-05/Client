@@ -95,6 +95,8 @@ const Lobby = () => {
         playSound(Button_Click);
         if (isLeader) {
             await api.delete(`/lobbies/${accessCode}`);
+        }else {
+            await api.delete(`/users/${userId}/${accessCode}`);
         }
         localStorage.removeItem('token');
         localStorage.removeItem('lobbyAccessCode');
