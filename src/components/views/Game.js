@@ -51,7 +51,6 @@ export default function Game() {
     }, [accessCode, playerName, userId]);
 
     const ENTER_KEY_CODE = 13;
-
     const history = useHistory();
     const scrollBottomRef = useRef(null);
     const chatWebSocket = useRef(null);
@@ -63,15 +62,13 @@ export default function Game() {
     let [scoredPoints, setScoredPoints] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
     const [buzzerWasPressed, setBuzzerWasPressed] = useState(false);
-    // In case this client is the clue giver, the message type is "description", otherwise it is "guess".
-
     const [timer, setTimer] = useState(null);
     const messageType = role === "cluegiver" ? "description" : "guess";
+
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
         audio.play();
       };
-
 
     const doLeave = async () => {
         playSound(Leave_Sound);
