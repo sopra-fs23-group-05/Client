@@ -178,4 +178,4 @@ We are open for more ideas!
 * Tom Meier
 
 ## License
-This project is licensed under Apache 2.0 - see [this](https://github.com/sopra-fs23-group-05/Client/blob/main/LICENSE) file for details
+This project is licensed under [MIT License](https://github.com/sopra-fs23-group-05/Client/blob/main/LICENSE).
