@@ -1,7 +1,7 @@
 import {Typography} from "@mui/material";
 import 'styles/views/PreGame.scss';
 import {useHistory} from 'react-router-dom';
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {api} from "../../helpers/api";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
@@ -54,7 +54,7 @@ const PreGame = () => {
             console.log('Closing Timer WebSocket');
             timerWebSocket.current.close();
         }
-    }, []);
+    }, [accessCode]);
 
     useEffect(() => {
         async function fetchData() {
@@ -78,12 +78,13 @@ const PreGame = () => {
     }, [accessCode, playerName]);
 
     // Page WebSocket code
-    const changePage = () => {
+    const changePage = useCallback(() => {
         console.log('Send Page Message!');
         pageWebSocket.current.send(
             JSON.stringify({url: `/games/${accessCode}`})
         );
-    }
+        console.log('Sent Page Message!');
+    }, [accessCode]);
 
     // Page WebSocket code
     useEffect(() => {
@@ -109,7 +110,7 @@ const PreGame = () => {
                 }
             }
         }
-    },[timer]);
+    },[isLeader, changePage]);
 
     const showDefinition = () => {
         playSound(Button_Click);
