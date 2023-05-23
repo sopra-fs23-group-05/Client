@@ -24,7 +24,10 @@ const UserLogin = () => {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [givenAccessCode, setGivenAccessCode] = useState(accessCodeURL);
-  const [errorAlertVisible, setErrorAlertVisible] = useState(false);
+  const [errorAlertVisible, setErrorAlertVisible] = useState(false); // State for error alert
+  const [loginButtonDisables, disableLoginButton] = useState(true); // State for login button
+  const [errorContent, setErrorContent] = useState(null);
+  const isNumeric = /^\d+$/;
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -32,6 +35,37 @@ const UserLogin = () => {
   const handleAccessCodeChange = (event) => {
     setGivenAccessCode(event.target.value);
   }
+
+
+  useEffect(() => {
+    // Enable login button if requirements are met
+    if (username !== '') {
+      disableLoginButton(false);
+    }
+
+    // Hide error message if access code is empty
+    if (isNumeric.test(givenAccessCode) || givenAccessCode === '') {
+      setErrorContent(null);
+    }
+
+    // Disable login button if access code is not a number
+    if (!isNumeric.test(givenAccessCode) && givenAccessCode !== '') {
+      disableLoginButton(true);
+      setErrorContent(
+          <Typography variant="h5" className="title" style={{
+            fontSize: '16px',
+            marginTop: '-16px',
+            marginBottom: '4px'
+          }}>Please enter an integer.</Typography>
+      );
+    } else if (givenAccessCode === '') {
+      disableLoginButton(true);
+    }
+    // Disable login button if username is empty
+    if (username === '') {
+      disableLoginButton(true);
+    }
+  }, [givenAccessCode, username]);
 
   const playSound = (soundFile) => {
     const audio = new Audio(soundFile);
@@ -81,11 +115,10 @@ const UserLogin = () => {
       history.push(`/lobbies/${lobby.accessCode}`);
 
     } catch (error) {
-      console.log(error);
         setErrorMessage(error);
-      setErrorAlertVisible(true);
+      setErrorAlertVisible(true); // Show the error alert
       setTimeout(() => {
-        setErrorAlertVisible(false);
+        setErrorAlertVisible(false); // Hide the error alert after 5 seconds
       }, 8000);
     }
   };
@@ -101,6 +134,7 @@ const UserLogin = () => {
           value={givenAccessCode}
           onChange={handleAccessCodeChange}
         />
+        {errorContent}
         <TextField className="custom-outlined-text-field"
           sx={{ marginBottom: '20px' }}
           label='Username'
@@ -118,13 +152,13 @@ const UserLogin = () => {
           <Button variant="contained"
             className="buttonLogin"
             onClick={() => doLogin()}
-            disabled={username === '' || givenAccessCode === ''}
+            disabled={loginButtonDisables}
           >
             Enter
           </Button>
         </div>
       </div>
-      {errorAlertVisible && (
+      {errorAlertVisible && ( // Render the alert if errorAlertVisible is true
         <Stack sx={{ width: '100%' }} spacing={2}>
           <Alert variant="filled" severity="error">
             Error: {handleError(errorMessage)}
