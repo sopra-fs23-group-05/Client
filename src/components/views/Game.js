@@ -95,6 +95,14 @@ export default function Game() {
         }
     }
 
+    // Page websocket code
+    const changePage = useCallback((url) => {
+        console.log('Send Page Message!');
+        pageWebSocket.current.send(
+            JSON.stringify({url: url})
+        );
+    }, []);
+
     const changeTurn = useCallback(async () => {
         console.log("changeTurn called");
         if(isLeader) {
@@ -109,7 +117,7 @@ export default function Game() {
                 alert(`Something went wrong while changing the turn in the backend: \n${handleError(error)}`);
             }
         }
-    }, [accessCode, isLeader, rounds, roundsPlayed]);
+    }, [accessCode, isLeader, rounds, roundsPlayed, changePage]);
 
     let [displayedCard, setCard] = useState(new Card({
         word: "Loading...",
@@ -258,14 +266,6 @@ export default function Game() {
     };
 
     // Page websocket code
-    const changePage = (url) => {
-        console.log('Send Page Message!');
-        pageWebSocket.current.send(
-            JSON.stringify({url: url})
-        );
-    }
-
-    // Page websocket code
     useEffect(() => {
         pageWebSocket.current.onmessage = (event) => {
             console.log(event.data);
@@ -286,7 +286,7 @@ export default function Game() {
                 changeTurn().then(() => {});
             }
         }
-    }, [changeTurn, changePage]);
+    }, [changeTurn]);
 
     /* This code is iterating over an array of chatMessages and returning
     * a new array of ListItem components. */
