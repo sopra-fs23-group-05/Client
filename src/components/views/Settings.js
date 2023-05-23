@@ -1,8 +1,10 @@
-import {api} from 'helpers/api';
+import {api, handleError} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Settings.scss';
 import {Container, Button, Typography, Box, Slider} from "@mui/material";
 import {useEffect, useState, useRef} from "react";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import Button_Click from "./sounds/Button_Click.mp3";
 
 
@@ -14,6 +16,8 @@ const Settings = () => {
     const [topic, setTopic] = useState("");
     const sliderRoundsValueRef = useRef(rounds);
     const sliderTimeValueRef = useRef(roundTime);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [errorAlertVisible, setErrorAlertVisible] = useState(false);
 
     const accessCode = localStorage.getItem('lobbyAccessCode');
 
@@ -63,8 +67,12 @@ const Settings = () => {
                 console.log(responseGame.data.settings.rounds);
 
             } catch (error) {
-                alert("Something went wrong while fetching the users! See the console for details.");
-            }
+                  setErrorMessage(error);
+                setErrorAlertVisible(true);
+                setTimeout(() => {
+                  setErrorAlertVisible(false);
+                }, 8000);
+              }
         }
 
 
@@ -275,6 +283,13 @@ const Settings = () => {
                 >
                     Back
                 </Button>
+                {errorAlertVisible && (
+                <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert variant="filled" severity="error">
+                    Error: {handleError(errorMessage)}
+                </Alert>
+                </Stack>
+            )}
             </div>
     );
 };

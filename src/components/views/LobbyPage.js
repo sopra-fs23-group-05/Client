@@ -5,6 +5,8 @@ import {Button, Typography} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import 'styles/views/LobbyPage.scss';
 import 'styles/views/Homepage.scss';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import TabooData from "taboo-data";
 import Button_Click from "./sounds/Button_Click.mp3";
 import Join_Sound from "./sounds/Join_Sound.mp3";
@@ -20,6 +22,8 @@ const Lobby = () => {
     const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
     const [settings, setSettings] = useState(null);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [errorAlertVisible, setErrorAlertVisible] = useState(false);
 
     const accessCode = window.location.pathname.slice(-6);
     const userId = localStorage.getItem('token');
@@ -81,9 +85,11 @@ const Lobby = () => {
                     });
                 }
             } catch (error) {
-                console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
-                console.error("Details:", error);
-                alert("Something went wrong while fetching the users! See the console for details.");
+                setErrorMessage(error);
+              setErrorAlertVisible(true);
+              setTimeout(() => {
+                setErrorAlertVisible(false);
+              }, 8000);
             }
         }
 
@@ -258,7 +264,11 @@ const Lobby = () => {
                 changePage();
             }
         } catch (error) {
-            alert(`Error: \n${handleError(error)}`);
+            setErrorMessage(error);
+          setErrorAlertVisible(true);
+          setTimeout(() => {
+            setErrorAlertVisible(false);
+          }, 8000);
         }
     }
 
@@ -272,7 +282,7 @@ const Lobby = () => {
 
     if (isLeader) {
         content = (
-            <div className="horizontal-box">
+            <div className="horizontal-box" style={{marginTop: '-24px'}}>
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => goToSettingsPage()}
@@ -306,20 +316,19 @@ const Lobby = () => {
             <div className="flex-container">
             
             <div className="horizontal-box" style={{marginTop: '-20px'}}>
-                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>Username:</Typography>
-                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>{username}</Typography>
-                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>Access Code:</Typography>
-                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>{accessCode}</Typography>
+                <Typography variant="h5" className="title" style={{fontSize: '30px'}}>Access Code:</Typography>
+                <Typography variant="h5" className="title" style={{fontSize: '30px'}}>{accessCode}</Typography>
             </div>
 
-            <div className="horizontal-box" style={{marginTop: '-20px'}}>
-                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>You need at least {remainingUsers} players to start the game</Typography>
+            <div className="horizontal-box" style={{marginTop: '-30px'}}>
+                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>Username:</Typography>
+                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>{username}</Typography>
             </div>
 
 
             <div className="flex-container">
-                <div className="buttonPanel">
-                    <Typography variant="h5" className="title">Team 1</Typography>
+                <div className="buttonPanel" style={{marginTop: '-20px'}}>
+                    <Typography variant="h5" className="title" style={{marginTop: '-20px'}}>Team 1</Typography>
                     <ul className="team-member-box">
                         {team1Content}
                     </ul>
@@ -332,7 +341,7 @@ const Lobby = () => {
                 </div>
 
                 <div className="buttonPanel">
-                    <Typography variant="h5" className="title">Team 2</Typography>
+                    <Typography variant="h5" className="title" style={{marginTop: '-20px'}}>Team 2</Typography>
                     <ul className="team-member-box">
                         {team2Content}
                     </ul>
@@ -345,7 +354,11 @@ const Lobby = () => {
                 </div>
             </div>
 
-            <div className="horizontal-box">
+            <div className="horizontal-box" style={{marginTop: '0px'}}>
+                <Typography variant="h5" className="title" style={{fontSize: '16px', marginTop: '-20px'}}>You need {remainingUsers} more players to start the game!</Typography>
+            </div>
+
+            <div className="horizontal-box" style={{marginTop: '-15px'}}>
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => goBack()}
@@ -361,6 +374,13 @@ const Lobby = () => {
             </div>
             {content}
             </div>
+            {errorAlertVisible && (
+                <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert variant="filled" severity="error">
+                    Error: {handleError(errorMessage)}
+                </Alert>
+                </Stack>
+            )}
         </div>
     );
 };

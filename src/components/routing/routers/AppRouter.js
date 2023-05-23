@@ -68,6 +68,7 @@ const AppRouter = () => {
                 <Route exact path="/games/:accessCode/endscreen">
                         <Endscreen/>
                 </Route>
+                <Route path="*"> {} <Redirect to="/homepage" /> </Route>
             </Switch>
         </BrowserRouter>
 

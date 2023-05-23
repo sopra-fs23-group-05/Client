@@ -3,12 +3,14 @@ import {useHistory} from 'react-router-dom';
 import 'styles/views/Endscreen.scss';
 import TabooLogo from './TabooLogo.png';
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import StarIcon from '@mui/icons-material/Star';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import Button_Click from "./sounds/Button_Click.mp3";
 import Winner_Sound from "./sounds/Winner_Sound.mp3";
 import {useEffect, useState} from "react";
-import {api} from "../../helpers/api";
+import {api, handleError} from "../../helpers/api";
 
 
 const Endscreen = () => {
@@ -33,6 +35,8 @@ const Endscreen = () => {
     const [winner, setWinner] = useState(0);
     const [MVPPlayer, setMVPPlayer] = useState("");
     const [leader, setLeader] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [errorAlertVisible, setErrorAlertVisible] = useState(false);
 
 
     const doHomepage = async () => {
@@ -97,9 +101,11 @@ const Endscreen = () => {
 
 
             } catch (error) {
-                console.error(`Something went wrong while fetching the users:`);
-                console.error("Details:", error);
-                alert("Something went wrong while fetching the users! See the console for details.");
+                setErrorMessage(error);
+              setErrorAlertVisible(true);
+              setTimeout(() => {
+                setErrorAlertVisible(false);
+              }, 8000);
             }
         }
 
@@ -219,6 +225,13 @@ const Endscreen = () => {
                             height={window.innerHeight}></canvas>
 
                 </div>
+                {errorAlertVisible && (
+                <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert variant="filled" severity="error">
+                    Error: {handleError(errorMessage)}
+                </Alert>
+                </Stack>
+            )}
             </div>
     );
 };
