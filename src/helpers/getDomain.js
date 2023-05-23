@@ -19,3 +19,10 @@ export const getWebSocketDomain = () => {
 
     return isProduction() ? prodWebSocketUrl : devWebSocketUrl
 }
+
+export const getClientDomain = () => {
+    const prodClientDomain = 'https://sopra-fs23-group-05-client.oa.r.appspot.com'
+    const devClientDomain = 'http://localhost:3000'
+
+    return isProduction() ? prodClientDomain : devClientDomain
+}

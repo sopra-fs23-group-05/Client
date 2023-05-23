@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import 'styles/views/Invite.scss';
 import Button_Click from "./sounds/Button_Click.mp3";
 import {Container, Button, Typography, Box} from "@mui/material";
+import {getClientDomain} from "../../helpers/getDomain";
 
 
 const Invite = () => {
@@ -22,7 +23,7 @@ const Invite = () => {
 
     const copyToClipboard = () => {
         playSound(Button_Click);
-        navigator.clipboard.writeText(`https://sopra-fs23-group-05-client.oa.r.appspot.com/user-login/${accessCode}`);
+        navigator.clipboard.writeText(`${getClientDomain()}/user-login/${accessCode}`);
     };
 
     return (
