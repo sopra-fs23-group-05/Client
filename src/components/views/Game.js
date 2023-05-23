@@ -71,7 +71,7 @@ export default function Game() {
         audio.play().then(() => {});
       };
 
-    const doLeave = async () => {
+    const doLeave = useCallback(async () => {
         playSound(Leave_Sound);
 
         try {
@@ -93,7 +93,7 @@ export default function Game() {
         } catch (error) {
             alert(`Something went wrong: \n${handleError(error)}`);
         }
-    }
+    }, [isLeader, accessCode, playerName, history]);
 
     // Page websocket code
     const changePage = useCallback((url) => {
