@@ -15,17 +15,17 @@ const PreGame = () => {
     const accessCode = localStorage.getItem('lobbyAccessCode');
 
     const playerName = localStorage.getItem('userName')
-    const [role, setRole] = useState(null);
+    const [role, setRole] = useState("");
     const [isLeader, setIsLeader] = useState(false);
-    const [team1Points, setTeam1Points] = useState(null);
-    const [team2points, setTeam2points] = useState(null);
+    const [team1Points, setTeam1Points] = useState(-1);
+    const [team2points, setTeam2points] = useState(-1);
     const pageWebSocket = useRef(null);
     const timerWebSocket = useRef(null);
     const [timer, setTimer] = useState(10);
 
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
-        audio.play();
+        audio.play().then(() => {});
       };
 
     // WebSocket code
@@ -74,7 +74,7 @@ const PreGame = () => {
             }
         }
 
-        fetchData();
+        fetchData().then(() => {});
     }, [accessCode, playerName]);
 
     // Page WebSocket code
