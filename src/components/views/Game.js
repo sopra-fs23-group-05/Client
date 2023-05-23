@@ -17,7 +17,6 @@ import {useEffect, useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
 import {api, handleError} from 'helpers/api';
 import {ChatMessage} from "models/ChatMessage";
-import User from "../../models/User";
 import Card from "../../models/Card";
 import Button_Click from "./sounds/Button_Click.mp3";
 import Notification_Sound from "./sounds/Notification_Sound.mp3";
@@ -141,9 +140,6 @@ export default function Game() {
 
     const [rounds, setRounds] = useState("");
 
-    // Get the actual user from the backend.
-    const user = new User({username: "felix", id: 666});
-
     // Websocket code
     useEffect(() => {
         chatWebSocket.current = new WebSocket(getWebSocketDomain() + '/chats/' + accessCode);
@@ -245,7 +241,7 @@ export default function Game() {
 
     // Chat websocket code
     const sendChatMessage = () => {
-        if (user && message && messageType) {
+        if (message && messageType) {
             console.log('Send Chat Message!');
             chatWebSocket.current.send(
                     // Take the access code from the URL, e.g. http://localhost:3000/game/123456
