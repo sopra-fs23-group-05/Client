@@ -103,7 +103,7 @@ const Settings = () => {
                         <Typography variant="h6" className="typography">Number of Rounds: {rounds}</Typography>
                         <Slider
                                 value={rounds}
-                                min={3}
+                                min={1}
                                 max={20}
                                 valueLabelDisplay="auto"
                                 aria-label="Small"
@@ -126,7 +126,7 @@ const Settings = () => {
 
                         <Slider
                                 value={roundTime}
-                                min={30}
+                                min={5}
                                 max={180}
                                 step={5}
                                 valueLabelDisplay="auto"

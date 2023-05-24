@@ -236,7 +236,7 @@ const Lobby = () => {
             playSound(Start_Sound);
             history.push(IncomingMessage.url);
         }
-    }, [history]);
+    }, [history, changePage]);
 
     const goToInvitePage = () => {
         playSound(Button_Click);
@@ -295,7 +295,7 @@ const Lobby = () => {
             if(isLeader){
                 await api.put(`/games/${accessCode}/cards`);
                 console.log("The cards were shuffled and the first card was drawn.");
-                changePage();
+                await changePage();
             }
         } catch (error) {
             setErrorMessage(error);
