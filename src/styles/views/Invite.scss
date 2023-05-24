@@ -11,7 +11,7 @@
     background-blend-mode: normal, normal;
     background: radial-gradient(ellipse closest-side at 50% 50%, #b219fe 5%, #48007e);
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    overflow: hidden;
+    overflow: auto;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -22,9 +22,11 @@
     .qrCodeBox {
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
-        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 304px;
         height: 480px;
         background-color: #D1C4E9;
         border-radius: 20px;
@@ -110,7 +112,7 @@
             background-color: #8a2be2
         }
     ;
-        width: 90%;
+        width: 304px;
         margin-top: -20px;
         font-size: 18px;
         font-weight: 600;

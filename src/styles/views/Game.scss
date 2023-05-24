@@ -24,7 +24,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    height: 150px;
+    height: 100%;
     width: fit-content;
     color: white;
     max-width: 139px;
@@ -36,9 +36,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    height: 150px;
     width: 100%;
-    overflow: auto;
     color: white;
 }
 

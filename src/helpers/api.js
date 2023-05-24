@@ -11,12 +11,10 @@ export const handleError = error => {
 
     // catch 4xx and 5xx status codes
     if (response && !!`${response.status}`.match(/^[4|5]\d{2}$/)) {
-        let info = `\nrequest to: ${response.request.responseURL}`;
+        let info = ``;
 
         if (response.data.status) {
-            info += `\nstatus code: ${response.data.status}`;
-            info += `\nerror: ${response.data.error}`;
-            info += `\nerror message: ${response.data.message}`;
+            info += `${response.data.message}`;
         } else {
             info += `\nstatus code: ${response.status}`;
             info += `\nerror message:\n${response.data}`;

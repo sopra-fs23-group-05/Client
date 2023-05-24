@@ -5,8 +5,12 @@ import {Button, Typography} from "@mui/material";
 import 'styles/views/AdminLogin.scss';
 import 'styles/views/LobbyPage.scss';
 import 'styles/views/Homepage.scss';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import TabooData from "taboo-data";
 import Button_Click from "./sounds/Button_Click.mp3";
+import Join_Sound from "./sounds/Join_Sound.mp3";
+import Start_Sound from "./sounds/Start_Sound.mp3";
 import {TeamRequest} from "../../models/TeamRequest";
 import {getWebSocketDomain} from "../../helpers/getDomain";
 
@@ -18,9 +22,12 @@ const Lobby = () => {
     const [user, setUser] = useState(null);
     const [isLeader, setIsLeader] = useState(false);
     const [settings, setSettings] = useState(null);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [errorAlertVisible, setErrorAlertVisible] = useState(false);
 
     const accessCode = window.location.pathname.slice(-6);
     const userId = localStorage.getItem('token');
+    const username = localStorage.getItem('userName');
 
     const teamWebSocket = useRef(null);
     const pageWebSocket = useRef(null);
@@ -39,6 +46,8 @@ const Lobby = () => {
             try {
                 console.log('The site was reloaded');
 
+                const remainingUsersResponse = await api.get(`/lobbies/${accessCode}/remainingUsers`);
+                setRemainingUsers(remainingUsersResponse.data);
                 //get user
                 const userResponse = await api.get(`/users/${userId}`);
                 console.log('user info', userResponse.data);
@@ -76,9 +85,11 @@ const Lobby = () => {
                     });
                 }
             } catch (error) {
-                console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
-                console.error("Details:", error);
-                alert("Something went wrong while fetching the users! See the console for details.");
+                setErrorMessage(error);
+              setErrorAlertVisible(true);
+              setTimeout(() => {
+                setErrorAlertVisible(false);
+              }, 8000);
             }
         }
 
@@ -89,7 +100,25 @@ const Lobby = () => {
     const goBack = async () => {
         playSound(Button_Click);
         if (isLeader) {
-            await api.delete(`/lobbies/${accessCode}`);
+            if (team1Members.some((member) => member.username === user.username)) {
+                teamWebSocket.current.send(
+                    JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), 1, parseInt(userId, 10), "LeaderLeftLobby"))
+                );
+            } else {
+                teamWebSocket.current.send(
+                    JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), 2, parseInt(userId, 10), "LeaderLeftLobby"))
+                );
+            }
+        }else {
+            if (team1Members.some((member) => member.username === user.username)) {
+                teamWebSocket.current.send(
+                    JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), 1, parseInt(userId, 10), "UserLeftLobby"))
+                );
+            } else {
+                teamWebSocket.current.send(
+                    JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), 2, parseInt(userId, 10), "UserLeftLobby"))
+                );
+            }
         }
         localStorage.removeItem('token');
         localStorage.removeItem('lobbyAccessCode');
@@ -103,7 +132,7 @@ const Lobby = () => {
         console.log('Opening Team WebSocket');
         teamWebSocket.current = new WebSocket(getWebSocketDomain() + '/teams');
         console.log('Opening Page WebSocket');
-        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages');
+        pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
         const openWebSocket = () => {
             teamWebSocket.current.onopen = (event) => {
                 console.log('Open Team WebSocket:', event);
@@ -125,7 +154,6 @@ const Lobby = () => {
 
     // Team WebSocket code
     const changeTeam = (teamNr, type) => {
-        playSound(Button_Click);
         console.log('Send Team Message!');
         teamWebSocket.current.send(
             JSON.stringify(new TeamRequest(parseInt(window.location.href.slice(-6), 10), teamNr, parseInt(userId, 10), type))
@@ -134,49 +162,62 @@ const Lobby = () => {
 
     // Team WebSocket code
     useEffect(() => {
-        teamWebSocket.current.onmessage = (event) => {
-            console.log(event.data);
-            const IncomingMessage = JSON.parse(event.data);
-            console.log('Received Team Message:', IncomingMessage);
+        const handleMessage = async (event) => {
+          console.log(event.data);
+          const IncomingMessage = JSON.parse(event.data);
+          console.log('Received Team Message:', IncomingMessage);
 
+          if (IncomingMessage.type === 'addition') {
+            playSound(Join_Sound);
+            if (IncomingMessage.teamNr === 1) {
+              setTeam1Members([...team1Members, { username: IncomingMessage.username }]);
+              lobby.team1.push({ id: null, leader: null, username: IncomingMessage.username });
+            } else if (IncomingMessage.teamNr === 2) {
+              setTeam2Members([...team2Members, { username: IncomingMessage.username }]);
+              lobby.team2.push({ id: null, leader: null, username: IncomingMessage.username });
+            }
+          } else if (IncomingMessage.type === 'removal') {
+              console.log(typeof (lobby.team1));
+              if (IncomingMessage.teamNr === 1) {
+                  lobby.team1 = lobby.team1.filter((user) => user.username !== IncomingMessage.username);
+                  const newTeam1Members = team1Members.filter((member) => member.username !== IncomingMessage.username);
+                  setTeam1Members(newTeam1Members);
+              } else if (IncomingMessage.teamNr === 2) {
+                  lobby.team2 = lobby.team2.filter((user) => user.username !== IncomingMessage.username);
+                  const newTeam2Members = team2Members.filter((member) => member.username !== IncomingMessage.username);
+                  setTeam2Members(newTeam2Members);
+              }
+          } else if (IncomingMessage.type === 'UserLeftLobby') {
 
-            if (IncomingMessage.type === 'addition') {
+                console.log('User left lobby');
                 if (IncomingMessage.teamNr === 1) {
-                    setTeam1Members([...team1Members, {
-                        username: IncomingMessage.username
-                    }]);
-                    lobby.team1.push({
-                        id: null,
-                        leader: null,
-                        username: IncomingMessage.username
-                    });
-                } else if (IncomingMessage.teamNr === 2) {
-                    setTeam2Members([...team2Members, {
-                        username: IncomingMessage.username
-                    }]);
-                    lobby.team2.push({
-                        id: null,
-                        leader: null,
-                        username: IncomingMessage.username
-                    });
-                }
-            } else if (IncomingMessage.type === 'removal') {
-                if (IncomingMessage.teamNr === 1) {
-                    lobby.team1 = lobby.team1.filter(user => user.username !== IncomingMessage.username);
-                    const newTeam1Members = team1Members.filter(member => member.username !== IncomingMessage.username);
+                    lobby.team1 = lobby.team1.filter((user) => user.username !== IncomingMessage.username);
+                    const newTeam1Members = team1Members.filter((member) => member.username !== IncomingMessage.username);
                     setTeam1Members(newTeam1Members);
                 } else if (IncomingMessage.teamNr === 2) {
-                    lobby.team2 = lobby.team2.filter(user => user.username !== IncomingMessage.username);
-                    const newTeam2Members = team2Members.filter(member => member.username !== IncomingMessage.username);
+                    console.log('User left team 2');
+                    lobby.team2 = lobby.team2.filter((user) => user.username !== IncomingMessage.username);
+                    const newTeam2Members = team2Members.filter((member) => member.username !== IncomingMessage.username);
                     setTeam2Members(newTeam2Members);
                 }
+            }else if (IncomingMessage.type === 'LeaderLeftLobby'){
+               history.push('/homepage');
             } else if (IncomingMessage.type === 'error') {
-                if (IncomingMessage.username === user.username) {
-                    alert("Joining this team would lead to an unfair game. Therefore, wait until more users have joined the lobby or join the other team!")
-                }
+            if (IncomingMessage.username === user.username) {
+              alert(
+                "Joining this team would lead to an unfair game. Therefore, wait until more users have joined the lobby or join the other team!"
+              );
             }
-        }
-    }, [lobby, team1Members, team2Members]);
+          }
+      
+          const remainingUsersResponse = await api.get(`/lobbies/${accessCode}/remainingUsers`);
+          setRemainingUsers(remainingUsersResponse.data);
+        };
+      
+        teamWebSocket.current.onmessage = handleMessage;
+      }, [accessCode, lobby, team1Members, team2Members, user]);
+      
+
 
     // Page WebSocket code
     const changePage = () => {
@@ -192,6 +233,7 @@ const Lobby = () => {
             console.log(event.data);
             const IncomingMessage = JSON.parse(event.data);
             console.log('Received Page Message:', IncomingMessage);
+            playSound(Start_Sound);
             history.push(IncomingMessage.url);
         }
     }, [history]);
@@ -205,9 +247,8 @@ const Lobby = () => {
         history.push(`/lobbies/${accessCode}/settings`)
     }
     const startGame = async () => {
-        playSound(Button_Click);
         try {
-            if(settings==="city"){
+            if (settings === "city") {
                 console.log(settings);
                 setSettings("city-country");
                 console.log(settings);
@@ -216,9 +257,8 @@ const Lobby = () => {
             await api.post(`/games/${accessCode}`);
 
             //get json file for the selected category
-        
+
             const categoryFile = await TabooData.getCategory(settings, 'en');
-            console.log("taken settings", settings);
             const categoryJSONFile = JSON.stringify(categoryFile);
             const originalObj = JSON.parse(categoryJSONFile);
 
@@ -244,30 +284,39 @@ const Lobby = () => {
                 }
             }
 
-            console.log("newObj", newObj);
             const newJson = JSON.stringify(Object.values(newObj));
-            console.log("newJson", newJson);
 
             const array = JSON.parse(newJson);
-            console.log("array", array);
             for (let i = 0; i < array.length; i++) {
                 const item = JSON.stringify(array[i]);
                 const slicedCard = item.slice();
-                console.log("sliced", slicedCard);
                 await api.post(`/games/${accessCode}/cards`, slicedCard);
             }
-
-            changePage();
+            if(isLeader){
+                await api.put(`/games/${accessCode}/cards`);
+                console.log("The cards were shuffled and the first card was drawn.");
+                changePage();
+            }
         } catch (error) {
-            alert(`Error: \n${handleError(error)}`);
+            setErrorMessage(error);
+          setErrorAlertVisible(true);
+          setTimeout(() => {
+            setErrorAlertVisible(false);
+          }, 8000);
         }
     }
 
     let content = <div className="horizontal-box"></div>
 
+    const checkAllUsersJoinedTeam = async () => {
+        const usersResponse = await api.get(`/lobbies/${accessCode}/users/teams`);
+        console.log(usersResponse.data);
+        return usersResponse.data;
+    }
+
     if (isLeader) {
         content = (
-            <div className="horizontal-box">
+            <div className="horizontal-box" style={{marginTop: '-24px'}}>
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => goToSettingsPage()}
@@ -277,7 +326,7 @@ const Lobby = () => {
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => startGame()}
-                        disabled={team1Members.length < 2 || team2Members.length < 2}
+                        disabled={team1Members.length < 2 || team2Members.length < 2 || !checkAllUsersJoinedTeam()}
                 >
                     Start Game
                 </Button>
@@ -293,17 +342,27 @@ const Lobby = () => {
         <div key = {user.username} className="team-member">{user.username}</div>
     ));
 
+
+    const [remainingUsers, setRemainingUsers] = useState(4);
+
     return (
         <div className="homePageRoot">
             <div className="flex-container">
-            <div className="horizontal-box">
-                <Typography variant="h5" className="title">Access Code:</Typography>
-                <Typography variant="h5" className="title">{accessCode}</Typography>
+            
+            <div className="horizontal-box" style={{marginTop: '-20px'}}>
+                <Typography variant="h5" className="title" style={{fontSize: '30px'}}>Access Code:</Typography>
+                <Typography variant="h5" className="title" style={{fontSize: '30px'}}>{accessCode}</Typography>
             </div>
 
+            <div className="horizontal-box" style={{marginTop: '-30px'}}>
+                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>Username:</Typography>
+                <Typography variant="h5" className="title" style={{fontSize: '16px'}}>{username}</Typography>
+            </div>
+
+
             <div className="flex-container">
-                <div className="buttonPanel">
-                    <Typography variant="h5" className="title">Team 1</Typography>
+                <div className="buttonPanel" style={{marginTop: '-20px'}}>
+                    <Typography variant="h5" className="title" style={{marginTop: '-20px'}}>Team 1</Typography>
                     <ul className="team-member-box">
                         {team1Content}
                     </ul>
@@ -316,7 +375,7 @@ const Lobby = () => {
                 </div>
 
                 <div className="buttonPanel">
-                    <Typography variant="h5" className="title">Team 2</Typography>
+                    <Typography variant="h5" className="title" style={{marginTop: '-20px'}}>Team 2</Typography>
                     <ul className="team-member-box">
                         {team2Content}
                     </ul>
@@ -329,7 +388,11 @@ const Lobby = () => {
                 </div>
             </div>
 
-            <div className="horizontal-box">
+            <div className="horizontal-box" style={{marginTop: '0px'}}>
+                <Typography variant="h5" className="title" style={{fontSize: '16px', marginTop: '-20px'}}>You need {remainingUsers} more players to start the game!</Typography>
+            </div>
+
+            <div className="horizontal-box" style={{marginTop: '-15px'}}>
                 <Button variant="contained"
                         className="buttonLogin"
                         onClick={() => goBack()}
@@ -345,6 +408,13 @@ const Lobby = () => {
             </div>
             {content}
             </div>
+            {errorAlertVisible && (
+                <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert variant="filled" severity="error">
+                    Error: {handleError(errorMessage)}
+                </Alert>
+                </Stack>
+            )}
         </div>
     );
 };
