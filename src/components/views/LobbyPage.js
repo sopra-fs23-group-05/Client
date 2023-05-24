@@ -35,6 +35,18 @@ const Lobby = () => {
     const [team1Members, setTeam1Members] = useState([]);
     const [team2Members, setTeam2Members] = useState([]);
 
+    const [isLoading, setIsLoading] = useState(false);
+
+  const handleStartGame = () => {
+    setIsLoading(true);
+    
+
+    setTimeout(() => {
+      setIsLoading(false);
+      
+    }, 2000);
+  };
+
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
         audio.play();
@@ -248,6 +260,7 @@ const Lobby = () => {
     }
     const startGame = async () => {
         try {
+            handleStartGame();
             if (settings === "city") {
                 console.log(settings);
                 setSettings("city-country");
@@ -315,24 +328,30 @@ const Lobby = () => {
     }
 
     if (isLeader) {
-        content = (
-            <div className="horizontal-box" style={{marginTop: '-24px'}}>
-                <Button variant="contained"
-                        className="buttonLogin"
-                        onClick={() => goToSettingsPage()}
-                >
-                    Settings
-                </Button>
-                <Button variant="contained"
-                        className="buttonLogin"
-                        onClick={() => startGame()}
-                        disabled={team1Members.length < 2 || team2Members.length < 2 || !checkAllUsersJoinedTeam()}
-                >
-                    Start Game
-                </Button>
-            </div>
-        );
-    }
+    content = (
+      <div className="horizontal-box" style={{ marginTop: '-24px' }}>
+        <Button
+          variant="contained"
+          className="buttonLogin"
+          onClick={() => goToSettingsPage()}
+        >
+          Settings
+        </Button>
+        <Button
+          variant="contained"
+          className="buttonLogin"
+          onClick={() => startGame()}
+          disabled={
+            team1Members.length < 2 ||
+            team2Members.length < 2 ||
+            !checkAllUsersJoinedTeam()
+          }
+        >
+          {isLoading ? 'Loading' : 'Start Game'} {}
+        </Button>
+      </div>
+    );
+  }
 
     const team1Content = team1Members.map((user) => (
         <div key = {user.username} className="team-member">{user.username}</div>
