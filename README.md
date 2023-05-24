@@ -105,7 +105,7 @@ the [Pregame-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/c
 
 ### Homepage
 <div style="display: flex; align-items: center; gap: 10px;">
-    <img src="./src/styles/Images/homePicture.png" alt="Image" width="150" height="300"> 
+    <img src="./src/styles/Images/HomepagePicture.png" alt="Image" width="150" height="300"> 
     <p style="max-width: 400px">
         Upon launching the game, you will be greeted by the homepage.Here, you have two options: to join an existing 
         lobby using a given access code or to create a new lobby. The lobby serves as a virtual room where players 
@@ -124,7 +124,7 @@ the [Pregame-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/c
 
 ### Invite Friends
 <div style="display: flex; align-items: center; gap: 10px;">
-    <img src="./src/styles/Images/invitePicture.png" alt="Image" width="150" height="300"> 
+    <img src="./src/styles/Images/InvitePicture.png" alt="Image" width="150" height="300"> 
     <p style="max-width: 400px">
         To ensure a fun multiplayer experience, every user can navigate to the invite page.
         Here, you have the option to send an invite link or a QR code to your friends,
@@ -146,7 +146,9 @@ the [Pregame-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/c
 
 ### Game-Play
 <div style="display: flex; align-items: center; gap: 10px;">
-    TODO import picture of game pages
+    <img src="./src/styles/Images/CluegiverPicture.png" alt="Image" width="150" height="300"> 
+    <img src="./src/styles/Images/GuesserPicture.png" alt="Image" width="150" height="300"> 
+    <img src="./src/styles/Images/BuzzerPicture.png" alt="Image" width="150" height="300">
     <p style="max-width: 400px">
         Once the game begins, each player will have access to a chat interface.
         This interface enables communication between team members and enhances collaboration during gameplay.
@@ -156,7 +158,7 @@ the [Pregame-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/c
 
 ### End-Screen
 <div style="display: flex; align-items: center; gap: 10px;">
-    TODO import picture of end screen
+    <img src="./src/styles/Images/EndscreenPicture.png" alt="Image" width="150" height="300"> 
     <p style="max-width: 400px">
         At the end of the game, the end screen displays the team with the highest score, indicating their victory.
         Furthermore, the end screen showcases the individual player who successfully guessed the most words throughout the game. 
