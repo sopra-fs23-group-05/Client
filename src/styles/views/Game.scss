@@ -82,11 +82,12 @@
     flex-direction: column;
     width: 370px;
     max-width: 379px;
-    height: 100%;
+    height: 300px;
     background-color: #D1C4E9;
     border-radius: 20px;
     border: 1px solid white;
     flex: 1;
+    position: relative;
 }
 
 .chat-box-containing-messages {

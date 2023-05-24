@@ -126,7 +126,7 @@ const Settings = () => {
 
                         <Slider
                                 value={roundTime}
-                                min={5}
+                                min={30}
                                 max={180}
                                 step={5}
                                 valueLabelDisplay="auto"
