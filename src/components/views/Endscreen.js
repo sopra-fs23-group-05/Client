@@ -145,7 +145,7 @@ const Endscreen = () => {
 
     return (
             <div className="homePageRoot">
-                <div className="flex-container" style={{gap: '10px'}}>
+                <div className="flex-container" style={{gap: '5px'}}>
                 <img src={TabooLogo} alt="Taboo logo" className="tabooLogo"/>
                     <div className="horizontal-box">
                         <StarIcon style={{color: '#EA854C', margin: '-10 0 0 0', fontSize: '50px'}}/>
@@ -155,17 +155,17 @@ const Endscreen = () => {
                         <StarIcon style={{color: '#EA854C', margin: '-10 0 0 0', fontSize: '50px'}}/>
                     </div>
 
-                    <h1 className="h1">YOU PLAYED {roundsPlayed} ROUNDS</h1>
-                    <h1 className="h1">SCORES</h1>
+                    <div className="h1" style={{marginTop: '5px'}}>YOU PLAYED {roundsPlayed} ROUNDS</div>
+                    <div className="h1" style={{margin: '20px 15px'}}>SCORES</div>
 
                     <div className="horizontal-box" style={{gap: '10px'}}>
-                        <div className="buttonPanel" style={{height: '80px'}}>
-                            <h1 className="h1">TEAM 1</h1>
-                            <h1 className="h1" style={{fontSize: '40px'}}>{team1Points}</h1>
+                        <div className="buttonPanel" style={{height: '25px', gap: '5px'}}>
+                            <div className="h1">TEAM 1</div>
+                            <div className="h1" style={{fontSize: '40px'}}>{team1Points}</div>
                         </div>
-                        <div className="buttonPanel" style={{height: '80px'}}>
-                            <h1 className="h1">TEAM 2</h1>
-                            <h1 className="h1" style={{fontSize: '40px'}}>{team2Points}</h1>
+                        <div className="buttonPanel" style={{height: '25px', gap: '5px'}}>
+                            <div className="h1">TEAM 2</div>
+                            <div className="h1" style={{fontSize: '40px'}}>{team2Points}</div>
                         </div>
                     </div>
 
@@ -224,7 +224,7 @@ const Endscreen = () => {
                     </div>
 
 
-                    <h1 className="h1" style={{fontSize: '32px'}}>Most Valuable Player</h1>
+                    <div className="h1" style={{fontSize: '32px', marginTop: '15px'}}>Most Valuable Player</div>
                     <div className="horizontal-box">
                         <EmojiEventsIcon style={{fontSize: '96px', color: '#EA854C'}}/>
                         {MVPInformation}
