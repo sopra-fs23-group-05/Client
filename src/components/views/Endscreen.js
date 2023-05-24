@@ -82,20 +82,20 @@ const Endscreen = () => {
         }
     }, [team1Points, team2Points, team1Size, team2Size]);
 
+    const [MVPname, setMVPname] = useState("No MVP");
+    const [MVPscore, setMVPscore] = useState(0);
+
     let MVPInformation = (
         <div style={{marginLeft: '50px'}}>
-            <h1 className="h1" style={{color: '#EA854C', marginBottom: '10px'}}>No MVP</h1>
+            <h1 className="h1" style={{color: '#EA854C', marginBottom: '10px'}}>{MVPname}</h1>
+            <h1 className="h1" style={{fontSize: '19px', textAlign: 'left'}}>Score: {MVPscore}</h1>
         </div>
-    )
+    );
 
     const checkMVPInformation = useCallback( ( ) => {
-        if (MVPPlayer !== null) {
-            MVPInformation = (
-                <div style={{marginLeft: '50px'}}>
-                    <h1 className="h1" style={{color: '#EA854C', marginBottom: '10px'}}>{MVPPlayer.name}</h1>
-                    <h1 className="h1" style={{fontSize: '19px', textAlign: 'left'}}>Score: {MVPPlayer.personalScore}</h1>
-                </div>
-            );
+        if (MVPPlayer) {
+            setMVPname(MVPPlayer.name);
+            setMVPscore(MVPPlayer.personalScore);
         }
     }, [MVPPlayer]);
 
@@ -104,7 +104,6 @@ const Endscreen = () => {
             try {
                 const userResponse = await api.get(`/users/${userId}`);
                 setLeader(userResponse.data.leader);
-                console.log(responsePlayer);
 
                 const responseGame = await api.get(`/games/${accessCode}`);
                 await new Promise(resolve => setTimeout(resolve, 100));
