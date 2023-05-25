@@ -30,7 +30,6 @@ const Invite = () => {
 
     // Page WebSocket code
     useEffect(() => {
-        console.log('Opening Page WebSocket');
         pageWebSocket.current = new WebSocket(getWebSocketDomain() + '/pages/' + accessCode);
         const openWebSocket = () => {
             pageWebSocket.current.onopen = (event) => {
@@ -42,7 +41,6 @@ const Invite = () => {
         }
         openWebSocket();
         return () => {
-            console.log('Closing Page WebSocket');
             pageWebSocket.current.close();
         }
     }, []);
