@@ -38,7 +38,7 @@ const AppRouter = () => {
                     <Rules/>
                 </Route>
                 <Route exact path="/lobbies/:accessCode/invite">
-                        <Invite/>
+                    <Invite/>
                 </Route>
                 <Route exact path="/lobbies/:accessCode/settings">
                     <SettingsGuard>
@@ -74,7 +74,7 @@ const AppRouter = () => {
                         <Endscreen/>
                     </GameGuard>
                 </Route>
-                <Route path="*"> {} <Redirect to="/homepage" /> </Route>
+                <Route path="*"> {} <Redirect to="/homepage"/> </Route>
             </Switch>
         </BrowserRouter>
 

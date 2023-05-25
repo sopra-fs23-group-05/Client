@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Redirect} from "react-router-dom";
 import PropTypes from "prop-types";
-import { api } from "../../../helpers/api";
+import {api} from "../../../helpers/api";
 
 export const SettingsGuard = (props) => {
     const [isAuthorized, setIsAuthorized] = useState(null);
@@ -14,7 +14,7 @@ export const SettingsGuard = (props) => {
             const url = window.location.href;
             const urlSplit = url.split("/");
             console.log(isLeader);
-            if ( urlSplit[4] === accessCode && isLeader) {
+            if (urlSplit[4] === accessCode && isLeader) {
                 setIsAuthorized(true);
             } else {
                 setIsAuthorized(false);
@@ -26,7 +26,7 @@ export const SettingsGuard = (props) => {
     if (isAuthorized === null) {
         return <p>Loading...</p>;
     }
-    return isAuthorized ? props.children : <Redirect to={`/lobbies/${accessCode}`} />;
+    return isAuthorized ? props.children : <Redirect to={`/lobbies/${accessCode}`}/>;
 };
 
 SettingsGuard.propTypes = {

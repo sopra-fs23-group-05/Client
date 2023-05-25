@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Endscreen.scss';
 import TabooLogo from './TabooLogo.png';
@@ -9,7 +9,6 @@ import StarIcon from '@mui/icons-material/Star';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import Button_Click from "./sounds/Button_Click.mp3";
 import Winner_Sound from "./sounds/Winner_Sound.mp3";
-import {useEffect, useState} from "react";
 import {api, handleError} from "../../helpers/api";
 
 
@@ -18,7 +17,7 @@ const Endscreen = () => {
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
         audio.play();
-      };
+    };
 
     playSound(Winner_Sound);
     const history = useHistory();
@@ -64,19 +63,17 @@ const Endscreen = () => {
         window.open(tweetUrl, '_blank');
     };
 
-    const calculateWinner = useCallback( ( ) => {
-        if(team1Size < 2){
+    const calculateWinner = useCallback(() => {
+        if (team1Size < 2) {
             setWinner(2);
-        }
-        else if(team2Size < 2){
+        } else if (team2Size < 2) {
             setWinner(1);
-        }
-        else{
+        } else {
             if (team1Points > team2Points) {
                 setWinner(1)
-            } else if(team1Points < team2Points){
+            } else if (team1Points < team2Points) {
                 setWinner(2);
-            } else if(team1Points === team2Points){
+            } else if (team1Points === team2Points) {
                 setWinner(0);
             }
         }
@@ -92,7 +89,7 @@ const Endscreen = () => {
         </div>
     );
 
-    const checkMVPInformation = useCallback( ( ) => {
+    const checkMVPInformation = useCallback(() => {
         if (MVPPlayer) {
             setMVPname(MVPPlayer.name);
             setMVPscore(MVPPlayer.personalScore);
@@ -125,10 +122,11 @@ const Endscreen = () => {
                 setErrorMessage(error);
                 setErrorAlertVisible(true);
                 setTimeout(() => {
-                setErrorAlertVisible(false);
-              }, 8000);
+                    setErrorAlertVisible(false);
+                }, 8000);
             }
         }
+
         fetchData();
     }, [accessCode, calculateWinner, checkMVPInformation, team1Points, team2Points, team1Size, team2Size, userId]);
 
@@ -143,120 +141,138 @@ const Endscreen = () => {
     }
 
     return (
-            <div className="homePageRoot">
-                <div className="flex-container" style={{gap: '5px'}}>
+        <div className="homePageRoot">
+            <div className="flex-container" style={{gap: '5px'}}>
                 <img src={TabooLogo} alt="Taboo logo" className="tabooLogo"/>
-                    <div className="horizontal-box">
-                        <StarIcon style={{color: '#EA854C', margin: '-10 0 0 0', fontSize: '50px'}}/>
-                        <h1 className="h1">
+                <div className="horizontal-box">
+                    <StarIcon style={{color: '#EA854C', margin: '-10 0 0 0', fontSize: '50px'}}/>
+                    <h1 className="h1">
                         {winnerInformation}
-                        </h1>
-                        <StarIcon style={{color: '#EA854C', margin: '-10 0 0 0', fontSize: '50px'}}/>
-                    </div>
-
-                    <div className="h1" style={{marginTop: '5px'}}>YOU PLAYED {roundsPlayed} ROUNDS</div>
-                    <div className="h1" style={{margin: '20px 15px'}}>SCORES</div>
-
-                    <div className="horizontal-box" style={{gap: '10px'}}>
-                        <div className="buttonPanel" style={{height: '25px', gap: '5px'}}>
-                            <div className="h1">TEAM 1</div>
-                            <div className="h1" style={{fontSize: '40px'}}>{team1Points}</div>
-                        </div>
-                        <div className="buttonPanel" style={{height: '25px', gap: '5px'}}>
-                            <div className="h1">TEAM 2</div>
-                            <div className="h1" style={{fontSize: '40px'}}>{team2Points}</div>
-                        </div>
-                    </div>
-
-                    <div className="horizontal-box" style={{ gap: '10px' }}>
-                        <div className="buttonPanel" style={{ height: '129px', padding: '15px', overflow: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-                            {team1Players && (
-                                <>
-                                    <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-                                        <thead>
-                                            <tr>
-                                                <th colSpan="2" className="table-title">Team 1 Players</th>
-                                            </tr>
-                                            <tr>
-                                                <th className="table-row" style={{ textAlign: 'left' }}>NAME</th>
-                                                <th className="table-row" style={{ textAlign: 'right' }}>SCORE</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {team1Players.map((player, index) => (
-                                                <tr key={player.name} style={{ borderBottom: (index !== team1Size - 1) ? '1px solid white' : 'none' }}>
-                                                    <td className="table-row" style={{ textAlign: 'left' }}>{player.name}</td>
-                                                    <td className="table-row" style={{ textAlign: 'right' }}>{player.personalScore}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </>
-                            )}
-                        </div>
-
-                        <div className="buttonPanel" style={{ height: '129px', padding: '15px', overflow: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-                            {team2Players && (
-                                <>
-                                    <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-                                        <thead>
-                                            <tr>
-                                                <th colSpan="2" className="table-title">Team 2 Players</th>
-                                            </tr>
-                                            <tr>
-                                                <th className="table-row" style={{ textAlign: 'left' }}>NAME</th>
-                                                <th className="table-row" style={{ textAlign: 'right' }}>SCORE</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {team2Players.map((player, index) => (
-                                                <tr key={player.name} style={{ borderBottom: (index !== team2Size - 1) ? '1px solid white' : 'none' }}>
-                                                    <td className="table-row" style={{ textAlign: 'left' }}>{player.name}</td>
-                                                    <td className="table-row" style={{ textAlign: 'right' }}>{player.personalScore}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </>
-                            )}
-                        </div>
-                    </div>
-
-
-                    <div className="h1" style={{fontSize: '32px', marginTop: '15px'}}>Most Valuable Player</div>
-                    <div className="horizontal-box">
-                        <EmojiEventsIcon style={{fontSize: '96px', color: '#EA854C'}}/>
-                        {MVPInformation}
-                    </div>
-
-                    <div className="horizontal-box" style={{gap: '20px'}}>
-                        <Button variant="contained"
-                                className="button"
-                                style={{height: '60px'}}
-                                onClick={() => doShare()}
-                        >
-                            Share
-                        </Button>
-                        <Button variant="contained"
-                                className="button"
-                                style={{height: '60px'}}
-                                onClick={() => doHomepage()}
-                        >
-                            Homepage
-                        </Button>
-                    </div>
-                    <canvas ref={canvasRef} style={{display: 'none'}} width={window.innerWidth}
-                            height={window.innerHeight}></canvas>
-
+                    </h1>
+                    <StarIcon style={{color: '#EA854C', margin: '-10 0 0 0', fontSize: '50px'}}/>
                 </div>
-                {errorAlertVisible && (
-                <Stack sx={{ width: '100%' }} spacing={2}>
-                <Alert variant="filled" severity="error">
-                    Error: {handleError(errorMessage)}
-                </Alert>
+
+                <div className="h1" style={{marginTop: '5px'}}>YOU PLAYED {roundsPlayed} ROUNDS</div>
+                <div className="h1" style={{margin: '20px 15px'}}>SCORES</div>
+
+                <div className="horizontal-box" style={{gap: '10px'}}>
+                    <div className="buttonPanel" style={{height: '25px', gap: '5px'}}>
+                        <div className="h1">TEAM 1</div>
+                        <div className="h1" style={{fontSize: '40px'}}>{team1Points}</div>
+                    </div>
+                    <div className="buttonPanel" style={{height: '25px', gap: '5px'}}>
+                        <div className="h1">TEAM 2</div>
+                        <div className="h1" style={{fontSize: '40px'}}>{team2Points}</div>
+                    </div>
+                </div>
+
+                <div className="horizontal-box" style={{gap: '10px'}}>
+                    <div className="buttonPanel" style={{
+                        height: '129px',
+                        padding: '15px',
+                        overflow: 'auto',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'flex-start'
+                    }}>
+                        {team1Players && (
+                            <>
+                                <table style={{borderCollapse: 'collapse', width: '100%'}}>
+                                    <thead>
+                                    <tr>
+                                        <th colSpan="2" className="table-title">Team 1 Players</th>
+                                    </tr>
+                                    <tr>
+                                        <th className="table-row" style={{textAlign: 'left'}}>NAME</th>
+                                        <th className="table-row" style={{textAlign: 'right'}}>SCORE</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {team1Players.map((player, index) => (
+                                        <tr key={player.name}
+                                            style={{borderBottom: (index !== team1Size - 1) ? '1px solid white' : 'none'}}>
+                                            <td className="table-row" style={{textAlign: 'left'}}>{player.name}</td>
+                                            <td className="table-row"
+                                                style={{textAlign: 'right'}}>{player.personalScore}</td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                            </>
+                        )}
+                    </div>
+
+                    <div className="buttonPanel" style={{
+                        height: '129px',
+                        padding: '15px',
+                        overflow: 'auto',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'flex-start'
+                    }}>
+                        {team2Players && (
+                            <>
+                                <table style={{borderCollapse: 'collapse', width: '100%'}}>
+                                    <thead>
+                                    <tr>
+                                        <th colSpan="2" className="table-title">Team 2 Players</th>
+                                    </tr>
+                                    <tr>
+                                        <th className="table-row" style={{textAlign: 'left'}}>NAME</th>
+                                        <th className="table-row" style={{textAlign: 'right'}}>SCORE</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {team2Players.map((player, index) => (
+                                        <tr key={player.name}
+                                            style={{borderBottom: (index !== team2Size - 1) ? '1px solid white' : 'none'}}>
+                                            <td className="table-row" style={{textAlign: 'left'}}>{player.name}</td>
+                                            <td className="table-row"
+                                                style={{textAlign: 'right'}}>{player.personalScore}</td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                            </>
+                        )}
+                    </div>
+                </div>
+
+
+                <div className="h1" style={{fontSize: '32px', marginTop: '15px'}}>Most Valuable Player</div>
+                <div className="horizontal-box">
+                    <EmojiEventsIcon style={{fontSize: '96px', color: '#EA854C'}}/>
+                    {MVPInformation}
+                </div>
+
+                <div className="horizontal-box" style={{gap: '20px'}}>
+                    <Button variant="contained"
+                            className="button"
+                            style={{height: '60px'}}
+                            onClick={() => doShare()}
+                    >
+                        Share
+                    </Button>
+                    <Button variant="contained"
+                            className="button"
+                            style={{height: '60px'}}
+                            onClick={() => doHomepage()}
+                    >
+                        Homepage
+                    </Button>
+                </div>
+                <canvas ref={canvasRef} style={{display: 'none'}} width={window.innerWidth}
+                        height={window.innerHeight}></canvas>
+
+            </div>
+            {errorAlertVisible && (
+                <Stack sx={{width: '100%'}} spacing={2}>
+                    <Alert variant="filled" severity="error">
+                        Error: {handleError(errorMessage)}
+                    </Alert>
                 </Stack>
             )}
-            </div>
+        </div>
     );
 };
 
