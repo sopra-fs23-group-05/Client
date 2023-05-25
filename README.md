@@ -134,8 +134,8 @@ the [pregame page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/c
 
 ### Settings
 <div style="display: flex; align-items: center; gap: 10px;">
-    <img src="./src/styles/Images/settingsRoundsPicture.png" alt="Image" width="150" height="300"> 
-    <img src="./src/styles/Images/settingsTopicsPicture.png" alt="Image" width="150" height="300"> 
+    <img src="src/styles/Images/SettingsRoundsPicture.png" alt="Image" width="150" height="300"> 
+    <img src="./src/styles/Images/SettingsTopicsPicture.png" alt="Image" width="150" height="300"> 
     <p style="max-width: 400px">
         As the lobby leader, you hold the power to customize the game settings according to your preferences on the settings page.
         By utilizing the settings page, you can effortlessly personalize the game experience to suit your preferences.
