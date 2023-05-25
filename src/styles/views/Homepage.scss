@@ -1,87 +1,86 @@
 .homePageRoot {
-    gap: 114px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 40px 20px 35px 20px;
-    box-sizing: border-box;
-    background-position: 50% 50%;
-    background-size: cover;
-    background-blend-mode: normal, normal;
-    background: radial-gradient(ellipse closest-side at 50% 50%, #b219fe 5%, #48007e);
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    overflow: auto;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
+  gap: 114px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 40px 20px 35px 20px;
+  box-sizing: border-box;
+  background-position: 50% 50%;
+  background-size: cover;
+  background-blend-mode: normal, normal;
+  background: radial-gradient(ellipse closest-side at 50% 50%, #b219fe 5%, #48007e);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 
 
+  .leaveButton {
+    background-color: #7f5dab;
+    color: orange;
 
-    .leaveButton {
-        background-color: #7f5dab;
-        color: orange;
-    
-        &:hover {
-            background-color: #8a2be2
-        }
-    ;
-        width: 100%;
-        margin-top: 50px;
-        font-size: 18px;
-        font-weight: 600;
-        font-family: Inter, sans-serif;
+    &:hover {
+      background-color: #8a2be2
     }
+  ;
+    width: 100%;
+    margin-top: 50px;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: Inter, sans-serif;
+  }
 }
 
 .tabooLogo {
-    width: 330px;
-    min-height: 94.97px;
-    align-self: stretch;
-    box-sizing: border-box;
-    display: block;
-    margin: 0 auto;
+  width: 330px;
+  min-height: 94.97px;
+  align-self: stretch;
+  box-sizing: border-box;
+  display: block;
+  margin: 0 auto;
 }
 
 .buttonPanel {
-    width: 225px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 35px 34px 35px 34px;
-    border-radius: 15px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #ffffff;
-    box-sizing: content-box;
-    background-color: #b699db;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    cursor: pointer;
+  width: 225px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 35px 34px 35px 34px;
+  border-radius: 15px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ffffff;
+  box-sizing: content-box;
+  background-color: #b699db;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  cursor: pointer;
 }
 
 .MuiButton-root.button {
-    width: 219px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 20px auto;
-    padding: 20px 32.1px;
-    border-width: 1px;
-    border-radius: 9px;
-    border-style: solid;
-    border-color: #ffffff;
-    box-sizing: border-box;
-    background-color: #7f5dab;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    color: #EA854C;
-    font-size: 23px;
-    font-weight: 600;
-    font-family: Inter, sans-serif;
+  width: 219px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  padding: 20px 32.1px;
+  border-width: 1px;
+  border-radius: 9px;
+  border-style: solid;
+  border-color: #ffffff;
+  box-sizing: border-box;
+  background-color: #7f5dab;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  color: #EA854C;
+  font-size: 23px;
+  font-weight: 600;
+  font-family: Inter, sans-serif;
 }
 
   
