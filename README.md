@@ -25,10 +25,10 @@ Before getting started, download the following:
 1. For your local development environment, you will need to install [Node.js](https://nodejs.org/en).
 2. Download the code of [this repository](https://github.com/sopra-fs23-group-05/Client).
 
-### Installing
+### Installation
 Follow these steps to install the client code on your local machine:
 
-1. In your IDE, locate the option to import a project or open an existing project. ```E.g., in IntelliJ go to “File” > “New” > “Project from Existing Sources”```
+1. In your IDE, locate the option to import a project or open an existing project. E.g., in IntelliJ go to “File” > “New” > “Project from Existing Sources”.
 
 2. Select the downloaded file of the client code.
 
@@ -46,7 +46,7 @@ npm run dev
 
 Now you can open [http://localhost:3000](http://localhost:3000) to view the application in your browser. Make sure you have the [server](https://github.com/sopra-fs23-group-05/Server) running as well.
 
-Notice that the page will reload if you make any edits. You will also see any lint errors in the console (use Google Chrome).
+Notice that the page will reload if you make any edits.
 
 ### Deployment
 To deploy the application, you need to build the project first. To do so, run the following command:
@@ -78,9 +78,8 @@ This launches the test runner in an interactive watch mode. See the section abou
 > For macOS user running into a 'fsevents' error: https://github.com/jest-community/vscode-jest/issues/423
 
 ## Technologies
-We used React with HTML/CSS and JS for the client code of this application. Additionally, we used:
-TODO 
 
+* React with HTML/CSS and JS.
 * [MUI](https://mui.com) for UI elements.
 * [QR-Code API](https://www.npmjs.com/package/react-qr-code) to invite people.
 * [Dictionary API](https://www.datamuse.com/api/) to get definitions of a word.
@@ -90,16 +89,16 @@ TODO
 
 ## High-Level Components
 The client application consists of several high-level components
-* The [Lobby-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/LobbyPage.js) component is responsible for managing the overall lobby functionality. It serves as the main entry point for users, 
- providing them with essential lobby details such as the Access Code. On the lobby page, users can join a team and navigate to other pages, such as the [Settings-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Settings.js) or the [Invite-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Invite.js). 
- The lobby page also enables the Lobby-Leader to initiate the game.
-* The [Settings-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Settings.js) component handles the configuration and customization of the game settings. 
- The Lobby-Leader can view and modify various settings details, such as the number of rounds or the time allocated per round. Additionally, he can choose from multiple categories for the card deck.
-* The [Game-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Game.js) component is the core component responsible for managing the game itself.
- it displays crucial game details, including the current score and timer. Also, it presents the card with its taboo words and enables communication through the chat feature. Upon completion of a turn, the game page navigates the users to 
-the [Pregame-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/PreGame.js) to prepare for the next turn. Once all rounds are played, the game page directs users to the [Endscreen](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Endscreen.js) when the all rounds are played.
-* The [Endscreen](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Endscreen.js) component provides users with a summary of the game's outcome. It displays the number of rounds played and showcases the final team scores, declaring the winner-team. 
- Additionally, the endgame page presents a ranking of player scores, highlighting the best player of the game. Players have the option to share the game results on Twitter.
+* The [lobby page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/LobbyPage.js) component is responsible for managing the overall lobby functionality. It serves as the main entry point for users, 
+ providing them with essential lobby details such as the access code. On the lobby page, users can join a team and navigate to other pages, such as the [settings page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Settings.js) or the [invite page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Invite.js). 
+ The lobby page also enables the lobby leader to initiate the game.
+* The [settings page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Settings.js) component handles the configuration and customization of the game settings. 
+ The lobby leader can view and modify various settings details, such as the number of rounds or the time allocated per round. Additionally, he can choose from multiple categories for the card deck.
+* The [game page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Game.js) component is the core component responsible for managing the game itself.
+ It displays crucial game details, including the current score and timer. Also, it presents the card with its taboo words and enables communication through the chat feature. Upon completion of a turn, the game page navigates the users to 
+the [pregame page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/PreGame.js) to prepare for the next turn. Once all rounds are played, the game page directs users to the [endscreen](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Endscreen.js).
+* The [endscreen](https://github.com/sopra-fs23-group-05/Client/blob/main/src/components/views/Endscreen.js) component provides users with a summary of the game's outcome. It displays the number of rounds played and showcases the final team scores, declaring the winner-team. 
+ Additionally, the endscreen presents a ranking of player scores, highlighting the best player of the game. Players have the option to share the game results on Twitter.
 
 ## Illustrations
 
@@ -107,7 +106,7 @@ the [Pregame-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/c
 <div style="display: flex; align-items: center; gap: 10px;">
     <img src="./src/styles/Images/HomepagePicture.png" alt="Image" width="150" height="300"> 
     <p style="max-width: 400px">
-        Upon launching the game, you will be greeted by the homepage.Here, you have two options: to join an existing 
+        Upon launching the game, you will be greeted by the homepage. Here, you have two options: to join an existing 
         lobby using a given access code or to create a new lobby. The lobby serves as a virtual room where players 
         gather to play the game.
     </p>
@@ -144,7 +143,7 @@ the [Pregame-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/c
     </p>
 </div>
 
-### Game-Play
+### Gameplay
 <div style="display: flex; align-items: center; gap: 10px;">
     <img src="./src/styles/Images/CluegiverPicture.png" alt="Image" width="150" height="300"> 
     <img src="./src/styles/Images/GuesserPicture.png" alt="Image" width="150" height="300"> 
@@ -152,15 +151,15 @@ the [Pregame-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/c
     <p style="max-width: 400px">
         Once the game begins, each player will have access to a chat interface.
         This interface enables communication between team members and enhances collaboration during gameplay.
-        Additionally, if you are the clue giver or a buzzer, you will also be able to see the word that needs to be guessed.
+        Additionally, if you are the clue-giver or a buzzer, you will also be able to see the word that needs to be guessed.
     </p>
 </div>
 
-### End-Screen
+### Endscreen
 <div style="display: flex; align-items: center; gap: 10px;">
     <img src="./src/styles/Images/EndscreenPicture.png" alt="Image" width="150" height="300"> 
     <p style="max-width: 400px">
-        At the end of the game, the end screen displays the team with the highest score, indicating their victory.
+        At the end of the game, the endscreen displays the team with the highest score, indicating their victory.
         Furthermore, the end screen showcases the individual player who successfully guessed the most words throughout the game. 
         You also have the option to share the final results on Twitter.
     </p>
@@ -168,10 +167,9 @@ the [Pregame-Page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/c
 
 ## Roadmap
 Possible features that new developers can add:
-* A canvas to also draw the word instead of describing it. 
+* Optimize the application for different screen sizes.
 * Feedback that shows if you are close to the word (if there is a spelling mistake etc.)
-
-We are open for more ideas!
+* Add multiple difficulties of cards (easy, medium, hard) and let the lobby leader choose the difficulty.
 
 ## Authors
 * Daniel Maksimovic
