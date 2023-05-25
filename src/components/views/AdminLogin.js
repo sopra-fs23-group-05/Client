@@ -63,7 +63,6 @@ const AdminLogin = () => {
             //create lobby object
             const lobby = new Lobby(lobbyEmpty.data);
 
-            console.log(lobby);
             const accessCode = lobby.accessCode;
 
 
@@ -76,7 +75,6 @@ const AdminLogin = () => {
             console.log('current state of lobby:', lobby);
 
             localStorage.setItem('lobbyAccessCode', accessCode.toString());
-            console.log('access code when login:', accessCode);
 
             // Login successfully worked --> navigate to the route /lobbies/lobby.accessCode in the GameRouter
             history.push(`/lobbies/${lobby.accessCode}`);

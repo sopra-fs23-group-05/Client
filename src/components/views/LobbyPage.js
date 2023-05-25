@@ -49,7 +49,7 @@ const Lobby = () => {
 
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
-        audio.play();
+        audio.play().then(() => {});
     };
 
 
@@ -204,7 +204,6 @@ const Lobby = () => {
     // Team WebSocket code
     useEffect(() => {
         const handleMessage = async (event) => {
-            console.log(event.data);
             const IncomingMessage = JSON.parse(event.data);
             console.log('Received Team Message:', IncomingMessage);
 
@@ -218,7 +217,6 @@ const Lobby = () => {
                     lobby.team2.push({id: null, leader: null, username: IncomingMessage.username});
                 }
             } else if (IncomingMessage.type === 'removal') {
-                console.log(typeof (lobby.team1));
                 if (IncomingMessage.teamNr === 1) {
                     lobby.team1 = lobby.team1.filter((user) => user.username !== IncomingMessage.username);
                     const newTeam1Members = team1Members.filter((member) => member.username !== IncomingMessage.username);
@@ -266,7 +264,6 @@ const Lobby = () => {
     // Page WebSocket code
     useEffect(() => {
         pageWebSocket.current.onmessage = (event) => {
-            console.log(event.data);
             const IncomingMessage = JSON.parse(event.data);
             console.log('Received Page Message:', IncomingMessage);
             playSound(Start_Sound);
@@ -286,9 +283,7 @@ const Lobby = () => {
         try {
             handleStartGame();
             if (settings === "city") {
-                console.log(settings);
                 setSettings("city-country");
-                console.log(settings);
             }
             //create Game
             await api.post(`/games/${accessCode}`);
@@ -347,7 +342,6 @@ const Lobby = () => {
 
     const checkAllUsersJoinedTeam = async () => {
         const usersResponse = await api.get(`/lobbies/${accessCode}/users/teams`);
-        console.log(usersResponse.data);
         return usersResponse.data;
     }
 

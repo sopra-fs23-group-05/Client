@@ -203,7 +203,6 @@ export default function Game() {
     useEffect(() => {
         chatWebSocket.current.onmessage = (event) => {
             const ChatMessage = JSON.parse(event.data);
-            console.log('Received Chat Message:', ChatMessage);
             setChatMessages([...chatMessages, {
                 accessCode: ChatMessage.accessCode,
                 userId: ChatMessage.userId,
@@ -220,7 +219,6 @@ export default function Game() {
     useEffect(() => {
         cardWebSocket.current.onmessage = (event) => {
             const Card = JSON.parse(event.data);
-            console.log('Received Card:', Card);
             playSound(Notification_Sound);
             if (Card.word !== displayedCard.word) {
                 enableBuzzer();
@@ -286,7 +284,6 @@ export default function Game() {
     // Page websocket code
     useEffect(() => {
         pageWebSocket.current.onmessage = (event) => {
-            console.log(event.data);
             const IncomingMessage = JSON.parse(event.data);
             console.log('Received Page Message:', IncomingMessage);
             history.push(IncomingMessage.url);
@@ -297,7 +294,6 @@ export default function Game() {
     useEffect(() => {
         timerWebSocket.current.onmessage = (event) => {
             const TimerMessage = JSON.parse(event.data);
-            console.log('Received Timer Message:', TimerMessage);
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
                 chatWebSocket.current.close();
