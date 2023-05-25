@@ -346,7 +346,7 @@ export default function Game() {
 
     if (displayedCard) {
         cardContent = (
-                <div className="side-box">
+                <div className="side-box" style={{gap: '6px'}}>
                     <div>{displayedCard.taboo1}</div>
                     <div>{displayedCard.taboo2}</div>
                     <div>{displayedCard.taboo3}</div>
@@ -431,7 +431,7 @@ export default function Game() {
     if (role !== "guesser" || role === "cluegiver") {
         cardComponent = (
                 <div className="card-box">
-                    <div className="side-box">
+                    <div className="side-box" style={{alignItems: 'center'}}>
                         <Button variant="contained" className="word-button"
                                 onClick={async () => {
                                     const response = await fetch(`https://api.datamuse.com/words?sp=${displayedCard.word}&md=d`);

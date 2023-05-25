@@ -22,7 +22,7 @@
 .side-box {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-evenly;
     height: 100%;
     width: fit-content;
@@ -110,14 +110,14 @@
 
 .send-fields {
     display: flex;
-    align-self: flex-end;
+    align-self: center;
     margin: 5px;
     width: 98%;
 }
 
 .MuiButton-root.skip-button {
     width: fit-content;
-    height: 30px;
+    height: fit-content;
     margin-inline: 3px;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     background-color: red;
