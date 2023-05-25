@@ -19,7 +19,15 @@ const Endscreen = () => {
         audio.play();
     };
 
-    playSound(Winner_Sound);
+    const [winnerSoundPlayed, setWinnerSoundPlayed] = useState(false);
+
+    useEffect(() => {
+        if (!winnerSoundPlayed) {
+            playSound(Winner_Sound);
+            setWinnerSoundPlayed(true);
+        }
+    }, []);
+
     const history = useHistory();
     const canvasRef = useRef(null);
     const userId = localStorage.getItem('token');
