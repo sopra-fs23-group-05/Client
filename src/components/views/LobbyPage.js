@@ -209,7 +209,10 @@ const Lobby = () => {
             console.log('Received Team Message:', IncomingMessage);
 
             if (IncomingMessage.type === 'addition') {
-                playSound(Join_Sound);
+                // Play sound after a user interaction
+                document.addEventListener('click', () => {
+                    playSound(Join_Sound);
+                }, { once: true });
                 if (IncomingMessage.teamNr === 1) {
                     setTeam1Members([...team1Members, {username: IncomingMessage.username}]);
                     lobby.team1.push({id: null, leader: null, username: IncomingMessage.username});
