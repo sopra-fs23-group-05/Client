@@ -51,9 +51,7 @@ const PreGame = () => {
         }
         openWebSocket();
         return () => {
-            console.log('Closing Page WebSocket');
             pageWebSocket.current.close();
-            console.log('Closing Timer WebSocket');
             timerWebSocket.current.close();
         }
     }, []);

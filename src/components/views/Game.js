@@ -188,13 +188,9 @@ export default function Game() {
         }
         openWebSocket();
         return () => {
-            console.log('Closing Chat WebSocket');
             chatWebSocket.current.close();
-            console.log('Closing Page WebSocket');
             pageWebSocket.current.close();
-            console.log('Closing Card WebSocket');
             cardWebSocket.current.close();
-            console.log('Closing Timer WebSocket');
             timerWebSocket.current.close();
         }
     }, [accessCode]);
