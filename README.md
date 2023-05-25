@@ -179,3 +179,6 @@ Possible features that new developers can add:
 
 ## License
 This project is licensed under [MIT License](https://github.com/sopra-fs23-group-05/Client/blob/main/LICENSE).
+
+## Acknowledgement
+As a group, we would like to extend our heartfelt thanks to Luis, our remarkable TA, for his exceptional support throughout this project. His unwavering dedication, guidance, and patience have been instrumental in our collective success, and we are truly grateful for his expertise and encouragement. Working with Luis has been an invaluable learning experience for all of us, and we feel fortunate to have had him as our TA.
