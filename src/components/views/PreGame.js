@@ -92,7 +92,6 @@ const PreGame = () => {
     // Page WebSocket code
     useEffect(() => {
         pageWebSocket.current.onmessage = (event) => {
-            console.log(event.data);
             const IncomingMessage = JSON.parse(event.data);
             console.log('Received Page Message:', IncomingMessage);
             history.push(IncomingMessage.url);
@@ -105,7 +104,6 @@ const PreGame = () => {
     useEffect(() => {
         timerWebSocket.current.onmessage = (event) => {
             const TimerMessage = JSON.parse(event.data);
-            console.log('Received Timer Message:', TimerMessage);
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
                 if (isLeader) {

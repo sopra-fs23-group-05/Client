@@ -63,7 +63,6 @@ const Settings = () => {
                 setRounds(responseGame.data.settings.rounds);
                 setTopic(responseGame.data.settings.topic);
                 setTime(responseGame.data.settings.roundTime);
-                console.log(responseGame.data.settings.rounds);
 
             } catch (error) {
                 setErrorMessage(error);
