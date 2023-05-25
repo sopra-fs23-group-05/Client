@@ -409,12 +409,11 @@ export default function Game() {
         buzzerButton = (
             <Button variant="contained"
                     className="Buzzer"
+                    disabled={buzzerWasPressed}
                     onClick={() => {
-                        if (!buzzerWasPressed) {
-                            setBuzzerWasPressed(true);
-                            sendCardMessage("buzz");
-                            playSound(Buzzer_Sound);
-                        }
+                        setBuzzerWasPressed(true);
+                        sendCardMessage("buzz");
+                        playSound(Buzzer_Sound);
                     }}
             >
                 Buzzer
