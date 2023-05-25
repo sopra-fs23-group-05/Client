@@ -57,7 +57,7 @@ npm run build
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-Then, you can push your changed code to this GitHub repository. The application will be automatically deployed to Heroku. To do so, run the following commands:
+Then, you can push your changed code to this GitHub repository. The application will be automatically deployed to Google Cloud. To do so, run the following commands:
 
 ```
 git add .
@@ -134,7 +134,7 @@ the [pregame page](https://github.com/sopra-fs23-group-05/Client/blob/main/src/c
 
 ### Settings
 <div style="display: flex; align-items: center; gap: 10px;">
-    <img src="src/styles/Images/SettingsRoundsPicture.png" alt="Image" width="150" height="300"> 
+    <img src="src/styles/Images/SettingsRoundsPicture.png" alt="Image" width="140" height="300"> 
     <img src="./src/styles/Images/SettingsTopicsPicture.png" alt="Image" width="150" height="300"> 
     <p style="max-width: 400px">
         As the lobby leader, you hold the power to customize the game settings according to your preferences on the settings page.
