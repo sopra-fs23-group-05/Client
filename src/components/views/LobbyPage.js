@@ -109,6 +109,45 @@ const Lobby = () => {
     }, [accessCode, userId]);
 
 
+    const [joinButton1Disabled, setJoinButton1Disabled] = useState(false);
+    const [joinButton2Disabled, setJoinButton2Disabled] = useState(false);
+
+    useEffect(() => {
+        isJoinable();
+    }, [team1Members, team2Members]);
+
+    const isJoinable = () => {
+        //check if user is already in a team
+        let teamNumber = 0;
+        for (const element of team1Members) {
+            if (element.username === user.username) {
+                teamNumber = 1;
+            }
+        }
+
+        for (const element of team2Members) {
+            if (element.username === user.username) {
+                teamNumber = 2;
+            }
+        }
+
+        // if user is not in a team, check if teams are balanced
+        if (teamNumber === 0) {
+            if (team1Members.length > team2Members.length && Math.abs(team1Members.length - team2Members.length) > 1) {setJoinButton1Disabled(true);}
+            else if (team2Members.length > team1Members.length && Math.abs(team2Members.length - team1Members.length) > 1) {setJoinButton2Disabled(true);}
+            else {setJoinButton1Disabled(false); setJoinButton2Disabled(false);}
+        }
+        // if the user is in a team, we calculate the difference and subtract 1 from it to account for the fact that the user would no longer be in the team
+        else if (teamNumber === 1) {
+            if (Math.abs(team1Members.length - team2Members.length - 1) > 1) {setJoinButton2Disabled(true);}
+            else {setJoinButton1Disabled(false); setJoinButton2Disabled(false);} // if the teams are balanced, both buttons are enabled
+        } else if (teamNumber === 2) {
+            if (Math.abs(team2Members.length - team1Members.length - 1) > 1) {setJoinButton1Disabled(true);}
+            else {setJoinButton1Disabled(false); setJoinButton2Disabled(false);} // if the teams are balanced, both buttons are enabled
+            }
+    }
+
+
     const goBack = async () => {
         playSound(Button_Click);
         if (isLeader) {
@@ -363,11 +402,12 @@ const Lobby = () => {
                         </ul>
                         <Button variant="contained"
                                 className="buttonLogin"
-                                onClick={() => changeTeam(1, "addition")}
-                        >
-                            Join
-                        </Button>
-                    </div>
+                                disabled={joinButton1Disabled}
+                            onClick={() => changeTeam(1, "addition")}
+                    >
+                        Join
+                    </Button>
+                </div>
 
                     <div className="buttonPanel">
                         <Typography variant="h5" className="title" style={{marginTop: '-20px'}}>Team 2</Typography>
@@ -376,12 +416,13 @@ const Lobby = () => {
                         </ul>
                         <Button variant="contained"
                                 className="buttonLogin"
-                                onClick={() => changeTeam(2, "addition")}
-                        >
-                            Join
-                        </Button>
-                    </div>
+                                disabled={joinButton2Disabled}
+                            onClick={() => changeTeam(2, "addition")}
+                    >
+                        Join
+                    </Button>
                 </div>
+            </div>
 
                 <div className="horizontal-box" style={{marginTop: '0px'}}>
                     <Typography variant="h5" className="title" style={{fontSize: '16px', marginTop: '-20px'}}>You
