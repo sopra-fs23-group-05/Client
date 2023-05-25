@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Redirect} from "react-router-dom";
 import PropTypes from "prop-types";
-import { api } from "../../../helpers/api";
 
 export const LobbyGuard = (props) => {
     const [isAuthorized, setIsAuthorized] = useState(null);
@@ -12,7 +11,7 @@ export const LobbyGuard = (props) => {
             const url = window.location.href;
             const urlSplit = url.split("/");
             console.log(urlSplit[3]);
-            if ( urlSplit[4] === accessCode) {
+            if (urlSplit[4] === accessCode) {
                 setIsAuthorized(true);
             } else {
                 setIsAuthorized(false);
@@ -25,7 +24,7 @@ export const LobbyGuard = (props) => {
     if (isAuthorized === null) {
         return <p>Loading...</p>;
     }
-    return isAuthorized ? props.children : <Redirect to="/homepage" /> ;
+    return isAuthorized ? props.children : <Redirect to="/homepage"/>;
 };
 
 LobbyGuard.propTypes = {

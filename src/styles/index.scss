@@ -5,28 +5,28 @@
 This file contains the general and shared style of your application.
  */
 body {
-    margin: 0;
-    padding: 0;
-    min-width: 100vw;
-    min-height: 100vh;
-    font-family: $fontDefault;
+  margin: 0;
+  padding: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  font-family: $fontDefault;
 }
 
 input,
 textarea,
 select,
 button {
-    font-family: inherit;
-    line-height: inherit;
-    font-size: inherit;
-    outline: none;
+  font-family: inherit;
+  line-height: inherit;
+  font-size: inherit;
+  outline: none;
 }
 
 *:focus {
-    outline: none;
+  outline: none;
 }
 
 * {
-    -webkit-font-smoothing: antialiased;
-    box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
 }

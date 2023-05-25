@@ -1,151 +1,156 @@
 .card-and-timer-box {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 370px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 370px;
 }
 
 .card-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    background-color: #b699db;
-    border-radius: 20px;
-    border: 1px solid white;
-    width: 278px;
-    max-width: 278px;
-    height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: #b699db;
+  border-radius: 20px;
+  border: 1px solid white;
+  width: 278px;
+  max-width: 278px;
+  height: 100%;
 }
 
 .side-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    height: 100%;
-    width: fit-content;
-    color: white;
-    max-width: 139px;
-    flex: 1 1 auto;
-    margin: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-evenly;
+  height: 100%;
+  width: fit-content;
+  color: white;
+  max-width: 139px;
+  flex: 1 1 auto;
+  margin: 0 10px;
 }
+
 .leave-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    width: 100%;
-    color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  color: white;
 }
 
 .timer-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    width: 75px;
-    height: 120px;
-    margin-top: auto;
-    background-color: #b699db;
-    border-radius: 20px;
-    border: 1px solid white;
-    color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 75px;
+  height: 120px;
+  margin-top: auto;
+  background-color: #b699db;
+  border-radius: 20px;
+  border: 1px solid white;
+  color: white;
 }
 
 .MuiButton-root.Buzzer {
-    width: 100%;
-    margin-inline: 3px;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    background-color: red;
-    color: black;
-    font-size: 1.5rem;
-    font-weight: bold;
-    font-family: Inter, sans-serif;
+  width: 100%;
+  margin-inline: 3px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  background-color: red;
+  color: black;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: Inter, sans-serif;
 
 }
 
 .MuiButton-root.Buzzer:hover {
-    background-color: darkred;
+  background-color: darkred;
 }
 
 .textField-chat-input fieldset {
-    border-radius: 15px;
-    flex: 1;
+  border-radius: 15px;
+  flex: 1;
 }
 
 .chat-components-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    width: 370px;
-    max-width: 379px;
-    height: 300px;
-    background-color: #D1C4E9;
-    border-radius: 20px;
-    border: 1px solid white;
-    flex: 1;
-    position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 370px;
+  max-width: 379px;
+  height: 300px;
+  background-color: #D1C4E9;
+  border-radius: 20px;
+  border: 1px solid white;
+  flex: 1;
+  position: relative;
 }
 
 .chat-box-containing-messages {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    flex-direction: column;
-    width: 100%;
-    padding: 3px 8px 0 8px;
-    height: 450px;
-    overflow-y: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 100%;
+  padding: 3px 8px 0 8px;
+  height: 450px;
+  overflow-y: auto;
 }
 
 .chat-message-line {
-    display: flex;
-    width: 100%;
-    align-items: flex-start;
-    margin-top: 5px;
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  margin-top: 5px;
 }
 
 .send-fields {
-    display: flex;
-    align-self: flex-end;
-    margin: 5px;
-    width: 98%;
+  display: flex;
+  align-self: center;
+  margin: 5px;
+  width: 98%;
 }
 
 .MuiButton-root.skip-button {
-    width: fit-content;
-    height: 30px;
-    margin-inline: 3px;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    background-color: red;
-    color: white;
-    font-weight: 400;
-    font-family: Inter, sans-serif;
+  width: fit-content;
+  height: fit-content;
+  margin-inline: 3px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  background-color: red;
+  color: white;
+  font-weight: 400;
+  font-family: Inter, sans-serif;
 }
+
 .MuiButton-root.skip-button:active {
-    background-color: darkred;
+  background-color: darkred;
 }
+
 .MuiButton-root.skip-button:hover {
-    background-color: darkred;
+  background-color: darkred;
 }
 
 .MuiButton-root.word-button {
-    width: fit-content;
-    height: fit-content;
-    margin-inline: 3px;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    background-color: green;
-    color: white;
-    font-weight: 400;
-    font-family: Inter, sans-serif;
+  width: fit-content;
+  height: fit-content;
+  margin-inline: 3px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  background-color: green;
+  color: white;
+  font-weight: 400;
+  font-family: Inter, sans-serif;
 }
+
 .MuiButton-root.word-button:active {
-    background-color: darkgreen;
+  background-color: darkgreen;
 }
+
 .MuiButton-root.word-button:hover {
-    background-color: darkgreen;
+  background-color: darkgreen;
 }
 

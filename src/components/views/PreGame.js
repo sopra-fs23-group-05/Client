@@ -28,7 +28,7 @@ const PreGame = () => {
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
         audio.play();
-      };
+    };
 
     // WebSocket code
     useEffect(() => {
@@ -74,7 +74,7 @@ const PreGame = () => {
                 setErrorAlertVisible(true);
                 setTimeout(() => {
                     setErrorAlertVisible(false);
-              }, 8000);
+                }, 8000);
             }
         }
 
@@ -108,12 +108,12 @@ const PreGame = () => {
             console.log('Received Timer Message:', TimerMessage);
             setTimer(TimerMessage);
             if (TimerMessage === 0) {
-                if(isLeader) {
+                if (isLeader) {
                     changePage();
                 }
             }
         }
-    },[timer]);
+    }, [timer]);
 
     const showDefinition = () => {
         playSound(Button_Click);
@@ -125,46 +125,49 @@ const PreGame = () => {
             } else if (role.toString().toLowerCase() === "guesser") {
                 setDefinition("Guess the word the Clue-Giver is trying to describe")
             }
+        } else {
+            setDefinition("")
         }
-        else {setDefinition("")}
     }
 
     return (
         <div className="homePageRoot" style={{justifyContent: 'center'}}>
             <div className="flex-container" style={{gap: '50px'}}>
-            <div className="buttonPanel">
-                <Typography variant="h5" className="title"> Next Round Starts</Typography>
-                <br/>
-                <Typography variant="h4" className="title">{timer}</Typography>
-            </div>
-            <div className="buttonPanel">
-                <Typography variant="h5" className="title"> Your Next Role</Typography>
-                <br/>
-                <Typography variant="h5" className="title">{role}</Typography>
-                <br/>
-                <Button variant="contained"
-                        className="buttonLogin"
-                        onClick={showDefinition}
-                >
-                    What Do I Do?
-                </Button>
-                <br/>
-                <Typography variant="h8" className="title" style={{fontStyle: 'italic'}}>{definition}</Typography>
-            </div>
-            <div className="buttonPanel">
-                <Typography variant="h5" className="title">Team Scores</Typography>
-                <br/>
-                <Typography variant="h5" className="title" style={{alignSelf: "flex-start"}}>Team 1:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{team1Points}</Typography>
-                <Typography variant="h5" className="title" style={{alignSelf: "flex-start"}}>Team 2:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{team2points}</Typography>
-            </div>
+                <div className="buttonPanel">
+                    <Typography variant="h5" className="title"> Next Round Starts</Typography>
+                    <br/>
+                    <Typography variant="h4" className="title">{timer}</Typography>
+                </div>
+                <div className="buttonPanel">
+                    <Typography variant="h5" className="title"> Your Next Role</Typography>
+                    <br/>
+                    <Typography variant="h5" className="title">{role}</Typography>
+                    <br/>
+                    <Button variant="contained"
+                            className="buttonLogin"
+                            onClick={showDefinition}
+                    >
+                        What Do I Do?
+                    </Button>
+                    <br/>
+                    <Typography variant="h8" className="title" style={{fontStyle: 'italic'}}>{definition}</Typography>
+                </div>
+                <div className="buttonPanel">
+                    <Typography variant="h5" className="title">Team Scores</Typography>
+                    <br/>
+                    <Typography variant="h5" className="title" style={{alignSelf: "flex-start"}}>Team
+                        1:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{team1Points}</Typography>
+                    <Typography variant="h5" className="title" style={{alignSelf: "flex-start"}}>Team
+                        2:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{team2points}</Typography>
+                </div>
             </div>
             {errorAlertVisible && (
-        <Stack sx={{ width: '100%' }} spacing={2}>
-          <Alert variant="filled" severity="error">
-            Error: {handleError(errorMessage)}
-          </Alert>
-        </Stack>
-      )}
+                <Stack sx={{width: '100%'}} spacing={2}>
+                    <Alert variant="filled" severity="error">
+                        Error: {handleError(errorMessage)}
+                    </Alert>
+                </Stack>
+            )}
         </div>
     );
 

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import User from 'models/User';
 import {useHistory} from 'react-router-dom';
-import {TextField, Button, Typography, Box} from "@mui/material";
+import {Box, Button, TextField, Typography} from "@mui/material";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import 'styles/views/AdminLogin.scss';
@@ -26,7 +26,7 @@ const AdminLogin = () => {
     const playSound = (soundFile) => {
         const audio = new Audio(soundFile);
         audio.play();
-      };
+    };
 
     const goBack = () => {
         playSound(Button_Click);
@@ -83,56 +83,56 @@ const AdminLogin = () => {
 
         } catch (error) {
             setErrorMessage(error);
-          setErrorAlertVisible(true); // Show the error alert
-          setTimeout(() => {
-            setErrorAlertVisible(false); // Hide the error alert after 5 seconds
-          }, 8000);
+            setErrorAlertVisible(true); // Show the error alert
+            setTimeout(() => {
+                setErrorAlertVisible(false); // Hide the error alert after 5 seconds
+            }, 8000);
         }
     };
 
 
     return (
-            <div className="homePageRoot">
-                <img className="tabooLogo" src={TabooLogo} alt="Taboo Logo"/>
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                }}
-                >
-                    <div className="buttonPanel">
-                        <Typography variant="h5" sx={{color: 'white', marginBottom: '20px'}}>Login</Typography>
-                        <TextField className="custom-outlined-text-field"
-                                   sx={{marginBottom: '20px'}}
-                                   label='Username'
-                                   value={username}
-                                   onKeyDown={handleEnterKey}
-                                   onChange={handleUsernameChange}>
-                        </TextField>
-                        <div className="horizontal-box">
-                            <Button variant="contained"
-                                    className="buttonLogin"
-                                    onClick={() => goBack()}
-                            >
-                                Back
-                            </Button>
-                            <Button variant="contained"
-                                    className="buttonLogin"
-                                    onClick={() => doLogin()}
-                                    disabled={username===""}
-                            >
-                                Enter
-                            </Button>
-                        </div>
+        <div className="homePageRoot">
+            <img className="tabooLogo" src={TabooLogo} alt="Taboo Logo"/>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+            }}
+            >
+                <div className="buttonPanel">
+                    <Typography variant="h5" sx={{color: 'white', marginBottom: '20px'}}>Login</Typography>
+                    <TextField className="custom-outlined-text-field"
+                               sx={{marginBottom: '20px'}}
+                               label='Username'
+                               value={username}
+                               onKeyDown={handleEnterKey}
+                               onChange={handleUsernameChange}>
+                    </TextField>
+                    <div className="horizontal-box">
+                        <Button variant="contained"
+                                className="buttonLogin"
+                                onClick={() => goBack()}
+                        >
+                            Back
+                        </Button>
+                        <Button variant="contained"
+                                className="buttonLogin"
+                                onClick={() => doLogin()}
+                                disabled={username === ""}
+                        >
+                            Enter
+                        </Button>
                     </div>
-                </Box>
-                {errorAlertVisible && (
-                <Stack sx={{ width: '100%' }} spacing={2}>
-                <Alert variant="filled" severity="error">
-                    Error: {handleError(errorMessage)}
-                </Alert>
+                </div>
+            </Box>
+            {errorAlertVisible && (
+                <Stack sx={{width: '100%'}} spacing={2}>
+                    <Alert variant="filled" severity="error">
+                        Error: {handleError(errorMessage)}
+                    </Alert>
                 </Stack>
             )}
-            </div>
+        </div>
     );
 };
 

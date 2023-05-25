@@ -1,44 +1,45 @@
 .flex-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 30px;
-    max-width: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 350px;
 }
 
 .rulesRectangle {
-    max-width: 350px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-self: stretch;
-    align-items: flex-start;
-    box-sizing: content-box;
-    background-color: #D1C4E9;
-    height: 1125px;
-    padding: 13px 16px;
-    border-radius: 9px;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-self: stretch;
+  align-items: flex-start;
+  box-sizing: content-box;
+  background-color: #D1C4E9;
+  height: 1125px;
+  padding: 13px 16px;
+  border-radius: 9px;
 }
 
 .rulesText {
-    font-size: 24px;
-    font-weight: 300;
-    font-family: Futura, sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  font-family: Futura, sans-serif;
 }
 
 .slider {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 5px;
-    width: 320px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  width: 320px;
 
 }
+
 .grey-button {
-    color: grey;
-    opacity: 0.5;
-    cursor: default;
+  color: grey;
+  opacity: 0.5;
+  cursor: default;
 }
 
   

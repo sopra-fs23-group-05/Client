@@ -7,12 +7,10 @@ import BackgroundMusic from "components/views/sounds/BackgroundMusic";
  * Overhauled by Kyrill Hux
  */
 const App = () => {
-  return (
-    <div>
-      <AppRouter/>
-      <BackgroundMusic/>
-    </div>
-  );
+    return (<div>
+        <AppRouter/>
+        <BackgroundMusic/>
+    </div>);
 };
 
 export default App;
