@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useCallback, useRef} from "react";
 import {useHistory} from 'react-router-dom';
 import 'styles/views/Endscreen.scss';
 import TabooLogo from './TabooLogo.png';
@@ -23,7 +23,7 @@ const Endscreen = () => {
     playSound(Winner_Sound);
     const history = useHistory();
     const canvasRef = useRef(null);
-
+    const userId = localStorage.getItem('token');
     const accessCode = localStorage.getItem('lobbyAccessCode');
     const [team1Points, setTeam1Points] = useState(0);
     const [team2Points, setTeam2Points] = useState(0);
@@ -33,7 +33,7 @@ const Endscreen = () => {
     const [team2Size, setTeam2Size] = useState(0);
     const [roundsPlayed, setRoundsPlayed] = useState("");
     const [winner, setWinner] = useState(0);
-    const [MVPPlayer, setMVPPlayer] = useState("");
+    const [MVPPlayer, setMVPPlayer] = useState(null);
     const [leader, setLeader] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [errorAlertVisible, setErrorAlertVisible] = useState(false);
@@ -64,9 +64,47 @@ const Endscreen = () => {
         window.open(tweetUrl, '_blank');
     };
 
+    const calculateWinner = useCallback( ( ) => {
+        if(team1Size < 2){
+            setWinner(2);
+        }
+        else if(team2Size < 2){
+            setWinner(1);
+        }
+        else{
+            if (team1Points > team2Points) {
+                setWinner(1)
+            } else if(team1Points < team2Points){
+                setWinner(2);
+            } else if(team1Points === team2Points){
+                setWinner(0);
+            }
+        }
+    }, [team1Points, team2Points, team1Size, team2Size]);
+
+    const [MVPname, setMVPname] = useState("No MVP");
+    const [MVPscore, setMVPscore] = useState(0);
+
+    let MVPInformation = (
+        <div style={{marginLeft: '50px'}}>
+            <h1 className="h1" style={{color: '#EA854C', marginBottom: '10px'}}>{MVPname}</h1>
+            <h1 className="h1" style={{fontSize: '19px', textAlign: 'left'}}>Score: {MVPscore}</h1>
+        </div>
+    );
+
+    const checkMVPInformation = useCallback( ( ) => {
+        if (MVPPlayer) {
+            setMVPname(MVPPlayer.name);
+            setMVPscore(MVPPlayer.personalScore);
+        }
+    }, [MVPPlayer]);
+
     useEffect(() => {
         async function fetchData() {
             try {
+                const userResponse = await api.get(`/users/${userId}`);
+                setLeader(userResponse.data.leader);
+
                 const responseGame = await api.get(`/games/${accessCode}`);
                 await new Promise(resolve => setTimeout(resolve, 100));
                 setTeam1Points(responseGame.data.team1.points);
@@ -76,68 +114,57 @@ const Endscreen = () => {
                 setTeam1Players(responseGame.data.team1.players);
                 setTeam2Players(responseGame.data.team2.players);
                 setRoundsPlayed(responseGame.data.roundsPlayed);
-                const userId = localStorage.getItem('token');
-                const userResponse = await api.get(`/users/${userId}`);
-                setLeader(userResponse.data.leader);
 
-                if(team1Size < 2){
-                    setWinner(2);
-                }
-                else if(team2Size < 2){
-                    setWinner(1);
-                }
-                else{
-                    if (team1Points > team2Points) {
-                        setWinner(1)
-                    } else if(team1Points < team2Points){
-                        setWinner(2);
-                    } else if(team1Points === team2Points){
-                        setWinner(0);
-                    }
-                }
+                calculateWinner();
+
                 const responsePlayer = await api.get(`/games/${accessCode}/players/MVP`);
-                console.log(responsePlayer);
                 setMVPPlayer(responsePlayer.data);
-
+                checkMVPInformation();
 
             } catch (error) {
                 setErrorMessage(error);
-              setErrorAlertVisible(true);
-              setTimeout(() => {
+                setErrorAlertVisible(true);
+                setTimeout(() => {
                 setErrorAlertVisible(false);
               }, 8000);
             }
         }
-
-
         fetchData();
-    }, [accessCode, team1Points, team2Points]);
+    }, [accessCode, calculateWinner, checkMVPInformation, team1Points, team2Points, team1Size, team2Size, userId]);
 
+    let winnerInformation = "";
 
+    if (winner === 0) {
+        winnerInformation = "IT'S A TIE!";
+    } else if (winner === 1) {
+        winnerInformation = "TEAM 1 WINS!";
+    } else if (winner === 2) {
+        winnerInformation = "TEAM 2 WINS!";
+    }
 
     return (
             <div className="homePageRoot">
-                <div className="flex-container">
+                <div className="flex-container" style={{gap: '5px'}}>
                 <img src={TabooLogo} alt="Taboo logo" className="tabooLogo"/>
                     <div className="horizontal-box">
                         <StarIcon style={{color: '#EA854C', margin: '-10 0 0 0', fontSize: '50px'}}/>
                         <h1 className="h1">
-                        {winner === 0 ? "IT'S A TIE!" : `TEAM ${winner} WINS!`}
+                        {winnerInformation}
                         </h1>
                         <StarIcon style={{color: '#EA854C', margin: '-10 0 0 0', fontSize: '50px'}}/>
                     </div>
 
-                    <h1 className="h1">YOU PLAYED {roundsPlayed} ROUNDS</h1>
-                    <h1 className="h1">SCORES</h1>
+                    <div className="h1" style={{marginTop: '5px'}}>YOU PLAYED {roundsPlayed} ROUNDS</div>
+                    <div className="h1" style={{margin: '20px 15px'}}>SCORES</div>
 
                     <div className="horizontal-box" style={{gap: '10px'}}>
-                        <div className="buttonPanel" style={{height: '80px'}}>
-                            <h1 className="h1">TEAM 1</h1>
-                            <h1 className="h1" style={{fontSize: '40px'}}>{team1Points}</h1>
+                        <div className="buttonPanel" style={{height: '25px', gap: '5px'}}>
+                            <div className="h1">TEAM 1</div>
+                            <div className="h1" style={{fontSize: '40px'}}>{team1Points}</div>
                         </div>
-                        <div className="buttonPanel" style={{height: '80px'}}>
-                            <h1 className="h1">TEAM 2</h1>
-                            <h1 className="h1" style={{fontSize: '40px'}}>{team2Points}</h1>
+                        <div className="buttonPanel" style={{height: '25px', gap: '5px'}}>
+                            <div className="h1">TEAM 2</div>
+                            <div className="h1" style={{fontSize: '40px'}}>{team2Points}</div>
                         </div>
                     </div>
 
@@ -196,13 +223,10 @@ const Endscreen = () => {
                     </div>
 
 
-                    <h1 className="h1" style={{fontSize: '32px'}}>Most Valuable Player</h1>
+                    <div className="h1" style={{fontSize: '32px', marginTop: '15px'}}>Most Valuable Player</div>
                     <div className="horizontal-box">
                         <EmojiEventsIcon style={{fontSize: '96px', color: '#EA854C'}}/>
-                        <div style={{marginLeft: '50px'}}>
-                        <h1 className="h1" style={{color: '#EA854C', marginBottom: '10px'}}>{MVPPlayer.name}</h1>
-                        <h1 className="h1" style={{fontSize: '19px', textAlign: 'left'}}>Score: {MVPPlayer.personalScore}</h1>
-                        </div>
+                        {MVPInformation}
                     </div>
 
                     <div className="horizontal-box" style={{gap: '20px'}}>
